@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 const Color colorPrimary = Color(0xFF39B273);
 const Color colorWhite = Color(0xFFFFFFFF);
 const Color colorBlack = Color(0xFF000000);
+const Color colorBackground = Color(0xFFD3D3D3);
+
 
 List<Color> shadowGradient = [
   colorBlack.withOpacity(0.93),

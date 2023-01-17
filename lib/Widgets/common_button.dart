@@ -52,15 +52,14 @@ class CommonButton extends StatelessWidget {
       onTap: onTap,
       child: Container(
           width: width,
-          margin: buttonMargin ?? EdgeInsets.symmetric(horizontal: 70.w),
           decoration: BoxDecoration(
             color: backgroundColor ?? colorPrimary,
-            borderRadius: BorderRadius.circular(20.0),
+            borderRadius: BorderRadius.circular(15.0),
             boxShadow: [
               BoxShadow(
                 color: backgroundColor != null ? backgroundColor!.withOpacity(.36) : colorPrimary.withOpacity(.36),
-                spreadRadius: 1,
-                blurRadius: 5,
+                spreadRadius: 10,
+                blurRadius: 20,
                 offset: const Offset(0, 4),
               ),
               BoxShadow(color: Colors.grey.shade300),
@@ -107,14 +106,14 @@ class CommonButton extends StatelessWidget {
                                 TextWidget(
                                   text: "text",
                                   fontSize: fontSize ?? 14.sp,
-                                  fontWeight: FontWeight.w600,
+                                  fontWeight: FontWeight.w700,
                                   fontFamily: strFontName,
                                   color: Colors.transparent,
                                 ),
                                 TextWidget(
                                   text: text,
                                   fontSize: fontSize ?? 14.sp,
-                                  fontWeight: FontWeight.w600,
+                                  fontWeight: FontWeight.w700,
                                   fontFamily: strFontName,
                                   color: textColor ?? colorWhite,
                                 ),

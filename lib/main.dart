@@ -17,13 +17,16 @@ class MyApp extends StatelessWidget {
       designSize: const Size(360, 690),
       minTextAdapt: true,
       splitScreenMode: true,
-      builder: (BuildContext context, Widget? child) => MaterialApp(
-        title: 'Webpatente',
-        debugShowCheckedModeBanner: false,
-        theme: ThemeData(
-          primarySwatch: Colors.blue,
+      builder: (BuildContext context, Widget? child) => GestureDetector(
+        onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
+        child: MaterialApp(
+          title: 'Webpatente',
+          debugShowCheckedModeBanner: false,
+          theme: ThemeData(
+            primarySwatch: Colors.blue,
+          ),
+          home: const SplashScreen(),
         ),
-        home: const SplashScreen(),
       ),
     );
 

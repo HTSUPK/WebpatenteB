@@ -7,10 +7,11 @@ import '../resources/color_resources.dart';
 import '../resources/strings.dart';
 
 class TextEditingWidget extends StatelessWidget {
-  final String? hint, initialValue, fontFamilyText, fontFamilyHint, counterText, prefixIconName;
+  final String? hint, labelText, initialValue, fontFamilyText, fontFamilyHint, counterText, prefixIconName, fontFamilyLabel;
   final Widget? prefixIcon;
   final Color? color;
   final Color? hintColor;
+  final Color? labelColor;
   final TextEditingController? controller;
   final FocusNode? focusNode;
   final bool? readOnly;
@@ -32,6 +33,7 @@ class TextEditingWidget extends StatelessWidget {
   final bool isBorderEnable;
   final FontWeight? fontWeightText;
   final FontWeight? fontWeightHint;
+  final FontWeight? fontWeightLabel;
   final String? suffixIconName;
   final Widget? suffixIconWidget;
   final double? suffixIconHeight;
@@ -41,13 +43,15 @@ class TextEditingWidget extends StatelessWidget {
   final VoidCallback? onEditingComplete;
   final bool autoFocus;
   final bool expands;
-  final double? fontSize, hintSize, borderRadius, contentPaddingHorizontal, contentPaddingVertical;
+  final double? fontSize, labelSize, hintSize, borderRadius, contentPaddingHorizontal, contentPaddingVertical;
   final BoxConstraints? prefixIconConstraints;
 
   const TextEditingWidget(
       {Key? key,
       this.hint,
+      this.labelText,
       this.hintSize,
+      this.labelSize,
       this.expands = false,
       this.autoFocus = false,
       this.prefixIconConstraints,
@@ -72,11 +76,14 @@ class TextEditingWidget extends StatelessWidget {
       this.inputFormatters,
       this.width,
       this.hintColor,
+      this.labelColor,
       this.isBorderEnable = true,
       this.isShadowEnable = true,
       this.fontFamilyText,
       this.fontFamilyHint,
       this.fontWeightHint,
+      this.fontWeightLabel,
+      this.fontFamilyLabel,
       this.fontWeightText,
       this.suffixIconName,
       this.suffixIconHeight,
@@ -95,84 +102,79 @@ class TextEditingWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: height,
-      width: width,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(borderRadius ?? 16.0),
-        border: Border.all(color: Colors.transparent),
-        boxShadow: [
-          isShadowEnable
-              ? BoxShadow(
-                  color: colorBlack.withOpacity(0.10),
-                  spreadRadius: 1,
-                  blurRadius: 5,
-                  offset: const Offset(2, 2), // changes position of shadow
-                )
-              : const BoxShadow(
-                  color: Colors.transparent,
-                ),
-        ],
+    return TextFormField(
+      autofocus: autoFocus,
+      inputFormatters: inputFormatters,
+      textInputAction: textInputAction,
+      validator: validator,
+      onTap: onTap,
+      obscureText: passwordVisible,
+      maxLength: maxLength,
+      controller: controller,
+      focusNode: focusNode,
+      onFieldSubmitted: onFieldSubmitted,
+      initialValue: initialValue,
+      readOnly: readOnly ?? false,
+      maxLines: maxLines,
+      textAlign: textAlign ?? TextAlign.left,
+      keyboardType: textInputType,
+      expands: expands,
+      style: TextStyle(
+        color: colorBlack,
+        fontSize: fontSize ?? 14.sp,
+        fontFamily: fontFamilyText ?? strFontName,
+        fontWeight: fontWeightText ?? FontWeight.w500,
       ),
-      child: TextFormField(
-        autofocus: autoFocus,
-        inputFormatters: inputFormatters,
-        textInputAction: textInputAction,
-        validator: validator,
-        onTap: onTap,
-        obscureText: passwordVisible,
-        maxLength: maxLength,
-        controller: controller,
-        focusNode: focusNode,
-        onFieldSubmitted: onFieldSubmitted,
-        initialValue: initialValue,
-        readOnly: readOnly ?? false,
-        maxLines: maxLines,
-        textAlign: textAlign ?? TextAlign.left,
-        keyboardType: textInputType,
-        expands: expands,
-        style: TextStyle(
-          color: colorBlack,
-          fontSize: fontSize ?? 14.sp,
-          fontFamily: fontFamilyText ?? strFontName,
-          fontWeight: fontWeightText ?? FontWeight.w500,
+      onChanged: onChanged,
+      onEditingComplete: onEditingComplete,
+      decoration: InputDecoration(
+        enabled: true,
+        counterText: counterText ?? "",
+        isDense: isDense ?? isDense,
+        prefixIcon: prefixIconName?.isNotEmpty ?? false
+            ? Padding(
+                padding: EdgeInsets.symmetric(horizontal: 10.w),
+                child: SvgPicture.asset(prefixIconName!),
+              )
+            : prefixIcon,
+        suffixIcon: suffixIconWidget ??
+            (suffixIconName != null
+                ? GestureDetector(
+                    behavior: HitTestBehavior.opaque,
+                    onTap: onTapSuffixIcon,
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 10.w),
+                      child: SvgPicture.asset(suffixIconName!),
+                    ))
+                : null),
+        hintText: hint,
+        errorMaxLines: 2,
+        contentPadding: EdgeInsets.symmetric(horizontal: contentPaddingHorizontal ?? 12.w, vertical: contentPaddingVertical ?? 12.h),
+        hintStyle: TextStyle(
+          color: hintColor ?? Color(0xFF3B3B3B).withOpacity(0.5),
+          fontSize: hintSize ?? 14.sp,
+          fontFamily: fontFamilyHint ?? strFontName,
+          fontWeight: fontWeightHint ?? FontWeight.w300,
         ),
-        onChanged: onChanged,
-        onEditingComplete: onEditingComplete,
-        decoration: InputDecoration(
-          enabled: true,
-          counterText: counterText ?? "",
-          isDense: isDense ?? isDense,
-          prefixIcon: prefixIconName?.isNotEmpty ?? false
-              ? Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 10.w),
-                  child: SvgPicture.asset(prefixIconName!),
-                )
-              : prefixIcon,
-          suffixIcon: suffixIconWidget ??
-              (suffixIconName != null
-                  ? GestureDetector(
-                      behavior: HitTestBehavior.opaque,
-                      onTap: onTapSuffixIcon,
-                      child: Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 10.w),
-                        child: SvgPicture.asset(suffixIconName!),
-                      ))
-                  : null),
-          hintText: hint,
-          errorMaxLines: 2,
-          contentPadding: EdgeInsets.symmetric(horizontal: contentPaddingHorizontal ?? 12.w, vertical: contentPaddingVertical ?? 12.h),
-          hintStyle: TextStyle(
-            color: hintColor ?? Color(0xFF3B3B3B).withOpacity(0.5),
-            fontSize: hintSize ?? 14.sp,
-            fontFamily: fontFamilyHint ?? strFontName,
-            fontWeight: fontWeightHint ?? FontWeight.w300,
-          ),
-          filled: true,
-          prefixIconConstraints: prefixIconConstraints,
-          fillColor: color ?? Colors.white,
-          border: OutlineInputBorder(borderRadius: BorderRadius.circular(borderRadius ?? 16.0), borderSide: BorderSide.none),
+        filled: true,
+        prefixIconConstraints: prefixIconConstraints,
+        fillColor: color ?? Colors.white,
+        border: UnderlineInputBorder(
+          borderSide: BorderSide.none,
+          borderRadius: BorderRadius.circular(13.0),
         ),
+        labelText: labelText,
+        labelStyle: TextStyle(
+          color: labelColor ?? colorBlack.withOpacity(0.6),
+          fontSize: labelSize ?? 13.sp,
+          fontFamily: fontFamilyLabel ?? strFontName,
+          fontWeight: fontWeightLabel ?? FontWeight.w400,
+        ),
+        // border: OutlineInputBorder(
+        //     borderSide: BorderSide.none,
+        //     borderRadius: BorderRadius.circular(50)
+        // ),
+        // border: OutlineInputBorder(borderRadius: BorderRadius.circular(borderRadius ?? 16.0), borderSide: BorderSide.none),
       ),
     );
   }

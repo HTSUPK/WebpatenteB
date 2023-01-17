@@ -4,4 +4,4 @@ const strAppName = 'Webpatente';
 const strAndroid = 'android';
 const strIos = 'ios';
 
-const strFontName = "Poppins";
+const strFontName = "SF Pro Rounded";
