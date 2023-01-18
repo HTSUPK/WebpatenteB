@@ -16,6 +16,7 @@ class CommonButton extends StatelessWidget {
   final Color? textColor;
   final Color? borderColor;
   final Color? backgroundColor;
+  final double? borderRadius;
   final double? verticalPadding;
   final double? horizontalPadding;
   final double? assetHeight;
@@ -24,6 +25,7 @@ class CommonButton extends StatelessWidget {
   final double borderWidth;
   final Widget? iconWidget;
   final EdgeInsetsGeometry? buttonMargin;
+
   const CommonButton(
       {Key? key,
       this.width,
@@ -39,6 +41,7 @@ class CommonButton extends StatelessWidget {
       this.fontSize,
       this.horizontalPadding,
       this.borderColor,
+      this.borderRadius,
       this.backgroundColor,
       this.borderWidth = 1.0,
       this.iconWidget,
@@ -54,7 +57,7 @@ class CommonButton extends StatelessWidget {
           width: width,
           decoration: BoxDecoration(
             color: backgroundColor ?? colorPrimary,
-            borderRadius: BorderRadius.circular(15.0),
+            borderRadius: BorderRadius.circular(borderRadius ?? 15.0),
             boxShadow: [
               BoxShadow(
                 color: backgroundColor != null ? backgroundColor!.withOpacity(.36) : colorPrimary.withOpacity(.36),

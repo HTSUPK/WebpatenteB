@@ -7,6 +7,8 @@ const Color colorPrimary = Color(0xFF39B273);
 const Color colorWhite = Color(0xFFFFFFFF);
 const Color colorBlack = Color(0xFF000000);
 const Color colorBackground = Color(0xFFD3D3D3);
+const Color colorDarkBlue = Color(0xFF436293);
+const Color colorSwitchBackground = Color(0xFF32D74B);
 
 
 List<Color> shadowGradient = [

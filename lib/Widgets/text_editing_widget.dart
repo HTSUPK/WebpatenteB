@@ -102,79 +102,84 @@ class TextEditingWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return TextFormField(
-      autofocus: autoFocus,
-      inputFormatters: inputFormatters,
-      textInputAction: textInputAction,
-      validator: validator,
-      onTap: onTap,
-      obscureText: passwordVisible,
-      maxLength: maxLength,
-      controller: controller,
-      focusNode: focusNode,
-      onFieldSubmitted: onFieldSubmitted,
-      initialValue: initialValue,
-      readOnly: readOnly ?? false,
-      maxLines: maxLines,
-      textAlign: textAlign ?? TextAlign.left,
-      keyboardType: textInputType,
-      expands: expands,
-      style: TextStyle(
-        color: colorBlack,
-        fontSize: fontSize ?? 14.sp,
-        fontFamily: fontFamilyText ?? strFontName,
-        fontWeight: fontWeightText ?? FontWeight.w500,
-      ),
-      onChanged: onChanged,
-      onEditingComplete: onEditingComplete,
-      decoration: InputDecoration(
-        enabled: true,
-        counterText: counterText ?? "",
-        isDense: isDense ?? isDense,
-        prefixIcon: prefixIconName?.isNotEmpty ?? false
-            ? Padding(
-                padding: EdgeInsets.symmetric(horizontal: 10.w),
-                child: SvgPicture.asset(prefixIconName!),
-              )
-            : prefixIcon,
-        suffixIcon: suffixIconWidget ??
-            (suffixIconName != null
-                ? GestureDetector(
-                    behavior: HitTestBehavior.opaque,
-                    onTap: onTapSuffixIcon,
-                    child: Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 10.w),
-                      child: SvgPicture.asset(suffixIconName!),
-                    ))
-                : null),
-        hintText: hint,
-        errorMaxLines: 2,
-        contentPadding: EdgeInsets.symmetric(horizontal: contentPaddingHorizontal ?? 12.w, vertical: contentPaddingVertical ?? 12.h),
-        hintStyle: TextStyle(
-          color: hintColor ?? Color(0xFF3B3B3B).withOpacity(0.5),
-          fontSize: hintSize ?? 14.sp,
-          fontFamily: fontFamilyHint ?? strFontName,
-          fontWeight: fontWeightHint ?? FontWeight.w300,
+    return Material(
+      elevation: 5.0,
+      shadowColor: Colors.grey,
+      borderRadius:  BorderRadius.circular(13.0),
+      child: TextFormField(
+        autofocus: autoFocus,
+        inputFormatters: inputFormatters,
+        textInputAction: textInputAction,
+        validator: validator,
+        onTap: onTap,
+        obscureText: passwordVisible,
+        maxLength: maxLength,
+        controller: controller,
+        focusNode: focusNode,
+        onFieldSubmitted: onFieldSubmitted,
+        initialValue: initialValue,
+        readOnly: readOnly ?? false,
+        maxLines: maxLines,
+        textAlign: textAlign ?? TextAlign.left,
+        keyboardType: textInputType,
+        expands: expands,
+        style: TextStyle(
+          color: colorBlack,
+          fontSize: fontSize ?? 14.sp,
+          fontFamily: fontFamilyText ?? strFontName,
+          fontWeight: fontWeightText ?? FontWeight.w500,
         ),
-        filled: true,
-        prefixIconConstraints: prefixIconConstraints,
-        fillColor: color ?? Colors.white,
-        border: UnderlineInputBorder(
-          borderSide: BorderSide.none,
-          borderRadius: BorderRadius.circular(13.0),
+        onChanged: onChanged,
+        onEditingComplete: onEditingComplete,
+        decoration: InputDecoration(
+          enabled: true,
+          counterText: counterText ?? "",
+          isDense: isDense ?? isDense,
+          prefixIcon: prefixIconName?.isNotEmpty ?? false
+              ? Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 10.w),
+                  child: SvgPicture.asset(prefixIconName!),
+                )
+              : prefixIcon,
+          suffixIcon: suffixIconWidget ??
+              (suffixIconName != null
+                  ? GestureDetector(
+                      behavior: HitTestBehavior.opaque,
+                      onTap: onTapSuffixIcon,
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 10.w),
+                        child: SvgPicture.asset(suffixIconName!),
+                      ))
+                  : null),
+          hintText: hint,
+          errorMaxLines: 2,
+          contentPadding: EdgeInsets.symmetric(horizontal: contentPaddingHorizontal ?? 12.w, vertical: contentPaddingVertical ?? 12.h),
+          hintStyle: TextStyle(
+            color: hintColor ?? Color(0xFF3B3B3B).withOpacity(0.5),
+            fontSize: hintSize ?? 14.sp,
+            fontFamily: fontFamilyHint ?? strFontName,
+            fontWeight: fontWeightHint ?? FontWeight.w300,
+          ),
+          filled: true,
+          prefixIconConstraints: prefixIconConstraints,
+          fillColor: color ?? Colors.white,
+          border: UnderlineInputBorder(
+            borderSide: BorderSide.none,
+            borderRadius: BorderRadius.circular(13.0),
+          ),
+          labelText: labelText,
+          labelStyle: TextStyle(
+            color: labelColor ?? colorBlack.withOpacity(0.6),
+            fontSize: labelSize ?? 13.sp,
+            fontFamily: fontFamilyLabel ?? strFontName,
+            fontWeight: fontWeightLabel ?? FontWeight.w400,
+          ),
+          // border: OutlineInputBorder(
+          //     borderSide: BorderSide.none,
+          //     borderRadius: BorderRadius.circular(50)
+          // ),
+          // border: OutlineInputBorder(borderRadius: BorderRadius.circular(borderRadius ?? 16.0), borderSide: BorderSide.none),
         ),
-        labelText: labelText,
-        labelStyle: TextStyle(
-          color: labelColor ?? colorBlack.withOpacity(0.6),
-          fontSize: labelSize ?? 13.sp,
-          fontFamily: fontFamilyLabel ?? strFontName,
-          fontWeight: fontWeightLabel ?? FontWeight.w400,
-        ),
-        // border: OutlineInputBorder(
-        //     borderSide: BorderSide.none,
-        //     borderRadius: BorderRadius.circular(50)
-        // ),
-        // border: OutlineInputBorder(borderRadius: BorderRadius.circular(borderRadius ?? 16.0), borderSide: BorderSide.none),
       ),
     );
   }

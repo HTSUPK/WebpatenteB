@@ -9,7 +9,8 @@ import '../resources/image_resources.dart';
 
 class CommonAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
-  final String? prefixIconName, prefixIcon;
+  final String? prefixIconName, prefixIcon, backIcon;
+  final double? backIconHeight, backIconWidth;
   final bool? shouldShowBackButton;
   final PreferredSizeWidget? bottom;
   final bool? isPrefixIcon;
@@ -25,6 +26,9 @@ class CommonAppBar extends StatelessWidget implements PreferredSizeWidget {
       {Key? key,
       required this.title,
       this.shouldShowBackButton = true,
+      this.backIcon,
+      this.backIconHeight,
+      this.backIconWidth,
       this.bottom,
       this.isPrefixIcon,
       this.prefixIcon,
@@ -55,8 +59,8 @@ class CommonAppBar extends StatelessWidget implements PreferredSizeWidget {
       title: TextWidget(
         text: title,
         color: colorWhite,
-        fontWeight: FontWeight.w400,
-        fontSize: 18.sp,
+        fontWeight: FontWeight.w700,
+        fontSize: 21.sp,
       ),
       centerTitle: true,
       leading: (shouldShowBackButton ?? true)
@@ -70,10 +74,16 @@ class CommonAppBar extends StatelessWidget implements PreferredSizeWidget {
                       }
                     },
                 child: Container(
-                  height: 5,
-                  width: 5,
-                  margin: const EdgeInsets.only(left: 22),
-                  padding: const EdgeInsets.only(bottom: 12, right: 5, left: 5, top: 10),
+                  // height: 5,
+                  // width: 5,
+                  margin: const EdgeInsets.only(left: 10),
+                  // padding: const EdgeInsets.only(bottom: 12, right: 5, left: 5, top: 10),
+                  child: Image.asset(
+                    backIcon!,
+                    fit: BoxFit.cover,
+                    height: backIconHeight ?? 37.h,
+                    width: backIconWidth ?? 37.w,
+                  ),
                   // child: SvgPicture.asset(icArrowLeft, color: colorWhite),
                 ),
               )
