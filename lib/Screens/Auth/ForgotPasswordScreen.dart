@@ -17,12 +17,17 @@ class ForgotPasswordScreen extends StatefulWidget {
 }
 
 class _ForgotPasswordScreenState extends BaseStatefulWidgetState<ForgotPasswordScreen> {
+
+  @override
+  // TODO: implement scaffoldBgColor
+  Color? get scaffoldBgColor => colorBackground;
+
   @override
   Widget buildBody(BuildContext context) {
     return Container(
       height: screenSize.height,
       width: screenSize.width,
-      color: colorWhite,
+      color: colorBackground,
       child: SingleChildScrollView(
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: 18.w),

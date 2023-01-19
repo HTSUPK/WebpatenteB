@@ -102,7 +102,7 @@ class _ProfileScreenState extends BaseStatefulWidgetState<ProfileScreen> {
         Expanded(
           child: Container(
             width: screenSize.width,
-            color: colorWhite,
+            color: colorBackground,
             padding: EdgeInsets.symmetric(horizontal: 12.w),
             child: Column(
               children: [

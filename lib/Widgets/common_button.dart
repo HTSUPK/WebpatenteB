@@ -6,7 +6,7 @@ import '../resources/color_resources.dart';
 import '../resources/strings.dart';
 
 class CommonButton extends StatelessWidget {
-  final double? width;
+  final double? width,height;
   final String? text;
   final String? stringAssetName;
   final GestureTapCallback? onTap;
@@ -29,6 +29,7 @@ class CommonButton extends StatelessWidget {
   const CommonButton(
       {Key? key,
       this.width,
+      this.height,
       this.text,
       this.onTap,
       this.showLoading = false,
@@ -55,6 +56,7 @@ class CommonButton extends StatelessWidget {
       onTap: onTap,
       child: Container(
           width: width,
+          height: height ?? 50.h,
           decoration: BoxDecoration(
             color: backgroundColor ?? colorPrimary,
             borderRadius: BorderRadius.circular(borderRadius ?? 15.0),
@@ -62,7 +64,7 @@ class CommonButton extends StatelessWidget {
               BoxShadow(
                 color: backgroundColor != null ? backgroundColor!.withOpacity(.36) : colorPrimary.withOpacity(.36),
                 spreadRadius: 10,
-                blurRadius: 20,
+                blurRadius: 10,
                 offset: const Offset(0, 4),
               ),
               BoxShadow(color: Colors.grey.shade300),

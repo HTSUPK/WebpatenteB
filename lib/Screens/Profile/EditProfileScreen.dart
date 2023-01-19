@@ -12,6 +12,7 @@ import '../../Widgets/text_widget.dart';
 import '../../base/base_stateful_widget.dart';
 import '../../resources/color_resources.dart';
 import '../../resources/image_resources.dart';
+import '../../resources/strings.dart';
 
 class EditProfileScreen extends StatefulWidget {
   const EditProfileScreen({Key? key}) : super(key: key);
@@ -25,14 +26,14 @@ class _EditProfileScreenState extends BaseStatefulWidgetState<EditProfileScreen>
 
   @override
   // TODO: implement scaffoldBgColor
-  Color? get scaffoldBgColor => colorWhite;
+  Color? get scaffoldBgColor => colorBackground;
 
   @override
   PreferredSizeWidget? buildAppBar(BuildContext context) {
     // TODO: implement buildAppBar
     return const CommonAppBar(
       title: "Edit Profile",
-        backIcon: icArrowLeft,
+      backIcon: icArrowLeft,
     );
   }
 
@@ -44,14 +45,35 @@ class _EditProfileScreenState extends BaseStatefulWidgetState<EditProfileScreen>
         child: Column(
           children: [
             heightBox(32.h),
-            const CircleAvatar(
-              radius: 60,
-              backgroundColor: colorWhite,
-              child: CircleAvatar(
-                radius: 55,
-                backgroundImage: NetworkImage(
-                  "https://t4.ftcdn.net/jpg/02/14/74/61/360_F_214746128_31JkeaP6rU0NzzzdFC4khGkmqc8noe6h.jpg",
-                ),
+            Container(
+              height: 129.h,
+              width: 129.w,
+              child: Stack(
+                children: [
+                  const CircleAvatar(
+                    radius: 65,
+                    backgroundColor: colorWhite,
+                    child: CircleAvatar(
+                      radius: 60,
+                      backgroundImage: NetworkImage(
+                        "https://t4.ftcdn.net/jpg/02/14/74/61/360_F_214746128_31JkeaP6rU0NzzzdFC4khGkmqc8noe6h.jpg",
+                      ),
+                    ),
+                  ),
+                  Positioned(
+                    bottom: 15.h,
+                    right: 15.w,
+                    child: GestureDetector(
+                      onTap: () => chooseProfileImage(),
+                      child: Image.asset(
+                        icCamera,
+                        height: 35.h,
+                        width: 35.w,
+                        fit: BoxFit.fitWidth,
+                      ),
+                    ),
+                  )
+                ],
               ),
             ),
             heightBox(30.h),
@@ -63,7 +85,6 @@ class _EditProfileScreenState extends BaseStatefulWidgetState<EditProfileScreen>
               onEditingComplete: () => FocusScope.of(context).nextFocus(),
             ),
             heightBox(12.h),
-            
             TextEditingWidget(
               textInputType: TextInputType.emailAddress,
               textInputAction: TextInputAction.next,
@@ -122,6 +143,39 @@ class _EditProfileScreenState extends BaseStatefulWidgetState<EditProfileScreen>
           ],
         ),
       ),
+    );
+  }
+
+  void chooseProfileImage() {
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext bc) {
+        return SafeArea(
+          child: Wrap(
+            children: <Widget>[
+              ListTile(
+                  leading: const Icon(Icons.photo_library),
+                  title: TextWidget(
+                    text: "From Gallery",
+                    fontSize: 16,
+                    fontFamily: strFontName,
+                    fontWeight: FontWeight.w500,
+                  ),
+                  onTap: () {}),
+              ListTile(
+                leading: const Icon(Icons.photo_camera),
+                title: TextWidget(
+                  text: "From Camera",
+                  fontSize: 16,
+                  fontFamily: strFontName,
+                  fontWeight: FontWeight.w500,
+                ),
+                onTap: () {},
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 

@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import '../../base/base_stateful_widget.dart';
 import '../../resources/image_resources.dart';
 import '../Auth/LoginScreen.dart';
 
@@ -12,7 +13,7 @@ class SplashScreen extends StatefulWidget {
   State<SplashScreen> createState() => _SplashScreenState();
 }
 
-class _SplashScreenState extends State<SplashScreen> {
+class _SplashScreenState extends BaseStatefulWidgetState<SplashScreen> {
   @override
   void initState() {
     // TODO: implement initState
@@ -29,15 +30,13 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: SizedBox(
-        height: 690.h,
-        width: 360.w,
-        child: Image.asset(
-          splash,
-          fit: BoxFit.cover,
-        ),
+  Widget buildBody(BuildContext context) {
+    return SizedBox(
+      height: 690.h,
+      width: 360.w,
+      child: Image.asset(
+        splash,
+        fit: BoxFit.cover,
       ),
     );
   }

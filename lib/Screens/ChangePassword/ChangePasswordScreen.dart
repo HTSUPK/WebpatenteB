@@ -6,6 +6,7 @@ import 'package:webpatente/Widgets/common_appbar.dart';
 import '../../Widgets/common_button.dart';
 import '../../Widgets/text_editing_widget.dart';
 import '../../base/base_stateful_widget.dart';
+import '../../resources/color_resources.dart';
 import '../../resources/image_resources.dart';
 
 class ChangePasswordScreen extends StatefulWidget {
@@ -19,6 +20,10 @@ class _ChangePasswordScreenState extends BaseStatefulWidgetState<ChangePasswordS
   bool isHideChangeOldPassword = true;
   bool isHideChangeNewPassword = true;
   bool isHideChangeConfirmPassword = true;
+
+  @override
+  // TODO: implement scaffoldBgColor
+  Color? get scaffoldBgColor => colorBackground;
 
   @override
   PreferredSizeWidget? buildAppBar(BuildContext context) {

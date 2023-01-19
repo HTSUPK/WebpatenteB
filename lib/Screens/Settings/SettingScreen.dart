@@ -21,7 +21,7 @@ class _SettingScreenState extends BaseStatefulWidgetState<SettingScreen> {
 
   @override
   // TODO: implement scaffoldBgColor
-  Color? get scaffoldBgColor => colorWhite;
+  Color? get scaffoldBgColor => colorBackground;
 
   @override
   PreferredSizeWidget? buildAppBar(BuildContext context) {
@@ -64,7 +64,7 @@ class _SettingScreenState extends BaseStatefulWidgetState<SettingScreen> {
             thickness: 1,
             color: colorDarkBlue,
           ),
-          GestureDetector(
+          InkWell(
             onTap: () => Navigator.push(
                 context,
                 MaterialPageRoute(

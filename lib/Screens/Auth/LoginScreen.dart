@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
 import '../../Widgets/common_button.dart';
 import '../../Widgets/common_widgets.dart';
 import '../../Widgets/text_editing_widget.dart';
@@ -23,23 +24,26 @@ class _LoginScreenState extends BaseStatefulWidgetState<LoginScreen> {
   bool isHideLoginPassword = true;
 
   @override
+  // TODO: implement scaffoldBgColor
+  Color? get scaffoldBgColor => colorBackground;
+
+  @override
   Widget buildBody(BuildContext context) {
-    return  SingleChildScrollView(
+    return SingleChildScrollView(
       child: Container(
-        height: screenSize.height,
+        // height: screenSize.height,
         width: screenSize.width,
         color: colorBackground,
         padding: EdgeInsets.symmetric(horizontal: 23.w),
         child: Column(
+          mainAxisSize: MainAxisSize.min,
           children: [
-            heightBox(82.h),
-            Center(
-              child: Image.asset(
-                icon,
-                height: 120.h,
-                width: 135.w,
-                fit: BoxFit.cover,
-              ),
+            heightBox(50.h),
+            Image.asset(
+              icon,
+              height: 120.h,
+              width: 135.w,
+              fit: BoxFit.cover,
             ),
             heightBox(48.h),
             TextWidget(
@@ -77,7 +81,7 @@ class _LoginScreenState extends BaseStatefulWidgetState<LoginScreen> {
             ),
             heightBox(20.h),
             CommonButton(
-              width: 360.w,
+              width: screenSize.width,
               text: "Sign in",
               fontSize: 19,
               onTap: () {
@@ -107,7 +111,7 @@ class _LoginScreenState extends BaseStatefulWidgetState<LoginScreen> {
                 fontFamily: strFontName,
               ),
             ),
-            const Spacer(),
+            heightBox(50.h),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -135,7 +139,7 @@ class _LoginScreenState extends BaseStatefulWidgetState<LoginScreen> {
                   ),
                 ),
               ],
-            )
+            ),
           ],
         ),
       ),

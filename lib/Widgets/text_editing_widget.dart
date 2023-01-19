@@ -105,7 +105,7 @@ class TextEditingWidget extends StatelessWidget {
     return Material(
       elevation: 5.0,
       shadowColor: Colors.grey,
-      borderRadius:  BorderRadius.circular(13.0),
+      borderRadius: BorderRadius.circular(13.0),
       child: TextFormField(
         autofocus: autoFocus,
         inputFormatters: inputFormatters,
@@ -141,16 +141,17 @@ class TextEditingWidget extends StatelessWidget {
                   child: SvgPicture.asset(prefixIconName!),
                 )
               : prefixIcon,
-          suffixIcon: suffixIconWidget ??
-              (suffixIconName != null
-                  ? GestureDetector(
+          suffixIcon: suffixIconWidget ?? (suffixIconName != null ? GestureDetector(
                       behavior: HitTestBehavior.opaque,
                       onTap: onTapSuffixIcon,
                       child: Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 10.w),
-                        child: SvgPicture.asset(suffixIconName!),
-                      ))
-                  : null),
+                        padding: EdgeInsets.all(20),
+                        child: SvgPicture.asset(
+                          suffixIconName!,
+                          // height: 15,
+                          // width: 15,
+                        ),
+                      )) : null),
           hintText: hint,
           errorMaxLines: 2,
           contentPadding: EdgeInsets.symmetric(horizontal: contentPaddingHorizontal ?? 12.w, vertical: contentPaddingVertical ?? 12.h),

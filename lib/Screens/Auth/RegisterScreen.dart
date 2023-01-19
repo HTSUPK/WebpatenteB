@@ -25,14 +25,19 @@ class _RegisterScreenState extends BaseStatefulWidgetState<RegisterScreen> {
   Country _selectedDialogCountry = CountryPickerUtils.getCountryByPhoneCode('1');
 
   @override
+  // TODO: implement scaffoldBgColor
+  Color? get scaffoldBgColor => colorBackground;
+
+  @override
   Widget buildBody(BuildContext context) {
-    return Container(
-      height: screenSize.height,
-      width: screenSize.width,
-      color: colorWhite,
-      padding: EdgeInsets.symmetric(horizontal: 18.w),
-      child: SingleChildScrollView(
+    return SingleChildScrollView(
+      child: Container(
+        // height: screenSize.height,
+        width: screenSize.width,
+        color: colorBackground,
+        padding: EdgeInsets.symmetric(horizontal: 18.w),
         child: Column(
+          mainAxisSize: MainAxisSize.min,
           children: [
             heightBox(17.h),
             Row(
@@ -51,13 +56,16 @@ class _RegisterScreenState extends BaseStatefulWidgetState<RegisterScreen> {
                   //   alignment: Alignment.topLeft,
                   // ),
                 ),
-                widthBox(40.w),
+                // widthBox(40.w),
+                const Spacer(),
                 Image.asset(
                   icon,
                   height: 120.h,
                   width: 135.w,
                   fit: BoxFit.fill,
                 ),
+                const Spacer(),
+                const Spacer(),
               ],
             ),
             heightBox(35.h),
@@ -163,7 +171,8 @@ class _RegisterScreenState extends BaseStatefulWidgetState<RegisterScreen> {
                     fontWeight: FontWeight.w400,
                     fontFamily: strFontName,
                   ),
-                  heightBox(20.h),
+                  heightBox(10.h),
+                  // Spacer(),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [

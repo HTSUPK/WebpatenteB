@@ -1,3 +1,5 @@
+const extra = "assets/images/EXTRA.jpg";
+
 // Splash
 const splash = "assets/images/ic_splash.png";
 
@@ -29,4 +31,15 @@ const icTernCondition = "assets/images/ic_termCondition.svg";
 const icFeedback = "assets/images/ic_feedback.svg";
 const icLogout = "assets/images/ic_logout.svg";
 const icArrowRight = "assets/images/ic_arrow_right.svg";
+
+// EditProfile
+const icCamera = "assets/images/camera.png";
+
+// StartQuiz
+const icRight = "assets/images/ic_right.svg";
+
+// Question
+const icClose = "assets/images/close.png";
+const icPreviewButton = "assets/images/ic_preview_button.png";
+const icNextButton = "assets/images/ic_next_button.png";
 
