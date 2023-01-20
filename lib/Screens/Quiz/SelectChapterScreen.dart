@@ -3,12 +3,12 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:webpatente/Widgets/common_appbar.dart';
 import 'package:webpatente/Widgets/common_button.dart';
 import 'package:webpatente/resources/color_resources.dart';
-
 import '../../Widgets/chapterCard_widget.dart';
 import '../../Widgets/text_widget.dart';
 import '../../base/base_stateful_widget.dart';
 import '../../resources/image_resources.dart';
-import 'QuestionScreen.dart';
+import 'QuizScreen.dart';
+import '../Question/QuestionScreen.dart';
 
 class SelectChapterScreen extends StatefulWidget {
   const SelectChapterScreen({Key? key}) : super(key: key);
@@ -62,7 +62,7 @@ class _SelectChapterScreenState extends BaseStatefulWidgetState<SelectChapterScr
         onTap: () => Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => const QuestionScreen(),
+            builder: (context) => const QuizScreen(),
           ),
         ),
       ),

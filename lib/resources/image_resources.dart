@@ -1,4 +1,4 @@
-const extra = "assets/images/EXTRA.jpg";
+const icDummy = "assets/images/ic_dummy.png";
 
 // Splash
 const splash = "assets/images/ic_splash.png";
@@ -42,4 +42,12 @@ const icRight = "assets/images/ic_right.svg";
 const icClose = "assets/images/close.png";
 const icPreviewButton = "assets/images/ic_preview_button.png";
 const icNextButton = "assets/images/ic_next_button.png";
+// const icTranslate = "assets/images/ic_translate.svg";
+const icTranslate = "assets/images/ic_translate.png";
+const icSpeak = "assets/images/ic_Speak.png";
+const icArrowDown = "assets/images/ic_arrow_down.svg";
+
+// Quiz
+const icSound = "assets/images/ic_sound.svg";
+const icQuizImage = "assets/images/ic_quizImage.png";
 

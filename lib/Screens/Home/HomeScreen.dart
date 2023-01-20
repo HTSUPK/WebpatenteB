@@ -10,8 +10,11 @@ import '../../resources/color_resources.dart';
 import '../../resources/image_resources.dart';
 import '../../resources/strings.dart';
 import '../Profile/ProfileScreen.dart';
-import '../Question/SelectChapterScreen.dart';
+import '../Question/QuestionScreen.dart';
+import '../Quiz/SelectChapterScreen.dart';
+import '../Quiz/QuizScreen.dart';
 import '../Statistics/StatisticsScreen.dart';
+import '../WebPatentePro/WebPatenteProScreen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -78,11 +81,19 @@ class _HomeScreenState extends BaseStatefulWidgetState<HomeScreen> {
                           ],
                         ),
                         const Spacer(),
-                        SizedBox(
-                          height: 80.h,
-                          width: 80.w,
-                          child: Image.asset(
-                            icVip,
+                        GestureDetector(
+                          onTap: () => Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const WebPatenteProScreen(),
+                            ),
+                          ),
+                          child: SizedBox(
+                            height: 80.h,
+                            width: 80.w,
+                            child: Image.asset(
+                              icVip,
+                            ),
                           ),
                         ),
                       ],
@@ -99,7 +110,12 @@ class _HomeScreenState extends BaseStatefulWidgetState<HomeScreen> {
                         imageHeight: 73.h,
                         imageWidth: 73.w,
                         textName: "Questions",
-                        onTap: () => showBottomSheet(),
+                        onTap: () => Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const QuestionScreen(),
+                          ),
+                        ),
                       ),
                       CardWidget(
                         height: 140.h,
@@ -108,6 +124,7 @@ class _HomeScreenState extends BaseStatefulWidgetState<HomeScreen> {
                         imageHeight: 73.h,
                         imageWidth: 73.w,
                         textName: "Quiz",
+                        onTap: () => showBottomSheet(),
                       ),
                     ],
                   ),
@@ -237,6 +254,7 @@ class _HomeScreenState extends BaseStatefulWidgetState<HomeScreen> {
                 text: "Continue",
                 fontSize: 22,
                 onTap: () {
+                  Navigator.pop(this.context);
                   Navigator.push(
                     context,
                     MaterialPageRoute(

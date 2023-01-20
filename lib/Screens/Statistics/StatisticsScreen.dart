@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:webpatente/Widgets/common_appbar.dart';
 import 'package:webpatente/resources/color_resources.dart';
-
 import '../../Widgets/text_widget.dart';
 import '../../base/base_stateful_widget.dart';
 import '../../resources/image_resources.dart';
@@ -15,6 +15,18 @@ class StatisticsScreen extends StatefulWidget {
 }
 
 class _StatisticsScreenState extends BaseStatefulWidgetState<StatisticsScreen> {
+  List<ChartData> chartData = [
+    ChartData('Quiz1', 35),
+    ChartData('Quiz2', 28),
+    ChartData('Quiz3', 34),
+    ChartData('Quiz4', 32),
+    ChartData('Quiz5', 40),
+    ChartData('Quiz6', 40),
+    ChartData('Quiz7', 40),
+    ChartData('Quiz8', 40),
+    ChartData('Quiz9', 40),
+  ];
+
   @override
   // TODO: implement scaffoldBgColor
   Color? get scaffoldBgColor => colorPrimary;
@@ -152,6 +164,34 @@ class _StatisticsScreenState extends BaseStatefulWidgetState<StatisticsScreen> {
                   fontWeight: FontWeight.w600,
                   fontSize: 22.sp,
                 ),
+                heightBox(10.h),
+                SfCartesianChart(
+                  primaryXAxis: CategoryAxis(
+                    majorGridLines: const MajorGridLines(
+                      width: 0,
+                    ),
+                  ),
+                  legend: Legend(isVisible: false),
+                  tooltipBehavior: TooltipBehavior(
+                    enable: true,
+                  ),
+                  series: <CartesianSeries<ChartData, String>>[
+                    ColumnSeries<ChartData, String>(
+                      dataSource: chartData,
+                      xValueMapper: (ChartData data, _) => data.x,
+                      yValueMapper: (ChartData data, _) => data.y,
+                      borderRadius: BorderRadius.circular(15),
+                      isVisibleInLegend: false,
+                      color: colorPrimary,
+                      // gradient: LinearGradient(
+                      //     colors: [colorPrimary, colorPrimary,],
+                      //     stops: [0.0, 1.0],
+                      //     begin: FractionalOffset.topCenter,
+                      //     end: FractionalOffset.bottomCenter,
+                      //     tileMode: TileMode.repeated),
+                    ),
+                  ],
+                ),
               ],
             ),
           ),
@@ -159,4 +199,14 @@ class _StatisticsScreenState extends BaseStatefulWidgetState<StatisticsScreen> {
       ],
     );
   }
+}
+
+class ChartData {
+  ChartData(
+    this.x,
+    this.y,
+  );
+
+  final String x;
+  final double? y;
 }

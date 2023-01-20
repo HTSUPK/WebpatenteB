@@ -25,12 +25,6 @@ class _ChapterCardState extends State<ChapterCard> {
       decoration: BoxDecoration(
         color: colorWhite,
         borderRadius: BorderRadius.circular(15),
-        // boxShadow: const [
-        //   BoxShadow(
-        //     color: Colors.grey,
-        //     blurRadius: 5,
-        //   ),
-        // ],
       ),
       padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 10.h),
       child: Row(
