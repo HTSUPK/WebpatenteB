@@ -25,9 +25,11 @@ class _ProfileScreenState extends BaseStatefulWidgetState<ProfileScreen> {
   @override
   PreferredSizeWidget? buildAppBar(BuildContext context) {
     // TODO: implement buildAppBar
-    return const CommonAppBar(
+    return  CommonAppBar(
       title: "Profile",
       backIcon: icArrowLeft,
+      backIconHeight: 45.h,
+      backIconWidth: 45.w,
     );
   }
 
@@ -53,7 +55,7 @@ class _ProfileScreenState extends BaseStatefulWidgetState<ProfileScreen> {
                 child: CircleAvatar(
                   radius: 55,
                   backgroundImage: NetworkImage(
-                    "https://t4.ftcdn.net/jpg/02/14/74/61/360_F_214746128_31JkeaP6rU0NzzzdFC4khGkmqc8noe6h.jpg",
+                    "https://hexeros.com/dev/superapp/uploads/user/user.png",
                   ),
                 ),
               ),

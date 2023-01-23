@@ -34,9 +34,11 @@ class _StatisticsScreenState extends BaseStatefulWidgetState<StatisticsScreen> {
   @override
   PreferredSizeWidget? buildAppBar(BuildContext context) {
     // TODO: implement buildAppBar
-    return const CommonAppBar(
+    return CommonAppBar(
       title: "Statistics",
       backIcon: icArrowLeft,
+      backIconHeight: 45.h,
+      backIconWidth: 45.w,
     );
   }
 

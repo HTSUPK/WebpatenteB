@@ -1,11 +1,10 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:webpatente/base/base_stateful_widget.dart';
 import 'package:webpatente/resources/color_resources.dart';
-
 import '../../Widgets/answer_button_widget.dart';
-import '../../Widgets/common_button.dart';
 import '../../Widgets/text_widget.dart';
 import '../../resources/image_resources.dart';
 import 'ResultScreen.dart';
@@ -18,6 +17,63 @@ class QuizScreen extends StatefulWidget {
 }
 
 class _QuizScreenState extends BaseStatefulWidgetState<QuizScreen> {
+  String minuteString = "00", secondString = "00";
+  int minutes = 0, seconds = 0, isSelect = 0;
+  late Timer _timer;
+  double progress = 0;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      _startSecond();
+      totalProgressTime();
+    });
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    _timer.cancel();
+    super.dispose();
+  }
+
+  void _startSecond() {
+    setState(() {
+      if (seconds < 59) {
+        seconds++;
+        secondString = seconds.toString();
+        if (secondString.length == 1) {
+          secondString = "0$secondString";
+        }
+      } else {
+        _startMinute();
+      }
+    });
+  }
+
+  void _startMinute() {
+    setState(() {
+      if (minutes < 59) {
+        seconds = 0;
+        secondString = "00";
+        minutes++;
+        minuteString = minutes.toString();
+        if (minuteString.length == 1) {
+          minuteString = "0$minuteString";
+        }
+      }
+    });
+  }
+
+  int giveMinute = 10;
+
+  totalProgressTime() {
+    int currentSecond = int.parse(secondString) + (int.parse(minuteString) * 60);
+    progress = currentSecond / (giveMinute * 60);
+  }
+
   @override
   // TODO: implement scaffoldBgColor
   Color? get scaffoldBgColor => colorPrimary;
@@ -36,19 +92,95 @@ class _QuizScreenState extends BaseStatefulWidgetState<QuizScreen> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Container(
+                    SizedBox(
                       height: 34.h,
                       width: 282.w,
-                      decoration: BoxDecoration(
-                        color: colorDarkGreen,
-                        borderRadius: BorderRadius.circular(50),
+                      child: Stack(
+                        fit: StackFit.expand,
+                        children: [
+                          ClipRRect(
+                            borderRadius: const BorderRadius.all(Radius.circular(50)),
+                            child: LinearProgressIndicator(
+                              value: progress,
+                              valueColor: const AlwaysStoppedAnimation(colorTimeBackground),
+                              backgroundColor: colorDarkGreen,
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(6),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                const Icon(
+                                  Icons.watch_later_outlined,
+                                  size: 18,
+                                ),
+                                widthBox(5.w),
+                                TextWidget(
+                                  text: "$minuteString:$secondString",
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ],
+                            ),
+                          ),
+                          // Positioned(
+                          //   top: 10,
+                          //   left: 10,
+                          //   child: TextWidget(
+                          //     text: "$minuteString:$secondString",
+                          //     fontSize: 16,
+                          //     fontWeight: FontWeight.w600,
+                          //   ),
+                          // )
+                        ],
                       ),
                     ),
-                    Image.asset(
-                      icClose,
-                      fit: BoxFit.fitWidth,
-                      height: 35.h,
-                      width: 35.w,
+                    // Container(
+                    //   height: 34.h,
+                    //   width: 282.w,
+                    //   decoration: BoxDecoration(
+                    //     color: colorDarkGreen,
+                    //     borderRadius: BorderRadius.circular(50),
+                    //   ),
+                    //   child: Padding(
+                    //     padding: const EdgeInsets.fromLTRB(6, 4, 150, 4),
+                    //     child: Container(
+                    //       // width: 117.w,
+                    //       height: 25.h,
+                    //       decoration: BoxDecoration(
+                    //         color: colorTimeBackground,
+                    //         borderRadius: BorderRadius.circular(50),
+                    //       ),
+                    //       child: Padding(
+                    //         padding: const EdgeInsets.all(6),
+                    //         child: Row(
+                    //           mainAxisSize: MainAxisSize.min,
+                    //           children: [
+                    //             const Icon(
+                    //               Icons.watch_later_outlined,
+                    //               size: 18,
+                    //             ),
+                    //             widthBox(5.w),
+                    //             TextWidget(
+                    //               text: "$minuteString:$secondString",
+                    //               fontSize: 16,
+                    //               fontWeight: FontWeight.w600,
+                    //             ),
+                    //           ],
+                    //         ),
+                    //       ),
+                    //     ),
+                    //   ),
+                    // ),
+                    GestureDetector(
+                      onTap: () => Navigator.pop(context),
+                      child: Image.asset(
+                        icClose,
+                        fit: BoxFit.fitWidth,
+                        height: 35.h,
+                        width: 35.w,
+                      ),
                     ),
                   ],
                 ),
@@ -62,21 +194,29 @@ class _QuizScreenState extends BaseStatefulWidgetState<QuizScreen> {
                     shrinkWrap: true,
                     scrollDirection: Axis.horizontal,
                     itemBuilder: (context, index) {
-                      return Padding(
-                        padding: EdgeInsets.only(left: 8.w),
-                        child: Container(
-                          height: 44.h,
-                          width: 44.w,
-                          decoration: BoxDecoration(
-                            color: colorDarkGreen,
-                            borderRadius: BorderRadius.circular(44),
-                          ),
-                          child: Center(
-                            child: TextWidget(
-                              text: "${index + 1}",
-                              fontSize: 22,
-                              fontWeight: FontWeight.w700,
-                              color: colorWhite,
+                      return GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            isSelect = index;
+                            setState(() {});
+                          });
+                        },
+                        child: Padding(
+                          padding: EdgeInsets.only(left: 8.w),
+                          child: Container(
+                            height: 44.h,
+                            width: 44.w,
+                            decoration: BoxDecoration(
+                              color: isSelect == index ? colorTimeBackground : colorDarkGreen,
+                              borderRadius: BorderRadius.circular(44),
+                            ),
+                            child: Center(
+                              child: TextWidget(
+                                text: "${index + 1}",
+                                fontSize: 22,
+                                fontWeight: FontWeight.w700,
+                                color: isSelect == index ? colorBlack : colorWhite,
+                              ),
                             ),
                           ),
                         ),

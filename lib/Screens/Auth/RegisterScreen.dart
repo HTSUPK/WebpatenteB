@@ -10,6 +10,7 @@ import '../../base/base_stateful_widget.dart';
 import '../../resources/color_resources.dart';
 import '../../resources/image_resources.dart';
 import '../../resources/strings.dart';
+import 'LoginScreen.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({Key? key}) : super(key: key);
@@ -183,7 +184,12 @@ class _RegisterScreenState extends BaseStatefulWidgetState<RegisterScreen> {
                         fontFamily: strFontName,
                       ),
                       TextButton(
-                        onPressed: () {},
+                        onPressed: () => Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const LoginScreen(),
+                          ),
+                        ),
                         child: TextWidget(
                           text: "Log In",
                           fontSize: 18,

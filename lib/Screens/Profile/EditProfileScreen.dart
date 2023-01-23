@@ -56,7 +56,7 @@ class _EditProfileScreenState extends BaseStatefulWidgetState<EditProfileScreen>
                     child: CircleAvatar(
                       radius: 60,
                       backgroundImage: NetworkImage(
-                        "https://t4.ftcdn.net/jpg/02/14/74/61/360_F_214746128_31JkeaP6rU0NzzzdFC4khGkmqc8noe6h.jpg",
+                        "https://hexeros.com/dev/superapp/uploads/user/user.png",
                       ),
                     ),
                   ),

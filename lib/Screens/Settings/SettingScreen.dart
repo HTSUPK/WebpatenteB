@@ -26,9 +26,11 @@ class _SettingScreenState extends BaseStatefulWidgetState<SettingScreen> {
   @override
   PreferredSizeWidget? buildAppBar(BuildContext context) {
     // TODO: implement buildAppBar
-    return const CommonAppBar(
+    return  CommonAppBar(
       title: "Setting",
       backIcon: icArrowLeft,
+      backIconHeight: 45.h,
+      backIconWidth: 45.w,
     );
   }
 

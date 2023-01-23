@@ -51,3 +51,6 @@ const icArrowDown = "assets/images/ic_arrow_down.svg";
 const icSound = "assets/images/ic_sound.svg";
 const icQuizImage = "assets/images/ic_quizImage.png";
 
+// WebPatente Pro
+const icIconVip = "assets/images/ic_ivonVip.png";
+

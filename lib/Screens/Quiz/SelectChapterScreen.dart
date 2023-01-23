@@ -43,7 +43,7 @@ class _SelectChapterScreenState extends BaseStatefulWidgetState<SelectChapterScr
               children: [
                 heightBox(10),
                 const ChapterCard(
-                  image: "https://t4.ftcdn.net/jpg/02/14/74/61/360_F_214746128_31JkeaP6rU0NzzzdFC4khGkmqc8noe6h.jpg",
+                  image: "https://hexeros.com/dev/superapp/uploads/user/user.png",
                   text: "Lorem Ipsum is simply dummy text of the printing and type setting industry.",
                 ),
               ],

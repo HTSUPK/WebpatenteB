@@ -14,6 +14,9 @@ const Color colorGoButton = Color(0XFFD8FF3C);
 const Color colorDarkGreen = Color(0XFF207B4C);
 const Color colorRed = Color(0XFFED4343);
 const Color colorAnsBackGround = Color(0XFFB7B7B7);
+const Color colorOrange = Color(0XFFFF8008);
+const Color colorOrangeLight = Color(0XFFFFC837);
+const Color colorTimeBackground = Color(0XFFD8FF3B);
 
 
 List<Color> shadowGradient = [

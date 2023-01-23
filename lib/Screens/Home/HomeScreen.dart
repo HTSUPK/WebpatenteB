@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/svg.dart';
 import '../../Widgets/card_widget.dart';
 import '../../Widgets/common_button.dart';
 import '../../Widgets/quizType_widget.dart';
@@ -12,7 +11,6 @@ import '../../resources/strings.dart';
 import '../Profile/ProfileScreen.dart';
 import '../Question/QuestionScreen.dart';
 import '../Quiz/SelectChapterScreen.dart';
-import '../Quiz/QuizScreen.dart';
 import '../Statistics/StatisticsScreen.dart';
 import '../WebPatentePro/WebPatenteProScreen.dart';
 
@@ -56,7 +54,7 @@ class _HomeScreenState extends BaseStatefulWidgetState<HomeScreen> {
                           child: CircleAvatar(
                             radius: 25,
                             backgroundImage: NetworkImage(
-                              "https://t4.ftcdn.net/jpg/02/14/74/61/360_F_214746128_31JkeaP6rU0NzzzdFC4khGkmqc8noe6h.jpg",
+                              "https://hexeros.com/dev/superapp/uploads/user/user.png",
                             ),
                           ),
                         ),
@@ -219,7 +217,16 @@ class _HomeScreenState extends BaseStatefulWidgetState<HomeScreen> {
           padding: EdgeInsets.symmetric(horizontal: 24.w),
           child: Column(
             children: [
-              heightBox(50.h),
+              heightBox(10.h),
+              Container(
+                width: 114.w,
+                height: 5.h,
+                decoration: BoxDecoration(
+                  color: const Color(0XFFD9D9D9),
+                  borderRadius: BorderRadius.circular(30),
+                ),
+              ),
+              heightBox(40.h),
               Image.asset(
                 icQuiz,
                 height: 83.h,

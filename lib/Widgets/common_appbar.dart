@@ -46,7 +46,7 @@ class CommonAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      systemOverlayStyle: SystemUiOverlayStyle(
+      systemOverlayStyle: const SystemUiOverlayStyle(
         statusBarColor: Colors.transparent, // status bar color
         statusBarIconBrightness: Brightness.light,
         systemNavigationBarColor: colorWhite,
@@ -77,10 +77,10 @@ class CommonAppBar extends StatelessWidget implements PreferredSizeWidget {
                   // height: 5,
                   // width: 5,
                   margin: const EdgeInsets.only(left: 10),
-                  // padding: const EdgeInsets.only(bottom: 12, right: 5, left: 5, top: 10),
+                  // padding: const EdgeInsets.all(bottom: 12, right: 5, left: 5, top: 10),
                   child: Image.asset(
                     backIcon!,
-                    fit: BoxFit.cover,
+                    // fit: BoxFit.fitWidth,
                     height: backIconHeight ?? 37.h,
                     width: backIconWidth ?? 37.w,
                   ),
@@ -110,7 +110,7 @@ class CommonAppBar extends StatelessWidget implements PreferredSizeWidget {
                       child: SvgPicture.asset(prefixIcon!),
                     ),
                   )
-                : prefixWidget ?? SizedBox.shrink(),
+                : prefixWidget ?? const SizedBox.shrink(),
       ],
       bottom: bottom,
     );

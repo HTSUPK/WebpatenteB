@@ -6,6 +6,7 @@ import '../../Widgets/questionItem_widget.dart';
 import '../../Widgets/text_editing_widget.dart';
 import '../../base/base_stateful_widget.dart';
 import '../../resources/image_resources.dart';
+import 'PictureFullViewScreen.dart';
 
 class QuestionScreen extends StatefulWidget {
   const QuestionScreen({Key? key}) : super(key: key);
@@ -103,11 +104,14 @@ class _QuestionScreenState extends BaseStatefulWidgetState<QuestionScreen> {
                       ),
                     ],
                   ),
-                  Image.asset(
-                    icClose,
-                    fit: BoxFit.fitWidth,
-                    height: 35.h,
-                    width: 35.w,
+                  GestureDetector(
+                    onTap: () => Navigator.pop(context),
+                    child: Image.asset(
+                      icClose,
+                      fit: BoxFit.fitWidth,
+                      height: 35.h,
+                      width: 35.w,
+                    ),
                   ),
                 ],
               ),
@@ -199,13 +203,16 @@ class _QuestionScreenState extends BaseStatefulWidgetState<QuestionScreen> {
                           mainAxisAlignment: MainAxisAlignment.start,
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            ClipRRect(
-                              borderRadius: BorderRadius.circular(8),
-                              child: Image.network(
-                                "https://t4.ftcdn.net/jpg/02/14/74/61/360_F_214746128_31JkeaP6rU0NzzzdFC4khGkmqc8noe6h.jpg",
-                                height: 55.h,
-                                width: 70.w,
-                                fit: BoxFit.cover,
+                            GestureDetector(
+                              onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => const PictureFullViewScreen(),),),
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(8),
+                                child: Image.network(
+                                  "https://hexeros.com/dev/superapp/uploads/user/user.png",
+                                  height: 55.h,
+                                  width: 70.w,
+                                  fit: BoxFit.cover,
+                                ),
                               ),
                             ),
                             widthBox(10.w),
@@ -261,22 +268,30 @@ class _QuestionScreenState extends BaseStatefulWidgetState<QuestionScreen> {
                           ],
                         ),
                         heightBox(8.h),
-                        DropdownButtonHideUnderline(
-                          child: DropdownButton(
-                            value: dropdownvalue,
-                            isDense: true,
-                            icon: const Icon(Icons.keyboard_arrow_down),
-                            items: items.map((String items) {
-                              return DropdownMenuItem(
-                                value: items,
-                                child: Text(items),
-                              );
-                            }).toList(),
-                            onChanged: (String? newValue) {
-                              setState(() {
-                                dropdownvalue = newValue!;
-                              });
-                            },
+                        Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 10.0,vertical: 5),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10.0),
+                            border: Border.all(
+                                color: colorBlack.withOpacity(0.22), style: BorderStyle.solid, width: 0.80),
+                          ),
+                          child: DropdownButtonHideUnderline(
+                            child: DropdownButton(
+                              value: dropdownvalue,
+                              isDense: true,
+                              icon: const Icon(Icons.keyboard_arrow_down),
+                              items: items.map((String items) {
+                                return DropdownMenuItem(
+                                  value: items,
+                                  child: Text(items),
+                                );
+                              }).toList(),
+                              onChanged: (String? newValue) {
+                                setState(() {
+                                  dropdownvalue = newValue!;
+                                });
+                              },
+                            ),
                           ),
                         ),
                         heightBox(8.h),

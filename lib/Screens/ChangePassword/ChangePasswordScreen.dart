@@ -28,9 +28,11 @@ class _ChangePasswordScreenState extends BaseStatefulWidgetState<ChangePasswordS
   @override
   PreferredSizeWidget? buildAppBar(BuildContext context) {
     // TODO: implement buildAppBar
-    return const CommonAppBar(
+    return  CommonAppBar(
       title: "Change Password",
       backIcon: icArrowLeft,
+      backIconHeight: 45.h,
+      backIconWidth: 45.w,
     );
   }
 

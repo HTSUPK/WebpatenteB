@@ -108,7 +108,7 @@ class _ResultScreenState extends BaseStatefulWidgetState<ResultScreen> {
                               ClipRRect(
                                 borderRadius: BorderRadius.circular(8),
                                 child: Image.network(
-                                  "https://t4.ftcdn.net/jpg/02/14/74/61/360_F_214746128_31JkeaP6rU0NzzzdFC4khGkmqc8noe6h.jpg",
+                                  "https://hexeros.com/dev/superapp/uploads/user/user.png",
                                   height: 55.h,
                                   width: 70.w,
                                   fit: BoxFit.cover,
