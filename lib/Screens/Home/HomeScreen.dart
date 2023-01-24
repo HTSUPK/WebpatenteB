@@ -8,6 +8,8 @@ import '../../base/base_stateful_widget.dart';
 import '../../resources/color_resources.dart';
 import '../../resources/image_resources.dart';
 import '../../resources/strings.dart';
+import '../../utils/app_constants.dart';
+import '../../utils/shared_preference_util.dart';
 import '../Profile/ProfileScreen.dart';
 import '../Question/QuestionScreen.dart';
 import '../Quiz/SelectChapterScreen.dart';
@@ -48,13 +50,14 @@ class _HomeScreenState extends BaseStatefulWidgetState<HomeScreen> {
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const CircleAvatar(
+                        CircleAvatar(
                           radius: 30,
                           backgroundColor: colorWhite,
                           child: CircleAvatar(
                             radius: 25,
                             backgroundImage: NetworkImage(
-                              "https://hexeros.com/dev/superapp/uploads/user/user.png",
+                              // "https://hexeros.com/dev/superapp/uploads/user/user.png",
+                              SharedPreferenceUtil.getString(userProfileImage),
                             ),
                           ),
                         ),
@@ -63,7 +66,7 @@ class _HomeScreenState extends BaseStatefulWidgetState<HomeScreen> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             TextWidget(
-                              text: "Marcus Levin",
+                              text: SharedPreferenceUtil.getString(userName),
                               fontSize: 26,
                               color: colorWhite,
                               fontFamily: strFontName,

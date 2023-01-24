@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
+import 'package:webpatente/utils/app_utils.dart';
 import '../../Providers/auth_provider.dart';
 import '../../Widgets/common_button.dart';
 import '../../Widgets/common_widgets.dart';
@@ -24,6 +25,17 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends BaseStatefulWidgetState<LoginScreen> {
   bool isHideLoginPassword = true;
+
+  TextEditingController emailController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    emailController.text = "test@gmail.com";
+    passwordController.text = "123456";
+    super.initState();
+  }
 
   @override
   // TODO: implement scaffoldBgColor
@@ -65,6 +77,7 @@ class _LoginScreenState extends BaseStatefulWidgetState<LoginScreen> {
               ),
               heightBox(22.h),
               TextEditingWidget(
+                controller: emailController,
                 textInputType: TextInputType.emailAddress,
                 textInputAction: TextInputAction.next,
                 labelText: "Email",
@@ -73,6 +86,7 @@ class _LoginScreenState extends BaseStatefulWidgetState<LoginScreen> {
               ),
               heightBox(14.h),
               TextEditingWidget(
+                controller: passwordController,
                 textInputType: TextInputType.text,
                 textInputAction: TextInputAction.done,
                 labelText: "Password",
@@ -84,16 +98,26 @@ class _LoginScreenState extends BaseStatefulWidgetState<LoginScreen> {
               ),
               heightBox(20.h),
               CommonButton(
+                showLoading: authProviderRef.authLoader,
                 width: screenSize.width,
                 text: "Sign in",
                 fontSize: 19,
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const HomeScreen(),
-                    ),
-                  );
+                onTap: () async {
+                  if (emailController.text.isEmpty) {
+                    AppUtils.toast("Please enter your email");
+                  } else if (passwordController.text.isEmpty) {
+                    AppUtils.toast("Please enter password");
+                  } else {
+                    Map<String, dynamic> body = {
+                      "email": emailController.text,
+                      "password": passwordController.text,
+                      "device_id": await AppUtils.getDeviceId(),
+                      "device_type": AppUtils.getDeviceTypeID(),
+                      "push_token": "",
+                    };
+                    // ignore: use_build_context_synchronously
+                    authProviderRef.callApiLogin(body, context);
+                  }
                 },
               ),
               heightBox(24.h),

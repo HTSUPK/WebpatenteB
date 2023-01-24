@@ -5,3 +5,5 @@ const androidDeviceTypeId = 'android';
 const iosDeviceTypeId = 'ios';
 
 const strFontName = "SF Pro Rounded";
+
+

@@ -163,10 +163,11 @@ class _RegisterScreenState extends BaseStatefulWidgetState<RegisterScreen> {
                     ),
                     heightBox(20.h),
                     CommonButton(
+                      showLoading: authProviderRef.authLoader,
                       width: screenSize.width,
                       text: "Sign Up",
                       fontSize: 19,
-                      onTap: () {
+                      onTap: () async {
                         if (nameController.text.isEmpty) {
                           AppUtils.toast("Please enter your name");
                         } else if (emailController.text.isEmpty) {
@@ -183,16 +184,15 @@ class _RegisterScreenState extends BaseStatefulWidgetState<RegisterScreen> {
                           Map<String, dynamic> body = {
                             "name": nameController.text,
                             "email": emailController.text,
-                            "country_code": _selectedDialogCountry.toString(),
-                            "mobile": phoneNoController,
+                            "country_code": "+${_selectedDialogCountry.phoneCode}",
+                            "mobile": phoneNoController.text,
                             "password": passwordController.text,
-                            "device_id": AppUtils.getDeviceId(),
+                            "device_id": await AppUtils.getDeviceId(),
                             "device_type": AppUtils.getDeviceTypeID(),
                             "push_token": "",
                           };
-                          print("Data $body");
-
-                          // authProviderRef.callApiRegister(body, context);
+                          // ignore: use_build_context_synchronously
+                          authProviderRef.callApiRegister(body, context);
                         }
                       },
                     ),
@@ -222,12 +222,7 @@ class _RegisterScreenState extends BaseStatefulWidgetState<RegisterScreen> {
                           fontFamily: strFontName,
                         ),
                         TextButton(
-                          onPressed: () => Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const LoginScreen(),
-                            ),
-                          ),
+                          onPressed: () => Navigator.pop(context),
                           child: TextWidget(
                             text: "Log In",
                             fontSize: 18,

@@ -13,6 +13,17 @@ abstract class RestClient {
   @POST(Apis.register)
   Future<AuthModel> registerRequest(@Body() body);
 
+  @POST(Apis.login)
+  Future<AuthModel> loginRequest(@Body() body);
+
+  @POST(Apis.forgotPassword)
+  Future<AuthModel> forgotPasswordRequest(@Body() body);
+
+  @GET(Apis.getUserProfile)
+  Future<AuthModel> getUserProfileRequest();
+
+  @POST(Apis.editUserProfile)
+  Future<AuthModel> editUserProfileRequest();
 }
 
 // flutter pub run build_runner build --delete-conflicting-outputs

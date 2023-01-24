@@ -1,29 +1,102 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-
+import 'package:webpatente/utils/app_utils.dart';
 import '../Apis/Retrofit_Api.dart';
 import '../Apis/base_model.dart';
 import '../Apis/network_api.dart';
 import '../Apis/server_error.dart';
 import '../Models/Auth_Model.dart';
+import '../Screens/Home/HomeScreen.dart';
+import '../utils/app_constants.dart';
+import '../utils/shared_preference_util.dart';
 
 class AuthProvider extends ChangeNotifier {
-  /// Register ///
+  bool authLoader = false;
 
+  /// Register ///
   Future<BaseModel<AuthModel>> callApiRegister(body, context) async {
     AuthModel response;
+    authLoader = true;
     notifyListeners();
     try {
       response = await RestClient(RetroApi().dioData()).registerRequest(body);
       if (response.status == 200) {
-        Fluttertoast.showToast(msg: response.message!);
+        authLoader = false;
+        SharedPreferenceUtil.putBool(isLoginKey, true);
+        SharedPreferenceUtil.putString(token, response.data!.token);
+        SharedPreferenceUtil.putString(userName, response.data!.name);
+        SharedPreferenceUtil.putString(userProfileImage, response.data!.profileImage);
+        AppUtils.toast(response.message!);
+        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const HomeScreen()));
         notifyListeners();
       } else if (response.status == 412) {
-        Fluttertoast.showToast(msg: response.message!);
+        authLoader = false;
+        AppUtils.toast(response.message!);
         notifyListeners();
       }
     } catch (error, stacktrace) {
+      authLoader = false;
+      if (kDebugMode) {
+        print("Exception occur: $error stackTrace: $stacktrace");
+      }
+      notifyListeners();
+      return BaseModel()..setException(ServerError.withError(error: error));
+    }
+    return BaseModel()..data = response;
+  }
+
+  /// Login ///
+  Future<BaseModel<AuthModel>> callApiLogin(body, context) async {
+    AuthModel response;
+    authLoader = true;
+    notifyListeners();
+    try {
+      response = await RestClient(RetroApi().dioData()).loginRequest(body);
+      if (response.status == 200) {
+        authLoader = false;
+        SharedPreferenceUtil.putBool(isLoginKey, true);
+        SharedPreferenceUtil.putString(token, response.data!.token);
+        SharedPreferenceUtil.putString(userName, response.data!.name);
+        SharedPreferenceUtil.putString(userProfileImage, response.data!.profileImage);
+        AppUtils.toast(response.message!);
+        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const HomeScreen()));
+        notifyListeners();
+      } else if (response.status == 412) {
+        authLoader = false;
+        AppUtils.toast(response.message!);
+        notifyListeners();
+      }
+    } catch (error, stacktrace) {
+      authLoader = false;
+      if (kDebugMode) {
+        print("Exception occur: $error stackTrace: $stacktrace");
+      }
+      notifyListeners();
+      return BaseModel()..setException(ServerError.withError(error: error));
+    }
+    return BaseModel()..data = response;
+  }
+
+  /// Forgot Password ///
+  Future<BaseModel<AuthModel>> callApiForgotPassword(body, context) async {
+    AuthModel response;
+    authLoader = true;
+    notifyListeners();
+    try {
+      response = await RestClient(RetroApi().dioData()).forgotPasswordRequest(body);
+      if (response.status == 200) {
+        authLoader = false;
+        AppUtils.toast(response.message!);
+        Navigator.pop(context);
+        notifyListeners();
+      } else if (response.status == 412) {
+        authLoader = false;
+        AppUtils.toast(response.message!);
+        notifyListeners();
+      }
+    } catch (error, stacktrace) {
+      authLoader = false;
       if (kDebugMode) {
         print("Exception occur: $error stackTrace: $stacktrace");
       }

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:provider/provider.dart';
+import '../../Providers/profile_provider.dart';
 import '../../Widgets/common_appbar.dart';
 import '../../Widgets/profileItem_widget.dart';
 import '../../Widgets/text_widget.dart';
@@ -7,6 +9,8 @@ import '../../base/base_stateful_widget.dart';
 import '../../resources/color_resources.dart';
 import '../../resources/image_resources.dart';
 import '../../resources/strings.dart';
+import '../../utils/app_constants.dart';
+import '../../utils/shared_preference_util.dart';
 import '../Settings/SettingScreen.dart';
 import 'EditProfileScreen.dart';
 
@@ -18,6 +22,18 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends BaseStatefulWidgetState<ProfileScreen> {
+  late ProfileProvider profileProviderRef;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    profileProviderRef = Provider.of<ProfileProvider>(context, listen: false);
+    Future.delayed(const Duration(seconds: 0), () {
+      profileProviderRef.callApiGetUserProfile();
+    });
+    super.initState();
+  }
+
   @override
   // TODO: implement scaffoldBgColor
   Color? get scaffoldBgColor => colorPrimary;
@@ -25,7 +41,7 @@ class _ProfileScreenState extends BaseStatefulWidgetState<ProfileScreen> {
   @override
   PreferredSizeWidget? buildAppBar(BuildContext context) {
     // TODO: implement buildAppBar
-    return  CommonAppBar(
+    return CommonAppBar(
       title: "Profile",
       backIcon: icArrowLeft,
       backIconHeight: 45.h,
@@ -49,26 +65,26 @@ class _ProfileScreenState extends BaseStatefulWidgetState<ProfileScreen> {
             mainAxisSize: MainAxisSize.min,
             children: [
               heightBox(22.h),
-              const CircleAvatar(
+               CircleAvatar(
                 radius: 60,
                 backgroundColor: colorWhite,
                 child: CircleAvatar(
                   radius: 55,
                   backgroundImage: NetworkImage(
-                    "https://hexeros.com/dev/superapp/uploads/user/user.png",
+                    SharedPreferenceUtil.getString(userProfileImage),
                   ),
                 ),
               ),
               heightBox(14.h),
               TextWidget(
-                text: "Marcus Levin",
+                text: SharedPreferenceUtil.getString(userName),
                 fontSize: 24,
                 color: colorWhite,
                 fontFamily: strFontName,
                 fontWeight: FontWeight.w700,
               ),
               TextWidget(
-                text: "diannerussell@gmail.com",
+                text: SharedPreferenceUtil.getString(userEmail),
                 fontSize: 16,
                 color: colorWhite,
                 fontFamily: strFontName,

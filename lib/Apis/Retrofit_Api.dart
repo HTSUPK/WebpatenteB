@@ -1,5 +1,7 @@
 import 'package:dio/dio.dart';
 
+import '../utils/app_constants.dart';
+import '../utils/shared_preference_util.dart';
 
 class RetroApi {
   Dio dioData() {
@@ -7,7 +9,7 @@ class RetroApi {
     // dio.options.headers["Accept"] = "application/json"; // Config your dio headers globally
 
     // dio.options.headers["VAuthorization"] = "Bearer " +  SharedPreferenceHelper.getString(ConstString.token);
-    dio.options.headers["VAuthorization"] = "Bearer " "";
+    dio.options.headers["VAuthorization"] = "Bearer ${SharedPreferenceUtil.getString(token)}";
 
     dio.options.followRedirects = false;
     dio.options.connectTimeout = 75000; //5s
