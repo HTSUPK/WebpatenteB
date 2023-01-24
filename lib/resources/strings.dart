@@ -1,7 +1,7 @@
 const baseUrl = 'http://afrocupid.co/api/V1/';
 
 const strAppName = 'Webpatente';
-const strAndroid = 'android';
-const strIos = 'ios';
+const androidDeviceTypeId = 'android';
+const iosDeviceTypeId = 'ios';
 
 const strFontName = "SF Pro Rounded";

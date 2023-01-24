@@ -1,7 +1,12 @@
+import 'dart:io';
+
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import '../resources/color_resources.dart';
+import '../resources/strings.dart';
 import '../widgets/text_widget.dart';
 import 'app_constants.dart';
 import 'page_transition_utils.dart';
@@ -21,7 +26,8 @@ class AppUtils {
     Navigator.of(rootNavigatorKey.currentContext!, rootNavigator: shouldUseRootNavigator)
         .push(
       SlideLeftRoute(page: enterPage),
-    ).then((value) {
+    )
+        .then((value) {
       callback?.call(value);
     });
   }
@@ -93,5 +99,31 @@ class AppUtils {
     DateTime dt = DateTime.parse(dateString!).toLocal();
     String date = DateFormat("hh:mm a").format(dt).toString();
     return date;
+  }
+
+  ///  Find Device ID ///
+  static Future<String?> getDeviceId() async {
+    DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
+    if (Platform.isIOS) {
+      IosDeviceInfo iosDeviceInfo = await deviceInfo.iosInfo;
+      return iosDeviceInfo.identifierForVendor; // unique ID on iOS
+    } else {
+      AndroidDeviceInfo androidDeviceInfo = await deviceInfo.androidInfo;
+      return androidDeviceInfo.id; // unique ID on Android
+    }
+  }
+
+  /// Find Device Type ///
+  static String getDeviceTypeID() {
+    return Platform.isAndroid ? androidDeviceTypeId : iosDeviceTypeId;
+  }
+
+  /// Toast ///
+  static toast(String? msg) {
+    return Fluttertoast.showToast(
+      msg: msg!,
+      backgroundColor: colorPrimary,
+      textColor: colorWhite,
+    );
   }
 }
