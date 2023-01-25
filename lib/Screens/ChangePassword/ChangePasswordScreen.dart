@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:provider/provider.dart';
+import 'package:webpatente/Providers/profile_provider.dart';
 import 'package:webpatente/Widgets/common_appbar.dart';
+import 'package:webpatente/utils/app_utils.dart';
 
 import '../../Widgets/common_button.dart';
 import '../../Widgets/text_editing_widget.dart';
@@ -21,6 +24,10 @@ class _ChangePasswordScreenState extends BaseStatefulWidgetState<ChangePasswordS
   bool isHideChangeNewPassword = true;
   bool isHideChangeConfirmPassword = true;
 
+  TextEditingController oldPasswordController = TextEditingController();
+  TextEditingController newPasswordController = TextEditingController();
+  TextEditingController confirmPasswordController = TextEditingController();
+
   @override
   // TODO: implement scaffoldBgColor
   Color? get scaffoldBgColor => colorBackground;
@@ -28,7 +35,7 @@ class _ChangePasswordScreenState extends BaseStatefulWidgetState<ChangePasswordS
   @override
   PreferredSizeWidget? buildAppBar(BuildContext context) {
     // TODO: implement buildAppBar
-    return  CommonAppBar(
+    return CommonAppBar(
       title: "Change Password",
       backIcon: icArrowLeft,
       backIconHeight: 45.h,
@@ -38,62 +45,84 @@ class _ChangePasswordScreenState extends BaseStatefulWidgetState<ChangePasswordS
 
   @override
   Widget buildBody(BuildContext context) {
-    return SingleChildScrollView(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 23),
-        child: Column(
-          children: [
-            heightBox(37.h),
-            SvgPicture.asset(
-              icForgotPassword,
-              height: 168.h,
-              width: 168.w,
-            ),
-            heightBox(27.h),
-            TextEditingWidget(
-              textInputType: TextInputType.text,
-              textInputAction: TextInputAction.next,
-              labelText: "Old Password",
-              fontSize: 16,
-              passwordVisible: isHideChangeOldPassword,
-              suffixIconName: isHideChangeOldPassword ? icPassword : icPasswordHide,
-              onTapSuffixIcon: changeOldPassword,
-              onEditingComplete: () => FocusScope.of(context).nextFocus(),
-            ),
-            heightBox(12.h),
-            TextEditingWidget(
-              textInputType: TextInputType.text,
-              textInputAction: TextInputAction.next,
-              labelText: "Confirm Password",
-              fontSize: 16,
-              passwordVisible: isHideChangeNewPassword,
-              suffixIconName: isHideChangeNewPassword ? icPassword : icPasswordHide,
-              onTapSuffixIcon: changeNewPassword,
-              onEditingComplete: () => FocusScope.of(context).nextFocus(),
-            ),
-            heightBox(12.h),
-            TextEditingWidget(
-              textInputType: TextInputType.text,
-              textInputAction: TextInputAction.next,
-              labelText: "Confirm Password",
-              fontSize: 16,
-              passwordVisible: isHideChangeConfirmPassword,
-              suffixIconName: isHideChangeConfirmPassword ? icPassword : icPasswordHide,
-              onTapSuffixIcon: changeConfirmPassword,
-              onEditingComplete: () => FocusScope.of(context).nextFocus(),
-            ),
-            heightBox(33.h),
-            CommonButton(
-              width: screenSize.width,
-              text: "Save",
-              fontSize: 19,
-              onTap: () {},
-            ),
-            heightBox(12.h),
-          ],
+    return Consumer<ProfileProvider>(builder: (_, profileProviderRef, __) {
+      return SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 23),
+          child: Column(
+            children: [
+              heightBox(37.h),
+              SvgPicture.asset(
+                icForgotPassword,
+                height: 168.h,
+                width: 168.w,
+              ),
+              heightBox(27.h),
+              TextEditingWidget(
+                controller: oldPasswordController,
+                textInputType: TextInputType.text,
+                textInputAction: TextInputAction.next,
+                labelText: "Old Password",
+                fontSize: 16,
+                passwordVisible: isHideChangeOldPassword,
+                suffixIconName: isHideChangeOldPassword ? icPassword : icPasswordHide,
+                onTapSuffixIcon: changeOldPassword,
+                onEditingComplete: () => FocusScope.of(context).nextFocus(),
+              ),
+              heightBox(12.h),
+              TextEditingWidget(
+                controller: newPasswordController,
+                textInputType: TextInputType.text,
+                textInputAction: TextInputAction.next,
+                labelText: "New Password",
+                fontSize: 16,
+                passwordVisible: isHideChangeNewPassword,
+                suffixIconName: isHideChangeNewPassword ? icPassword : icPasswordHide,
+                onTapSuffixIcon: changeNewPassword,
+                onEditingComplete: () => FocusScope.of(context).nextFocus(),
+              ),
+              heightBox(12.h),
+              TextEditingWidget(
+                controller: confirmPasswordController,
+                textInputType: TextInputType.text,
+                textInputAction: TextInputAction.done,
+                labelText: "Confirm Password",
+                fontSize: 16,
+                passwordVisible: isHideChangeConfirmPassword,
+                suffixIconName: isHideChangeConfirmPassword ? icPassword : icPasswordHide,
+                onTapSuffixIcon: changeConfirmPassword,
+                onEditingComplete: () => FocusScope.of(context).unfocus(),
+              ),
+              heightBox(33.h),
+              CommonButton(
+                width: screenSize.width,
+                text: "Save",
+                fontSize: 19,
+                onTap: () {
+                  if (oldPasswordController.text.isEmpty) {
+                    AppUtils.toast("Please enter old password");
+                  } else if (newPasswordController.text.isEmpty) {
+                    AppUtils.toast("Please enter new password");
+                  } else if (confirmPasswordController.text.isEmpty) {
+                    AppUtils.toast("Please enter confirm password");
+                  } else if (newPasswordController.text != confirmPasswordController.text) {
+                    AppUtils.toast("Password and confirm password are not same");
+                  } else {
+                    Map<String, dynamic> body = {
+                      "old_password": oldPasswordController.text,
+                      "new_password": newPasswordController.text,
+                      "confirm_password": confirmPasswordController.text,
+                    };
+                    profileProviderRef.callApiChangePassword(body, context);
+                  }
+                },
+              ),
+              heightBox(12.h),
+            ],
+          ),
         ),
-      ),
-    );
+      );
+    });
   }
 
   changeOldPassword() {

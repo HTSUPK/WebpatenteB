@@ -1,5 +1,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.webpatente">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+
    <application
         android:label="webpatente"
         android:name="${applicationName}"

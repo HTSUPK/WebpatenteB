@@ -1,7 +1,11 @@
+import 'dart:io';
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:dio/dio.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:provider/provider.dart';
+import '../../Providers/profile_provider.dart';
 import '../../Widgets/common_appbar.dart';
 import '../../Widgets/common_button.dart';
 import '../../Widgets/text_editing_widget.dart';
@@ -27,11 +31,15 @@ class _EditProfileScreenState extends BaseStatefulWidgetState<EditProfileScreen>
   TextEditingController phoneNoController = TextEditingController();
   TextEditingController emailController = TextEditingController();
 
-  final ImagePicker picker = ImagePicker();
+  // final ImagePicker picker = ImagePicker();
+  // File? proImage;
+
+  late ProfileProvider profileProviderRef;
 
   @override
   void initState() {
     // TODO: implement initState
+    profileProviderRef = Provider.of<ProfileProvider>(context, listen: false);
     phoneCode = SharedPreferenceUtil.getString(userPhoneCode);
     nameController.text = SharedPreferenceUtil.getString(userName);
     phoneNoController.text = SharedPreferenceUtil.getString(userPhoneNo);
@@ -65,16 +73,33 @@ class _EditProfileScreenState extends BaseStatefulWidgetState<EditProfileScreen>
               width: 129.w,
               child: Stack(
                 children: [
-                  const CircleAvatar(
-                    radius: 65,
-                    backgroundColor: colorWhite,
-                    child: CircleAvatar(
-                      radius: 60,
-                      backgroundImage: NetworkImage(
-                        "https://hexeros.com/dev/superapp/uploads/user/user.png",
-                      ),
-                    ),
-                  ),
+                  profileProviderRef.proImage != null
+                      ? CircleAvatar(
+                          radius: 65,
+                          backgroundColor: colorWhite,
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(60),
+                            child: Image.file(
+                              profileProviderRef.proImage!,
+                              fit: BoxFit.cover,
+                              height: 120,
+                              width: 120,
+                            ),
+                          ),
+                        )
+                      : CircleAvatar(
+                          radius: 65,
+                          backgroundColor: colorWhite,
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(60),
+                            child: Image.network(
+                              "https://hexeros.com/dev/superapp/uploads/user/user.png",
+                              fit: BoxFit.cover,
+                              height: 120,
+                              width: 120,
+                            ),
+                          ),
+                        ),
                   Positioned(
                     bottom: 10.h,
                     right: 10.w,
@@ -98,27 +123,27 @@ class _EditProfileScreenState extends BaseStatefulWidgetState<EditProfileScreen>
               textInputAction: TextInputAction.done,
               labelText: "Your Name",
               fontSize: 16,
-              onEditingComplete: () => FocusScope.of(context).nextFocus(),
+              onEditingComplete: () => FocusScope.of(context).unfocus(),
             ),
             heightBox(12.h),
             TextEditingWidget(
               controller: emailController,
               textInputType: TextInputType.emailAddress,
-              textInputAction: TextInputAction.next,
+              // textInputAction: TextInputAction.next,
               readOnly: true,
               labelText: "Email",
               fontSize: 16,
-              onEditingComplete: () => FocusScope.of(context).nextFocus(),
+              // onEditingComplete: () => FocusScope.of(context).nextFocus(),
             ),
             heightBox(12.h),
             TextEditingWidget(
               controller: phoneNoController,
               textInputType: TextInputType.number,
-              textInputAction: TextInputAction.next,
+              // textInputAction: TextInputAction.next,
               labelText: "Mobile Number",
               readOnly: true,
               fontSize: 16,
-              onEditingComplete: () => FocusScope.of(context).nextFocus(),
+              // onEditingComplete: () => FocusScope.of(context).nextFocus(),
               prefixIcon: SizedBox(
                 width: 75.w,
                 child: Padding(
@@ -157,10 +182,22 @@ class _EditProfileScreenState extends BaseStatefulWidgetState<EditProfileScreen>
             ),
             heightBox(12.h),
             CommonButton(
+              showLoading: profileProviderRef.profileLoader,
               width: screenSize.width,
               text: "Save",
               fontSize: 19,
-              onTap: () {},
+              onTap: () {
+                String fileName = profileProviderRef.filePath!.split('/').last;
+                FormData formData;
+                formData = FormData.fromMap({
+                  if (profileProviderRef.proImage != null)
+                    "profile_image": MultipartFile.fromFileSync(profileProviderRef.filePath!, filename: fileName),
+                  "name": nameController.text,
+                  "mobile": "9876543210",
+                  "email": "test@gmail.com",
+                });
+                profileProviderRef.callApiEditUserProfile(formData);
+              },
             ),
             heightBox(12.h),
           ],
@@ -211,29 +248,16 @@ class _EditProfileScreenState extends BaseStatefulWidgetState<EditProfileScreen>
   }
 
   void gallery() async {
-    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
-    // if (pickedFile != null) {
-    //   proImage = File(pickedFile.path);
-    //   List<int> imageBytes = proImage!.readAsBytesSync();
-    //   image = base64Encode(imageBytes);
-    //   File file = File(pickedFile.path);
-    //   fileExtension = extension(file.path);
-    // } else {
-    //   print('No image selected.');
-    // }
+    final pickedFile = await profileProviderRef.picker.pickImage(source: ImageSource.gallery);
+    profileProviderRef.proImage = File(pickedFile!.path);
+    profileProviderRef.filePath = pickedFile.path;
   }
 
   void camera() async {
-    final pickedFile = await picker.pickImage(source: ImageSource.camera);
-    // if (pickedFile != null) {
-    //   proImage = File(pickedFile.path);
-    //   List<int> imageBytes = proImage!.readAsBytesSync();
-    //   image = base64Encode(imageBytes);
-    //   File file = File(pickedFile.path);
-    //   fileExtension = extension(file.path);
-    // } else {
-    //   print('No image selected.');
-    // }
+    final pickedFile = await profileProviderRef.picker.pickImage(source: ImageSource.camera);
+
+    profileProviderRef.proImage = File(pickedFile!.path);
+    profileProviderRef.filePath = pickedFile.path;
   }
 
 /*void _openCountryPickerDialog() {

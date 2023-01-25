@@ -126,4 +126,6 @@ class AppUtils {
       textColor: colorWhite,
     );
   }
+
+
 }

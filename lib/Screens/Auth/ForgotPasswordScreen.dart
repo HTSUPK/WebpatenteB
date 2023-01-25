@@ -90,7 +90,7 @@ class _ForgotPasswordScreenState extends BaseStatefulWidgetState<ForgotPasswordS
                         textInputAction: TextInputAction.done,
                         labelText: "Email",
                         fontSize: 16,
-                        onEditingComplete: () => FocusScope.of(context).nextFocus(),
+                        onEditingComplete: () => FocusScope.of(context).unfocus(),
                       ),
                       heightBox(30.h),
                       CommonButton(

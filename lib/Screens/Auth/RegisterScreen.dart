@@ -159,7 +159,7 @@ class _RegisterScreenState extends BaseStatefulWidgetState<RegisterScreen> {
                       passwordVisible: isHideRegConfirmPassword,
                       suffixIconName: isHideRegConfirmPassword ? icPassword : icPasswordHide,
                       onTapSuffixIcon: changeRegConfirmPassword,
-                      onEditingComplete: () => FocusScope.of(context).nextFocus(),
+                      onEditingComplete: () => FocusScope.of(context).unfocus(),
                     ),
                     heightBox(20.h),
                     CommonButton(

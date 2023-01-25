@@ -94,7 +94,7 @@ class _LoginScreenState extends BaseStatefulWidgetState<LoginScreen> {
                 passwordVisible: isHideLoginPassword,
                 suffixIconName: isHideLoginPassword ? icPassword : icPasswordHide,
                 onTapSuffixIcon: changeLoginPassword,
-                onEditingComplete: () => FocusScope.of(context).nextFocus(),
+                onEditingComplete: () => FocusScope.of(context).unfocus(),
               ),
               heightBox(20.h),
               CommonButton(

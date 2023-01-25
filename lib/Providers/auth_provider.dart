@@ -7,6 +7,7 @@ import '../Apis/base_model.dart';
 import '../Apis/network_api.dart';
 import '../Apis/server_error.dart';
 import '../Models/Auth_Model.dart';
+import '../Screens/Auth/LoginScreen.dart';
 import '../Screens/Home/HomeScreen.dart';
 import '../utils/app_constants.dart';
 import '../utils/shared_preference_util.dart';
@@ -26,6 +27,7 @@ class AuthProvider extends ChangeNotifier {
         SharedPreferenceUtil.putBool(isLoginKey, true);
         SharedPreferenceUtil.putString(token, response.data!.token);
         SharedPreferenceUtil.putString(userName, response.data!.name);
+        SharedPreferenceUtil.putString(userEmail, response.data!.email);
         SharedPreferenceUtil.putString(userProfileImage, response.data!.profileImage);
         AppUtils.toast(response.message!);
         Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const HomeScreen()));
@@ -58,6 +60,7 @@ class AuthProvider extends ChangeNotifier {
         SharedPreferenceUtil.putBool(isLoginKey, true);
         SharedPreferenceUtil.putString(token, response.data!.token);
         SharedPreferenceUtil.putString(userName, response.data!.name);
+        SharedPreferenceUtil.putString(userEmail, response.data!.email);
         SharedPreferenceUtil.putString(userProfileImage, response.data!.profileImage);
         AppUtils.toast(response.message!);
         Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const HomeScreen()));
@@ -89,6 +92,40 @@ class AuthProvider extends ChangeNotifier {
         authLoader = false;
         AppUtils.toast(response.message!);
         Navigator.pop(context);
+        notifyListeners();
+      } else if (response.status == 412) {
+        authLoader = false;
+        AppUtils.toast(response.message!);
+        notifyListeners();
+      }
+    } catch (error, stacktrace) {
+      authLoader = false;
+      if (kDebugMode) {
+        print("Exception occur: $error stackTrace: $stacktrace");
+      }
+      notifyListeners();
+      return BaseModel()..setException(ServerError.withError(error: error));
+    }
+    return BaseModel()..data = response;
+  }
+
+  /// Logout ///
+  Future<BaseModel<AuthModel>> callApiLogout(context) async {
+    AuthModel response;
+    authLoader = true;
+    notifyListeners();
+    try {
+      response = await RestClient(RetroApi().dioData()).logoutRequest();
+      if (response.status == 200) {
+        authLoader = false;
+        AppUtils.toast(response.message!);
+        SharedPreferenceUtil.clear();
+        Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const LoginScreen(),
+            ),
+            (route) => false);
         notifyListeners();
       } else if (response.status == 412) {
         authLoader = false;
