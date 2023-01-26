@@ -187,7 +187,7 @@ class _QuizScreenState extends BaseStatefulWidgetState<QuizScreen> {
               ),
               heightBox(40.h),
               SizedBox(
-                height: 44.h,
+                height: 44,
                 width: screenSize.width,
                 child: ListView.builder(
                     itemCount: 30,
@@ -204,8 +204,8 @@ class _QuizScreenState extends BaseStatefulWidgetState<QuizScreen> {
                         child: Padding(
                           padding: EdgeInsets.only(left: 8.w),
                           child: Container(
-                            height: 44.h,
-                            width: 44.w,
+                            height: 44,
+                            width: 44,
                             decoration: BoxDecoration(
                               color: isSelect == index ? colorTimeBackground : colorDarkGreen,
                               borderRadius: BorderRadius.circular(44),

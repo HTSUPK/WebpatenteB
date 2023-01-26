@@ -39,7 +39,7 @@ class _PictureFullViewScreenState extends BaseStatefulWidgetState<PictureFullVie
               // heroAttributes: PhotoViewHeroAttributes(tag: galleryItems[index].id),
             );
           },
-          itemCount: 2,
+          itemCount: 1,
           loadingBuilder: (context, event) => const Center(
             child: SizedBox(
               width: 20.0,

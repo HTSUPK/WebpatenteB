@@ -7,7 +7,9 @@ import 'package:package_info_plus/package_info_plus.dart';
 import 'package:provider/provider.dart';
 import 'package:webpatente/Screens/Home/HomeScreen.dart';
 import '../../Providers/versionCheck_provider.dart';
+import '../../Widgets/text_widget.dart';
 import '../../base/base_stateful_widget.dart';
+import '../../resources/color_resources.dart';
 import '../../resources/image_resources.dart';
 import '../../utils/app_constants.dart';
 import '../../utils/app_utils.dart';
@@ -48,12 +50,13 @@ class _SplashScreenState extends BaseStatefulWidgetState<SplashScreen> {
         appVersion = packageInfo.version;
         Map<String, dynamic> body = {
           "type": AppUtils.getDeviceTypeID(),
-          "version": packageInfo.version,
-          // "version": 0,
+          // "version": packageInfo.version,
+          "version": 0,
           "device_id": await AppUtils.getDeviceId(),
           "device_type": AppUtils.getDeviceTypeID(),
         };
-        versionCheckProviderRef.callApiVersionCheck(body, context);
+        // ignore: use_build_context_synchronously
+        // versionCheckProviderRef.callApiVersionCheck(body, context);
       });
     });
     Timer(

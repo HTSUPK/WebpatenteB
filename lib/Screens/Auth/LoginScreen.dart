@@ -32,8 +32,8 @@ class _LoginScreenState extends BaseStatefulWidgetState<LoginScreen> {
   @override
   void initState() {
     // TODO: implement initState
-    emailController.text = "test@gmail.com";
-    passwordController.text = "123456";
+    // emailController.text = "test@gmail.com";
+    // passwordController.text = "123456";
     super.initState();
   }
 

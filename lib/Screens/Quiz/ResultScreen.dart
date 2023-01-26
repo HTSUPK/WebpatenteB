@@ -34,6 +34,7 @@ class _ResultScreenState extends BaseStatefulWidgetState<ResultScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     const Spacer(),
+                    const Spacer(),
                     TextWidget(
                       text: "Result (20:05)",
                       fontSize: 17,

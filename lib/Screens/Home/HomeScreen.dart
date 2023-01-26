@@ -12,6 +12,7 @@ import '../../utils/app_constants.dart';
 import '../../utils/shared_preference_util.dart';
 import '../Profile/ProfileScreen.dart';
 import '../Question/QuestionScreen.dart';
+import '../Quiz/QuizScreen.dart';
 import '../Quiz/SelectChapterScreen.dart';
 import '../Statistics/StatisticsScreen.dart';
 import '../WebPatentePro/WebPatenteProScreen.dart';
@@ -83,12 +84,12 @@ class _HomeScreenState extends BaseStatefulWidgetState<HomeScreen> {
                         ),
                         const Spacer(),
                         GestureDetector(
-                          onTap: () => Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const WebPatenteProScreen(),
-                            ),
-                          ),
+                          // onTap: () => Navigator.push(
+                          //   context,
+                          //   MaterialPageRoute(
+                          //     builder: (context) => const WebPatenteProScreen(),
+                          //   ),
+                          // ),
                           child: SizedBox(
                             height: 80.h,
                             width: 80.w,
@@ -188,7 +189,7 @@ class _HomeScreenState extends BaseStatefulWidgetState<HomeScreen> {
                     ),
                   ],
                 ),
-                heightBox(20.h),
+                heightBox(5.h),
               ],
             ),
           ],
@@ -198,6 +199,12 @@ class _HomeScreenState extends BaseStatefulWidgetState<HomeScreen> {
   }
 
   showBottomSheet() {
+    int isSelect = 1;
+    List<String> quizName = [
+      "Full Quiz",
+      "Selected Only",
+    ];
+
     return showModalBottomSheet(
       context: context,
       elevation: 10,
@@ -210,71 +217,98 @@ class _HomeScreenState extends BaseStatefulWidgetState<HomeScreen> {
         borderRadius: BorderRadius.circular(15.0),
       ),
       builder: (BuildContext context) {
-        return Container(
-          height: 450.h,
-          width: screenSize.width,
-          decoration: BoxDecoration(
-            color: colorWhite,
-            borderRadius: BorderRadius.circular(24),
-          ),
-          padding: EdgeInsets.symmetric(horizontal: 24.w),
-          child: Column(
-            children: [
-              heightBox(10.h),
-              Container(
-                width: 114.w,
-                height: 5.h,
-                decoration: BoxDecoration(
-                  color: const Color(0XFFD9D9D9),
-                  borderRadius: BorderRadius.circular(30),
-                ),
+        return StatefulBuilder(
+          builder: (BuildContext context, StateSetter myState) {
+            return Container(
+              height: 450.h,
+              width: screenSize.width,
+              decoration: BoxDecoration(
+                color: colorWhite,
+                borderRadius: BorderRadius.circular(24),
               ),
-              heightBox(40.h),
-              Image.asset(
-                icQuiz,
-                height: 83.h,
-                width: 73.w,
-                fit: BoxFit.cover,
-              ),
-              heightBox(8.h),
-              TextWidget(
-                text: "Start Quiz",
-                fontSize: 31,
-                fontWeight: FontWeight.w700,
-                fontFamily: strFontName,
-              ),
-              heightBox(38.h),
-              TextWidget(
-                text: "Please select type of quiz",
-                fontSize: 21,
-                fontWeight: FontWeight.w500,
-                fontFamily: strFontName,
-              ),
-              heightBox(19.h),
-              const QuizType(
-                name: "Full Quiz",
-              ),
-              heightBox(11.h),
-              const QuizType(
-                name: "Selected Only",
-              ),
-              heightBox(14.h),
-              CommonButton(
-                width: screenSize.width,
-                text: "Continue",
-                fontSize: 22,
-                onTap: () {
-                  Navigator.pop(this.context);
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const SelectChapterScreen(),
+              padding: EdgeInsets.symmetric(horizontal: 24.w),
+              child: Column(
+                children: [
+                  heightBox(10.h),
+                  Container(
+                    width: 114.w,
+                    height: 5.h,
+                    decoration: BoxDecoration(
+                      color: const Color(0XFFD9D9D9),
+                      borderRadius: BorderRadius.circular(30),
                     ),
-                  );
-                },
+                  ),
+                  heightBox(40.h),
+                  Image.asset(
+                    icQuiz,
+                    height: 83.h,
+                    width: 73.w,
+                    fit: BoxFit.cover,
+                  ),
+                  heightBox(8.h),
+                  TextWidget(
+                    text: "Start Quiz",
+                    fontSize: 31,
+                    fontWeight: FontWeight.w700,
+                    fontFamily: strFontName,
+                  ),
+                  heightBox(38.h),
+                  TextWidget(
+                    text: "Please select type of quiz",
+                    fontSize: 21,
+                    fontWeight: FontWeight.w500,
+                    fontFamily: strFontName,
+                  ),
+                  heightBox(19.h),
+                  ListView.builder(
+                      itemCount: quizName.length,
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemBuilder: (context, index) {
+                        return Column(
+                          children: [
+                            QuizType(
+                              name: quizName[index],
+                              onTap: () {
+                                myState(() {
+                                  isSelect = index;
+                                  myState(() {});
+                                });
+                              },
+                              isSelect: isSelect == index ? true : false,
+                            ),
+                            heightBox(10.h),
+                          ],
+                        );
+                      }),
+                  CommonButton(
+                    width: screenSize.width,
+                    text: "Continue",
+                    fontSize: 22,
+                    onTap: () {
+                      if (isSelect == 0) {
+                        Navigator.pop(this.context);
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const QuizScreen(),
+                          ),
+                        );
+                      } else if (isSelect == 1) {
+                        Navigator.pop(this.context);
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const SelectChapterScreen(),
+                          ),
+                        );
+                      }
+                    },
+                  ),
+                ],
               ),
-            ],
-          ),
+            );
+          },
         );
       },
     );

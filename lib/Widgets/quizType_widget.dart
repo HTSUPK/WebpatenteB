@@ -28,29 +28,33 @@ class QuizType extends StatefulWidget {
 class _QuizTypeState extends State<QuizType> {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(16.0),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(15),
-        border: Border.all(color: widget.isSelect == true ? colorPrimary : colorRightIcon),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          TextWidget(
-            text: widget.name,
-            fontSize: 18,
-            fontWeight: FontWeight.w600,
-            fontFamily: strFontName,
-          ),
-          SvgPicture.asset(
-            icRight,
-            height: 13.h,
-            width: 19.w,
-            fit: BoxFit.cover,
-            color: widget.isSelect == true ? colorPrimary : colorRightIcon ,
-          )
-        ],
+    return GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      onTap: widget.onTap,
+      child: Container(
+        padding: const EdgeInsets.all(16.0),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(15),
+          border: Border.all(color: widget.isSelect == true ? colorPrimary : colorRightIcon),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            TextWidget(
+              text: widget.name,
+              fontSize: 18,
+              fontWeight: FontWeight.w600,
+              fontFamily: strFontName,
+            ),
+            SvgPicture.asset(
+              icRight,
+              height: 13.h,
+              width: 19.w,
+              fit: BoxFit.cover,
+              color: widget.isSelect == true ? colorPrimary : colorRightIcon ,
+            )
+          ],
+        ),
       ),
     );
   }
