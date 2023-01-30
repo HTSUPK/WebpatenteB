@@ -119,14 +119,13 @@ class AppUtils {
   }
 
   /// Toast ///
-  static toast(String? msg) {
+  static toast(String? msg, Color backColor, Color textColor) {
     return Fluttertoast.showToast(
       msg: msg!,
-      backgroundColor: colorPrimary,
-      textColor: colorWhite,
+      backgroundColor: backColor,
+      textColor: textColor,
     );
   }
-
 
   Future<void> showMyDialog(context) async {
     return showDialog<void>(
@@ -155,5 +154,4 @@ class AppUtils {
       },
     );
   }
-
 }

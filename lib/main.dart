@@ -7,6 +7,7 @@ import 'Providers/auth_provider.dart';
 import 'Providers/profile_provider.dart';
 import 'Providers/question_provider.dart';
 import 'Providers/quiz_provider.dart';
+import 'Providers/setting_provider.dart';
 import 'Providers/versionCheck_provider.dart';
 import 'Screens/Splash/SplashScreen.dart';
 
@@ -31,6 +32,9 @@ void main() async {
         ),
         ChangeNotifierProvider<QuestionProvider>(
           create: (context) => QuestionProvider(),
+        ),
+        ChangeNotifierProvider<SettingProvider>(
+          create: (context) => SettingProvider(),
         ),
       ],
       child: const MyApp(),

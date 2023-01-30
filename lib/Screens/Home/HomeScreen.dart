@@ -9,13 +9,13 @@ import '../../resources/color_resources.dart';
 import '../../resources/image_resources.dart';
 import '../../resources/strings.dart';
 import '../../utils/app_constants.dart';
+import '../../utils/app_utils.dart';
 import '../../utils/shared_preference_util.dart';
 import '../Profile/ProfileScreen.dart';
 import '../Question/QuestionScreen.dart';
 import '../Quiz/QuizScreen.dart';
 import '../Quiz/SelectChapterScreen.dart';
 import '../Statistics/StatisticsScreen.dart';
-import '../WebPatentePro/WebPatenteProScreen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -84,12 +84,9 @@ class _HomeScreenState extends BaseStatefulWidgetState<HomeScreen> {
                         ),
                         const Spacer(),
                         GestureDetector(
-                          // onTap: () => Navigator.push(
-                          //   context,
-                          //   MaterialPageRoute(
-                          //     builder: (context) => const WebPatenteProScreen(),
-                          //   ),
-                          // ),
+                          onTap: () {
+                            AppUtils.toast("Coming Soon", colorPrimary, colorWhite);
+                          },
                           child: SizedBox(
                             height: 80.h,
                             width: 80.w,
@@ -158,6 +155,9 @@ class _HomeScreenState extends BaseStatefulWidgetState<HomeScreen> {
                       imageHeight: 73.h,
                       imageWidth: 73.w,
                       textName: "Tricks",
+                      onTap: () {
+                        AppUtils.toast("Coming Soon", colorPrimary, colorWhite);
+                      },
                     ),
                   ],
                 ),
@@ -172,6 +172,9 @@ class _HomeScreenState extends BaseStatefulWidgetState<HomeScreen> {
                       imageHeight: 73.h,
                       imageWidth: 73.w,
                       textName: "Videos",
+                      onTap: () {
+                        AppUtils.toast("Coming Soon", colorPrimary, colorWhite);
+                      },
                     ),
                     CardWidget(
                       height: 140.h,
@@ -291,7 +294,9 @@ class _HomeScreenState extends BaseStatefulWidgetState<HomeScreen> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => const QuizScreen(),
+                            builder: (context) => const QuizScreen(
+                              where: "fullQuiz",
+                            ),
                           ),
                         );
                       } else if (isSelect == 1) {

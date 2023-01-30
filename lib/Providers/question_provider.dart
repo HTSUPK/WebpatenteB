@@ -36,6 +36,20 @@ class QuestionProvider extends ChangeNotifier {
     return BaseModel()..data = response;
   }
 
+  // show Translate //
+  int? _selectTranslateIndex = 0;
+
+  int? get selectTranslateIndex => _selectTranslateIndex;
+
+  set selectTranslateIndex(int? value) {
+    _selectTranslateIndex = value;
+  }
+
+  selectIndex(int? index) {
+    selectTranslateIndex = index;
+    notifyListeners();
+  }
+
   /// Text To Spech ///
   TextToSpeech tts = TextToSpeech();
 
@@ -45,7 +59,7 @@ class QuestionProvider extends ChangeNotifier {
   String text = '';
   double volume = 1; // Range: 0-1
   double rate = 1.0; // Range: 0-2
-  double pitch = 1.0; // Range: 0-2
+  double pitch = 0.5; // Range: 0-2
 
   String? language;
   String? languageCode;

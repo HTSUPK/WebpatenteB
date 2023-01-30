@@ -205,6 +205,29 @@ class _RestClient implements RestClient {
   }
 
   @override
+  Future<QuestionModel> questionRequest() async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final _data = <String, dynamic>{};
+    final _result = await _dio
+        .fetch<Map<String, dynamic>>(_setStreamType<QuestionModel>(Options(
+      method: 'GET',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              'question/question_list',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+    final value = QuestionModel.fromJson(_result.data!);
+    return value;
+  }
+
+  @override
   Future<ChapterListModel> chapterListRequest() async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
@@ -228,25 +251,94 @@ class _RestClient implements RestClient {
   }
 
   @override
-  Future<QuestionModel> questionRequest() async {
+  Future<SelectedQuizModel> selectQuizRequest(body) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
-    final _data = <String, dynamic>{};
+    final _data = body;
     final _result = await _dio
-        .fetch<Map<String, dynamic>>(_setStreamType<QuestionModel>(Options(
-      method: 'GET',
+        .fetch<Map<String, dynamic>>(_setStreamType<SelectedQuizModel>(Options(
+      method: 'POST',
       headers: _headers,
       extra: _extra,
     )
             .compose(
               _dio.options,
-              'question/question_list',
+              'quiz/selected_quizlist',
               queryParameters: queryParameters,
               data: _data,
             )
             .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
-    final value = QuestionModel.fromJson(_result.data!);
+    final value = SelectedQuizModel.fromJson(_result.data!);
+    return value;
+  }
+
+  @override
+  Future<FullQuizModel> fullQuizRequest(body) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final _data = body;
+    final _result = await _dio
+        .fetch<Map<String, dynamic>>(_setStreamType<FullQuizModel>(Options(
+      method: 'POST',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              'quiz/full_quizlist',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+    final value = FullQuizModel.fromJson(_result.data!);
+    return value;
+  }
+
+  @override
+  Future<AuthModel> notificationFlagRequest(body) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final _data = body;
+    final _result = await _dio
+        .fetch<Map<String, dynamic>>(_setStreamType<AuthModel>(Options(
+      method: 'POST',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              'user/notification_flag',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+    final value = AuthModel.fromJson(_result.data!);
+    return value;
+  }
+
+  @override
+  Future<AuthModel> checkAbilityRequest(body) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final _data = body;
+    final _result = await _dio
+        .fetch<Map<String, dynamic>>(_setStreamType<AuthModel>(Options(
+      method: 'POST',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              'check_ability',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+    final value = AuthModel.fromJson(_result.data!);
     return value;
   }
 

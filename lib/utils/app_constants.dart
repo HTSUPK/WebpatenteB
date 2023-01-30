@@ -11,3 +11,4 @@ const userEmail = "userEmail";
 const userPhoneCode = "userPhoneCode";
 const userPhoneNo = "userPhoneNo";
 const userProfileImage = "userProfileImage";
+const notificationFlag = "notificationFlag";

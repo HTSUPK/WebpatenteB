@@ -167,7 +167,7 @@ class _ProfileScreenState extends BaseStatefulWidgetState<ProfileScreen> {
                           fontWeight: FontWeight.w600,
                         ),
                         content: TextWidget(
-                          text: "Are you sure to logout this app?",
+                          text: "Are you sure, do you want to logout?",
                           color: colorWhite,
                           textAlign: TextAlign.center,
                           fontWeight: FontWeight.w500,

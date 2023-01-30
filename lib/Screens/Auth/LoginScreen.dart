@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 import 'package:webpatente/utils/app_utils.dart';
 import '../../Providers/auth_provider.dart';
@@ -32,8 +31,8 @@ class _LoginScreenState extends BaseStatefulWidgetState<LoginScreen> {
   @override
   void initState() {
     // TODO: implement initState
-    // emailController.text = "test@gmail.com";
-    // passwordController.text = "123456";
+    emailController.text = "test@gmail.com";
+    passwordController.text = "123456";
     super.initState();
   }
 
@@ -82,6 +81,15 @@ class _LoginScreenState extends BaseStatefulWidgetState<LoginScreen> {
                 textInputAction: TextInputAction.next,
                 labelText: "Email",
                 fontSize: 16,
+                onChanged: (value) {
+                  Map<String, dynamic> body = {
+                    "type": "email",
+                    "value": value,
+                  };
+                  Future.delayed(const Duration(seconds: 2), () {
+                    authProviderRef.callApiCheckAbility(body);
+                  });
+                },
                 onEditingComplete: () => FocusScope.of(context).nextFocus(),
               ),
               heightBox(14.h),
@@ -104,9 +112,9 @@ class _LoginScreenState extends BaseStatefulWidgetState<LoginScreen> {
                 fontSize: 19,
                 onTap: () async {
                   if (emailController.text.isEmpty) {
-                    AppUtils.toast("Please enter your email");
+                    AppUtils.toast("Please enter your email", colorRed, colorWhite);
                   } else if (passwordController.text.isEmpty) {
-                    AppUtils.toast("Please enter password");
+                    AppUtils.toast("Please enter password", colorRed, colorWhite);
                   } else {
                     Map<String, dynamic> body = {
                       "email": emailController.text,

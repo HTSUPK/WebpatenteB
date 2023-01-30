@@ -1,7 +1,7 @@
 import 'dart:convert';
 /// status : 200
-/// message : "login successfully"
-/// data : {"id":6,"name":"Test","email":"test@test.com","country_code":"+91","mobile":"9876543210","profile_image":"https://hexeros.com/dev/web-patente/uploads/user/user.png","token":"4lztnsiJnxnkj2YMorS7BdOTU2gD1K39yUyCjLEeadI20u3e2FAPvbGRar2EzFAD9GvNd53AaHMR8aTRfXP01mSY5gjD8GTl3GLj"}
+/// message : "notification Setting updated"
+/// data : {"id":15,"name":"Test","email":"test@gmail.com","country_code":"+91","mobile":"9876543210","profile_image":"https://hexeros.com/dev/web-patente/uploads/user/user.png","notification":"1","token":"Dbg16SirJuxtxrmzOBi3hZjoSe7fMOZXMUdTL2jNaahJeRks57Tov6iNRyiPJhMTj8SouG7NjS6DmJ4apclEVH1G2pjgFoXdjO2l"}
 
 AuthModel authModelFromJson(String str) => AuthModel.fromJson(json.decode(str));
 String authModelToJson(AuthModel data) => json.encode(data.toJson());
@@ -46,13 +46,14 @@ AuthModel copyWith({  num? status,
 
 }
 
-/// id : 6
+/// id : 15
 /// name : "Test"
-/// email : "test@test.com"
+/// email : "test@gmail.com"
 /// country_code : "+91"
 /// mobile : "9876543210"
 /// profile_image : "https://hexeros.com/dev/web-patente/uploads/user/user.png"
-/// token : "4lztnsiJnxnkj2YMorS7BdOTU2gD1K39yUyCjLEeadI20u3e2FAPvbGRar2EzFAD9GvNd53AaHMR8aTRfXP01mSY5gjD8GTl3GLj"
+/// notification : "1"
+/// token : "Dbg16SirJuxtxrmzOBi3hZjoSe7fMOZXMUdTL2jNaahJeRks57Tov6iNRyiPJhMTj8SouG7NjS6DmJ4apclEVH1G2pjgFoXdjO2l"
 
 Data dataFromJson(String str) => Data.fromJson(json.decode(str));
 String dataToJson(Data data) => json.encode(data.toJson());
@@ -64,6 +65,7 @@ class Data {
       String? countryCode, 
       String? mobile, 
       String? profileImage, 
+      String? notification, 
       String? token,}){
     _id = id;
     _name = name;
@@ -71,6 +73,7 @@ class Data {
     _countryCode = countryCode;
     _mobile = mobile;
     _profileImage = profileImage;
+    _notification = notification;
     _token = token;
 }
 
@@ -81,6 +84,7 @@ class Data {
     _countryCode = json['country_code'];
     _mobile = json['mobile'];
     _profileImage = json['profile_image'];
+    _notification = json['notification'];
     _token = json['token'];
   }
   num? _id;
@@ -89,6 +93,7 @@ class Data {
   String? _countryCode;
   String? _mobile;
   String? _profileImage;
+  String? _notification;
   String? _token;
 Data copyWith({  num? id,
   String? name,
@@ -96,6 +101,7 @@ Data copyWith({  num? id,
   String? countryCode,
   String? mobile,
   String? profileImage,
+  String? notification,
   String? token,
 }) => Data(  id: id ?? _id,
   name: name ?? _name,
@@ -103,6 +109,7 @@ Data copyWith({  num? id,
   countryCode: countryCode ?? _countryCode,
   mobile: mobile ?? _mobile,
   profileImage: profileImage ?? _profileImage,
+  notification: notification ?? _notification,
   token: token ?? _token,
 );
   num? get id => _id;
@@ -111,6 +118,7 @@ Data copyWith({  num? id,
   String? get countryCode => _countryCode;
   String? get mobile => _mobile;
   String? get profileImage => _profileImage;
+  String? get notification => _notification;
   String? get token => _token;
 
   Map<String, dynamic> toJson() {
@@ -121,6 +129,7 @@ Data copyWith({  num? id,
     map['country_code'] = _countryCode;
     map['mobile'] = _mobile;
     map['profile_image'] = _profileImage;
+    map['notification'] = _notification;
     map['token'] = _token;
     return map;
   }

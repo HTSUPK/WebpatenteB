@@ -15,6 +15,7 @@ import '../../resources/color_resources.dart';
 import '../../resources/image_resources.dart';
 import '../../resources/strings.dart';
 import '../../utils/app_constants.dart';
+import '../../utils/app_utils.dart';
 import '../../utils/shared_preference_util.dart';
 
 class EditProfileScreen extends StatefulWidget {
@@ -93,7 +94,8 @@ class _EditProfileScreenState extends BaseStatefulWidgetState<EditProfileScreen>
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(60),
                             child: Image.network(
-                              "https://hexeros.com/dev/superapp/uploads/user/user.png",
+                              // "https://hexeros.com/dev/superapp/uploads/user/user.png",
+                              SharedPreferenceUtil.getString(userProfileImage),
                               fit: BoxFit.cover,
                               height: 120,
                               width: 120,
@@ -123,7 +125,7 @@ class _EditProfileScreenState extends BaseStatefulWidgetState<EditProfileScreen>
               textInputAction: TextInputAction.done,
               labelText: "Your Name",
               fontSize: 16,
-              onEditingComplete: () => FocusScope.of(context).unfocus(),
+              onEditingComplete: () => FocusScope.of(context).nextFocus(),
             ),
             heightBox(12.h),
             TextEditingWidget(
@@ -141,9 +143,9 @@ class _EditProfileScreenState extends BaseStatefulWidgetState<EditProfileScreen>
               textInputType: TextInputType.number,
               // textInputAction: TextInputAction.next,
               labelText: "Mobile Number",
-              readOnly: true,
+              // readOnly: true,
               fontSize: 16,
-              // onEditingComplete: () => FocusScope.of(context).nextFocus(),
+              onEditingComplete: () => FocusScope.of(context).unfocus(),
               prefixIcon: SizedBox(
                 width: 75.w,
                 child: Padding(
@@ -189,14 +191,20 @@ class _EditProfileScreenState extends BaseStatefulWidgetState<EditProfileScreen>
               onTap: () {
                 String fileName = profileProviderRef.filePath!.split('/').last;
                 FormData formData;
-                formData = FormData.fromMap({
-                  if (profileProviderRef.proImage != null)
-                    "profile_image": MultipartFile.fromFileSync(profileProviderRef.filePath!, filename: fileName),
-                  "name": nameController.text,
-                  "mobile": "9876543210",
-                  "email": "test@gmail.com",
-                });
-                profileProviderRef.callApiEditUserProfile(formData);
+                if (nameController.text.isEmpty) {
+                  AppUtils.toast("Please enter name", colorRed, colorWhite);
+                } else if (phoneNoController.text.isEmpty) {
+                  AppUtils.toast("Please enter mobile number", colorRed, colorWhite);
+                } else {
+                  formData = FormData.fromMap({
+                    if (profileProviderRef.proImage != null)
+                      "profile_image": MultipartFile.fromFileSync(profileProviderRef.filePath!, filename: fileName),
+                    "name": nameController.text,
+                    "mobile": phoneNoController.text,
+                    "email": emailController.text,
+                  });
+                  profileProviderRef.callApiEditUserProfile(formData);
+                }
               },
             ),
             heightBox(12.h),

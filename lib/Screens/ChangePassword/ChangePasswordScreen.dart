@@ -100,13 +100,13 @@ class _ChangePasswordScreenState extends BaseStatefulWidgetState<ChangePasswordS
                 fontSize: 19,
                 onTap: () {
                   if (oldPasswordController.text.isEmpty) {
-                    AppUtils.toast("Please enter old password");
+                    AppUtils.toast("Please enter old password", colorRed, colorWhite);
                   } else if (newPasswordController.text.isEmpty) {
-                    AppUtils.toast("Please enter new password");
+                    AppUtils.toast("Please enter new password", colorRed, colorWhite);
                   } else if (confirmPasswordController.text.isEmpty) {
-                    AppUtils.toast("Please enter confirm password");
+                    AppUtils.toast("Please enter confirm password", colorRed, colorWhite);
                   } else if (newPasswordController.text != confirmPasswordController.text) {
-                    AppUtils.toast("Password and confirm password are not same");
+                    AppUtils.toast("Password and confirm password are not same", colorRed, colorWhite);
                   } else {
                     Map<String, dynamic> body = {
                       "old_password": oldPasswordController.text,

@@ -17,7 +17,7 @@ class _TermAndConditionScreenState extends BaseStatefulWidgetState<TermAndCondit
   PreferredSizeWidget? buildAppBar(BuildContext context) {
     // TODO: implement buildAppBar
     return CommonAppBar(
-      title: "Term & Condition",
+      title: "Terms & Conditions",
       backIcon: icArrowLeft,
       backIconHeight: 45.h,
       backIconWidth: 45.w,
@@ -38,6 +38,7 @@ class _TermAndConditionScreenState extends BaseStatefulWidgetState<TermAndCondit
   @override
   Widget buildBody(BuildContext context) {
     return WebViewWidget(
+
       controller: controller,
     );
   }

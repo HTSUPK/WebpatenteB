@@ -2,15 +2,24 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:webpatente/base/base_stateful_widget.dart';
-import 'package:webpatente/resources/color_resources.dart';
+import 'package:provider/provider.dart';
+import '../../Providers/quiz_provider.dart';
 import '../../Widgets/answer_button_widget.dart';
 import '../../Widgets/text_widget.dart';
+import '../../base/base_stateful_widget.dart';
+import '../../resources/color_resources.dart';
 import '../../resources/image_resources.dart';
 import 'ResultScreen.dart';
 
 class QuizScreen extends StatefulWidget {
-  const QuizScreen({Key? key}) : super(key: key);
+  final String? where;
+  final List? selectChapterId;
+
+  const QuizScreen({
+    super.key,
+    this.where,
+    this.selectChapterId,
+  });
 
   @override
   State<QuizScreen> createState() => _QuizScreenState();
@@ -22,9 +31,31 @@ class _QuizScreenState extends BaseStatefulWidgetState<QuizScreen> {
   late Timer _timer;
   double progress = 0;
 
+  late QuizProvider quizProviderRef;
+
   @override
   void initState() {
     // TODO: implement initState
+    quizProviderRef = Provider.of<QuizProvider>(context, listen: false);
+    if (widget.where == "fullQuiz") {
+      Future.delayed(const Duration(seconds: 0), () {
+        Map<String, dynamic> body = {
+          "limit": "",
+          "offset": "",
+        };
+        quizProviderRef.callApiFullQuiz(body);
+      });
+    } else if (widget.where == "selectedQuiz") {
+      Future.delayed(const Duration(seconds: 0), () {
+        Map<String, dynamic> body = {
+          "limit": "",
+          "offset": "",
+          "chapter_id": widget.selectChapterId,
+        };
+        quizProviderRef.callApiSelectedQuiz(body);
+      });
+    }
+
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       _startSecond();
       totalProgressTime();
@@ -35,7 +66,7 @@ class _QuizScreenState extends BaseStatefulWidgetState<QuizScreen> {
   @override
   void dispose() {
     // TODO: implement dispose
-    _timer.cancel();
+   _timer.cancel();
     super.dispose();
   }
 
@@ -67,11 +98,12 @@ class _QuizScreenState extends BaseStatefulWidgetState<QuizScreen> {
     });
   }
 
-  int giveMinute = 10;
+  // int giveMinute = 10;
 
   totalProgressTime() {
     int currentSecond = int.parse(secondString) + (int.parse(minuteString) * 60);
-    progress = currentSecond / (giveMinute * 60);
+    progress = currentSecond / (quizProviderRef.giveMinute * 60);
+    print("Minute ${quizProviderRef.giveMinute}");
   }
 
   @override

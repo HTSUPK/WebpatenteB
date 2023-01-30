@@ -20,7 +20,6 @@ class ForgotPasswordScreen extends StatefulWidget {
 }
 
 class _ForgotPasswordScreenState extends BaseStatefulWidgetState<ForgotPasswordScreen> {
-
   TextEditingController emailController = TextEditingController();
 
   @override
@@ -99,13 +98,13 @@ class _ForgotPasswordScreenState extends BaseStatefulWidgetState<ForgotPasswordS
                         text: "Send",
                         fontSize: 19,
                         onTap: () {
-                          if(emailController.text.isEmpty){
-                            AppUtils.toast("Please Enter your email");
-                          }else{
-                            Map<String, dynamic> body ={
-                              "email" : emailController.text,
+                          if (emailController.text.isEmpty) {
+                            AppUtils.toast("Please Enter your email", colorRed, colorWhite);
+                          } else {
+                            Map<String, dynamic> body = {
+                              "email": emailController.text,
                             };
-                            authProviderRef.callApiForgotPassword(body,context);
+                            authProviderRef.callApiForgotPassword(body, context);
                           }
                         },
                       ),

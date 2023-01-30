@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:webpatente/resources/color_resources.dart';
 import '../Apis/Retrofit_Api.dart';
 import '../Apis/base_model.dart';
 import '../Apis/network_api.dart';
@@ -18,12 +19,12 @@ class ProfileProvider extends ChangeNotifier {
 
   Future<BaseModel<AuthModel>> callApiGetUserProfile() async {
     AuthModel response;
-    profileLoader = true;
+    // profileLoader = true;
     notifyListeners();
     try {
       response = await RestClient(RetroApi().dioData()).getUserProfileRequest();
       if (response.status == 200) {
-        profileLoader = false;
+        // profileLoader = false;
         SharedPreferenceUtil.putString(userName, response.data!.name);
         SharedPreferenceUtil.putString(userEmail, response.data!.email);
         SharedPreferenceUtil.putString(userPhoneCode, response.data!.countryCode);
@@ -32,12 +33,12 @@ class ProfileProvider extends ChangeNotifier {
         // Navigator.pop(context);
         notifyListeners();
       } else if (response.status == 412) {
-        profileLoader = false;
-        AppUtils.toast(response.message!);
+        // profileLoader = false;
+        AppUtils.toast(response.message!, colorRed, colorWhite);
         notifyListeners();
       }
     } catch (error, stacktrace) {
-      profileLoader = false;
+      // profileLoader = false;
       if (kDebugMode) {
         print("Exception occur: $error stackTrace: $stacktrace");
       }
@@ -57,7 +58,7 @@ class ProfileProvider extends ChangeNotifier {
       response = await RestClient(RetroApiProfile().dioData()).editUserProfileRequest(body);
       if (response.status == 200) {
         profileLoader = false;
-        AppUtils.toast(response.message!);
+        AppUtils.toast(response.message!, colorPrimary, colorWhite);
         SharedPreferenceUtil.putString(userName, response.data!.name);
         SharedPreferenceUtil.putString(userProfileImage, response.data!.profileImage);
         SharedPreferenceUtil.putString(userEmail, response.data!.email);
@@ -67,7 +68,7 @@ class ProfileProvider extends ChangeNotifier {
         notifyListeners();
       } else if (response.status == 412) {
         profileLoader = false;
-        AppUtils.toast(response.message!);
+        AppUtils.toast(response.message!, colorRed, colorWhite);
         notifyListeners();
       }
     } catch (error, stacktrace) {
@@ -135,12 +136,12 @@ class ProfileProvider extends ChangeNotifier {
       response = await RestClient(RetroApi().dioData()).changePasswordRequest(body);
       if (response.status == 200) {
         profileLoader = false;
-        AppUtils.toast(response.message!);
+        AppUtils.toast(response.message!, colorPrimary, colorWhite);
         Navigator.pop(context);
         notifyListeners();
       } else if (response.status == 412) {
         profileLoader = false;
-        AppUtils.toast(response.message!);
+        AppUtils.toast(response.message!, colorRed, colorWhite);
         notifyListeners();
       }
     } catch (error, stacktrace) {

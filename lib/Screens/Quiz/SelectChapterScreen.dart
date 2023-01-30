@@ -87,6 +87,7 @@ class _SelectChapterScreenState extends BaseStatefulWidgetState<SelectChapterScr
                       heightBox(10),
                       ChapterCard(
                         // image: "https://hexeros.com/dev/superapp/uploads/user/user.png",
+                        image: quizProvider.chapterList[index].image,
                         text: quizProvider.chapterList[index].chapter,
                         borderColor: quizProvider.selectChapter[index] == true ? colorPrimary : colorWhite,
                         onTap: () {
@@ -128,7 +129,9 @@ class _SelectChapterScreenState extends BaseStatefulWidgetState<SelectChapterScr
         onTap: () => Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => const QuizScreen(),
+            builder: (context) => const QuizScreen(
+              where: "selectedQuiz",
+            ),
           ),
         ),
       ),

@@ -276,14 +276,16 @@ class _QuestionScreenState extends BaseStatefulWidgetState<QuestionScreen> {
                                       onTap: () => Navigator.push(
                                         context,
                                         MaterialPageRoute(
-                                          builder: (context) => const PictureFullViewScreen(),
+                                          builder: (context) => PictureFullViewScreen(
+                                            image: questionProviderRef.questionList[index].image!,
+                                          ),
                                         ),
                                       ),
                                       child: ClipRRect(
                                         borderRadius: BorderRadius.circular(8),
                                         child: Image.network(
-                                          "https://hexeros.com/dev/superapp/uploads/user/user.png",
-                                          // questionProviderRef.questionList[index].image!,
+                                          // "https://hexeros.com/dev/superapp/uploads/user/user.png",
+                                          questionProviderRef.questionList[index].image!,
                                           height: 55.h,
                                           width: 70.w,
                                           fit: BoxFit.cover,
@@ -324,9 +326,12 @@ class _QuestionScreenState extends BaseStatefulWidgetState<QuestionScreen> {
                                                     },
                                                   ),
                                                   widthBox(10.w),
-                                                  const QuestionItem(
+                                                  QuestionItem(
                                                     iconName: icTranslate,
                                                     text: "Translate",
+                                                    onTap: () {
+                                                      questionProviderRef.selectIndex(index);
+                                                    },
                                                   ),
                                                 ],
                                               )
@@ -353,38 +358,45 @@ class _QuestionScreenState extends BaseStatefulWidgetState<QuestionScreen> {
                                     ),
                                   ],
                                 ),
-                                heightBox(8.h),
-                                Container(
-                                  padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5),
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(10.0),
-                                    border: Border.all(color: colorBlack.withOpacity(0.22), style: BorderStyle.solid, width: 0.80),
-                                  ),
-                                  child: DropdownButtonHideUnderline(
-                                    child: DropdownButton(
-                                      value: dropDownValue,
-                                      isDense: true,
-                                      icon: const Icon(Icons.keyboard_arrow_down),
-                                      items: items.map((String items) {
-                                        return DropdownMenuItem(
-                                          value: items,
-                                          child: Text(items),
-                                        );
-                                      }).toList(),
-                                      onChanged: (String? newValue) {
-                                        setState(() {
-                                          dropDownValue = newValue!;
-                                        });
-                                      },
-                                    ),
-                                  ),
-                                ),
-                                heightBox(8.h),
-                                TextWidget(
-                                  text: "Hindi: कहानी के लिए समय अवधि या सेटिंग कितनी महत्वपूर्ण थी?",
-                                  fontWeight: FontWeight.w400,
-                                  fontSize: 12.sp,
-                                ),
+                                questionProviderRef.selectTranslateIndex == index
+                                    ? Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          heightBox(8.h),
+                                          Container(
+                                            padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5),
+                                            decoration: BoxDecoration(
+                                              borderRadius: BorderRadius.circular(10.0),
+                                              border: Border.all(color: colorBlack.withOpacity(0.22), style: BorderStyle.solid, width: 0.80),
+                                            ),
+                                            child: DropdownButtonHideUnderline(
+                                              child: DropdownButton(
+                                                value: dropDownValue,
+                                                isDense: true,
+                                                icon: const Icon(Icons.keyboard_arrow_down),
+                                                items: items.map((String items) {
+                                                  return DropdownMenuItem(
+                                                    value: items,
+                                                    child: Text(items),
+                                                  );
+                                                }).toList(),
+                                                onChanged: (String? newValue) {
+                                                  setState(() {
+                                                    dropDownValue = newValue!;
+                                                  });
+                                                },
+                                              ),
+                                            ),
+                                          ),
+                                          heightBox(8.h),
+                                          TextWidget(
+                                            text: "Hindi: कहानी के लिए समय अवधि या सेटिंग कितनी महत्वपूर्ण थी?",
+                                            fontWeight: FontWeight.w400,
+                                            fontSize: 12.sp,
+                                          ),
+                                        ],
+                                      )
+                                    : const SizedBox(),
                               ],
                             ),
                           ),

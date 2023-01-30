@@ -169,17 +169,17 @@ class _RegisterScreenState extends BaseStatefulWidgetState<RegisterScreen> {
                       fontSize: 19,
                       onTap: () async {
                         if (nameController.text.isEmpty) {
-                          AppUtils.toast("Please enter your name");
+                          AppUtils.toast("Please enter your name", colorRed, colorWhite);
                         } else if (emailController.text.isEmpty) {
-                          AppUtils.toast("Please enter your email");
+                          AppUtils.toast("Please enter your email", colorRed, colorWhite);
                         } else if (phoneNoController.text.isEmpty) {
-                          AppUtils.toast("Please enter your phone number");
+                          AppUtils.toast("Please enter your phone number", colorRed, colorWhite);
                         } else if (passwordController.text.isEmpty) {
-                          AppUtils.toast("Please enter password");
+                          AppUtils.toast("Please enter password", colorRed, colorWhite);
                         } else if (confirmPasswordController.text.isEmpty) {
-                          AppUtils.toast("Please enter confirm password");
+                          AppUtils.toast("Please enter confirm password", colorRed, colorWhite);
                         } else if (passwordController.text != confirmPasswordController.text) {
-                          AppUtils.toast("Password and confirm password are not same");
+                          AppUtils.toast("Password and confirm password are not same", colorRed, colorWhite);
                         } else {
                           Map<String, dynamic> body = {
                             "name": nameController.text,

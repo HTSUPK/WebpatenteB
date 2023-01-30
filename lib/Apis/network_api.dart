@@ -3,7 +3,9 @@ import 'package:dio/dio.dart';
 import 'package:retrofit/http.dart';
 import '../Models/Auth_Model.dart';
 import '../Models/ChapterList_Model.dart';
+import '../Models/FullQuiz_Model.dart';
 import '../Models/Question_Model.dart';
+import '../Models/SelectedQuiz_Model.dart';
 import '../Models/version_check_Model.dart';
 import 'apis.dart';
 
@@ -37,11 +39,23 @@ abstract class RestClient {
   @POST(Apis.versionChecker)
   Future<VersionCheckModel> versionCheckRequest(@Body() body);
 
+  @GET(Apis.question)
+  Future<QuestionModel> questionRequest();
+
   @GET(Apis.chapterList)
   Future<ChapterListModel> chapterListRequest();
 
-  @GET(Apis.question)
-  Future<QuestionModel> questionRequest();
+  @POST(Apis.selectQuiz)
+  Future<SelectedQuizModel> selectQuizRequest(@Body() body);
+
+  @POST(Apis.fullQuiz)
+  Future<FullQuizModel> fullQuizRequest(@Body() body);
+
+  @POST(Apis.notificationFlag)
+  Future<AuthModel> notificationFlagRequest(@Body() body);
+
+  @POST(Apis.checkAbility)
+  Future<AuthModel> checkAbilityRequest(@Body() body);
 }
 
 // flutter pub run build_runner build --delete-conflicting-outputs
