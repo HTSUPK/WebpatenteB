@@ -251,13 +251,13 @@ class _RestClient implements RestClient {
   }
 
   @override
-  Future<SelectedQuizModel> selectQuizRequest(body) async {
+  Future<QuizModel> selectQuizRequest(body) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final _data = body;
     final _result = await _dio
-        .fetch<Map<String, dynamic>>(_setStreamType<SelectedQuizModel>(Options(
+        .fetch<Map<String, dynamic>>(_setStreamType<QuizModel>(Options(
       method: 'POST',
       headers: _headers,
       extra: _extra,
@@ -269,18 +269,18 @@ class _RestClient implements RestClient {
               data: _data,
             )
             .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
-    final value = SelectedQuizModel.fromJson(_result.data!);
+    final value = QuizModel.fromJson(_result.data!);
     return value;
   }
 
   @override
-  Future<FullQuizModel> fullQuizRequest(body) async {
+  Future<QuizModel> fullQuizRequest(body) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final _data = body;
     final _result = await _dio
-        .fetch<Map<String, dynamic>>(_setStreamType<FullQuizModel>(Options(
+        .fetch<Map<String, dynamic>>(_setStreamType<QuizModel>(Options(
       method: 'POST',
       headers: _headers,
       extra: _extra,
@@ -292,7 +292,7 @@ class _RestClient implements RestClient {
               data: _data,
             )
             .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
-    final value = FullQuizModel.fromJson(_result.data!);
+    final value = QuizModel.fromJson(_result.data!);
     return value;
   }
 
@@ -339,6 +339,52 @@ class _RestClient implements RestClient {
             )
             .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
     final value = AuthModel.fromJson(_result.data!);
+    return value;
+  }
+
+  @override
+  Future<QuizResultModel> quizResultRequest(body) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final _data = body;
+    final _result = await _dio
+        .fetch<Map<String, dynamic>>(_setStreamType<QuizResultModel>(Options(
+      method: 'POST',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              'user/quiz_result',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+    final value = QuizResultModel.fromJson(_result.data!);
+    return value;
+  }
+
+  @override
+  Future<StatisticsModel> statisticsRequest() async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final _data = <String, dynamic>{};
+    final _result = await _dio
+        .fetch<Map<String, dynamic>>(_setStreamType<StatisticsModel>(Options(
+      method: 'GET',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              'user/statistics',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+    final value = StatisticsModel.fromJson(_result.data!);
     return value;
   }
 

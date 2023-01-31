@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
-import 'package:webpatente/utils/shared_preference_util.dart';
 import 'Providers/auth_provider.dart';
 import 'Providers/profile_provider.dart';
 import 'Providers/question_provider.dart';
@@ -10,6 +9,8 @@ import 'Providers/quiz_provider.dart';
 import 'Providers/setting_provider.dart';
 import 'Providers/versionCheck_provider.dart';
 import 'Screens/Splash/SplashScreen.dart';
+import 'utils/app_utils.dart';
+import 'utils/shared_preference_util.dart';
 
 void main() async {
   await ScreenUtil.ensureScreenSize();
@@ -59,6 +60,12 @@ class MyApp extends StatelessWidget {
           theme: ThemeData(
             primarySwatch: Colors.blue,
           ),
+          builder: (context, child) {
+            return ScrollConfiguration(
+              behavior: MyBehavior(),
+              child: child!,
+            );
+          },
           home: const SplashScreen(),
         ),
       ),

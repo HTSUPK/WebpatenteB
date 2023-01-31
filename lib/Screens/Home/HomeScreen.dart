@@ -295,7 +295,7 @@ class _HomeScreenState extends BaseStatefulWidgetState<HomeScreen> {
                           context,
                           MaterialPageRoute(
                             builder: (context) => const QuizScreen(
-                              where: "fullQuiz",
+                              where: "full",
                             ),
                           ),
                         );

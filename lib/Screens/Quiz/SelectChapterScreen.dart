@@ -1,6 +1,5 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:webpatente/Widgets/common_appbar.dart';
@@ -8,11 +7,9 @@ import 'package:webpatente/Widgets/common_button.dart';
 import 'package:webpatente/resources/color_resources.dart';
 import '../../Providers/quiz_provider.dart';
 import '../../Widgets/chapterCard_widget.dart';
-import '../../Widgets/text_widget.dart';
 import '../../base/base_stateful_widget.dart';
 import '../../resources/image_resources.dart';
 import 'QuizScreen.dart';
-import '../Question/QuestionScreen.dart';
 
 class SelectChapterScreen extends StatefulWidget {
   const SelectChapterScreen({Key? key}) : super(key: key);
@@ -22,14 +19,14 @@ class SelectChapterScreen extends StatefulWidget {
 }
 
 class _SelectChapterScreenState extends BaseStatefulWidgetState<SelectChapterScreen> {
-  late QuizProvider quizProvider;
+  late QuizProvider quizProviderRef;
 
   @override
   void initState() {
     // TODO: implement initState
-    quizProvider = Provider.of(context, listen: false);
+    quizProviderRef = Provider.of(context, listen: false);
     Future.delayed(const Duration(seconds: 0), () {
-      quizProvider.callApiChapterList();
+      quizProviderRef.callApiChapterList();
     });
     super.initState();
   }
@@ -49,8 +46,8 @@ class _SelectChapterScreenState extends BaseStatefulWidgetState<SelectChapterScr
 
   @override
   Widget buildBody(BuildContext context) {
-    return Consumer<QuizProvider>(builder: (_, quizProvider, __) {
-      return quizProvider.quizLoader
+    return Consumer<QuizProvider>(builder: (_, quizProviderRef, __) {
+      return quizProviderRef.quizLoader
           ? Shimmer.fromColors(
               baseColor: Colors.grey[300]!,
               highlightColor: Colors.grey[100]!,
@@ -74,11 +71,11 @@ class _SelectChapterScreenState extends BaseStatefulWidgetState<SelectChapterScr
                   }),
             )
           : ListView.builder(
-              itemCount: quizProvider.chapterList.length,
+              itemCount: quizProviderRef.chapterList.length,
               shrinkWrap: true,
               itemBuilder: (context, index) {
-                for (int i = 0; i < quizProvider.chapterList.length; i++) {
-                  quizProvider.selectChapter.add(false);
+                for (int i = 0; i < quizProviderRef.chapterList.length; i++) {
+                  quizProviderRef.selectChapter.add(false);
                 }
                 return Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 12),
@@ -86,14 +83,13 @@ class _SelectChapterScreenState extends BaseStatefulWidgetState<SelectChapterScr
                     children: [
                       heightBox(10),
                       ChapterCard(
-                        // image: "https://hexeros.com/dev/superapp/uploads/user/user.png",
-                        image: quizProvider.chapterList[index].image,
-                        text: quizProvider.chapterList[index].chapter,
-                        borderColor: quizProvider.selectChapter[index] == true ? colorPrimary : colorWhite,
+                        image: quizProviderRef.chapterList[index].image,
+                        text: quizProviderRef.chapterList[index].chapter,
+                        borderColor: quizProviderRef.selectChapter[index] == true ? colorPrimary : colorWhite,
                         onTap: () {
                           setState(() {
-                            quizProvider.selectChapter[index] = quizProvider.selectChapter[index] == true ? false : true;
-                            onSelect(quizProvider.selectChapter[index], quizProvider.chapterList[index].id);
+                            quizProviderRef.selectChapter[index] = quizProviderRef.selectChapter[index] == true ? false : true;
+                            onSelect(quizProviderRef.selectChapter[index], quizProviderRef.chapterList[index].id);
                             setState(() {});
                           });
                         },
@@ -107,14 +103,14 @@ class _SelectChapterScreenState extends BaseStatefulWidgetState<SelectChapterScr
 
   onSelect(bool selected, chapterId) {
     if (selected == true) {
-      quizProvider.selectChapterId.add(chapterId);
+      quizProviderRef.selectChapterId.add(chapterId);
       if (kDebugMode) {
-        print("ID ${quizProvider.selectChapterId}");
+        print("ID ${quizProviderRef.selectChapterId}");
       }
     } else {
-      quizProvider.selectChapterId.remove(chapterId);
+      quizProviderRef.selectChapterId.remove(chapterId);
       if (kDebugMode) {
-        print("ID ${quizProvider.selectChapterId}");
+        print("ID ${quizProviderRef.selectChapterId}");
       }
     }
   }
@@ -129,8 +125,9 @@ class _SelectChapterScreenState extends BaseStatefulWidgetState<SelectChapterScr
         onTap: () => Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => const QuizScreen(
-              where: "selectedQuiz",
+            builder: (context) => QuizScreen(
+              where: "selected",
+              selectChapterId: quizProviderRef.selectChapterId,
             ),
           ),
         ),

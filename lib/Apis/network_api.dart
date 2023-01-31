@@ -3,12 +3,12 @@ import 'package:dio/dio.dart';
 import 'package:retrofit/http.dart';
 import '../Models/Auth_Model.dart';
 import '../Models/ChapterList_Model.dart';
-import '../Models/FullQuiz_Model.dart';
 import '../Models/Question_Model.dart';
-import '../Models/SelectedQuiz_Model.dart';
+import '../Models/QuizResult_Model.dart';
+import '../Models/Quiz_Model.dart';
+import '../Models/Statistics_Model.dart';
 import '../Models/version_check_Model.dart';
 import 'apis.dart';
-
 part 'network_api.g.dart';
 
 @RestApi(baseUrl: Apis.baseUrl)
@@ -46,16 +46,22 @@ abstract class RestClient {
   Future<ChapterListModel> chapterListRequest();
 
   @POST(Apis.selectQuiz)
-  Future<SelectedQuizModel> selectQuizRequest(@Body() body);
+  Future<QuizModel> selectQuizRequest(@Body() body);
 
   @POST(Apis.fullQuiz)
-  Future<FullQuizModel> fullQuizRequest(@Body() body);
+  Future<QuizModel> fullQuizRequest(@Body() body);
 
   @POST(Apis.notificationFlag)
   Future<AuthModel> notificationFlagRequest(@Body() body);
 
   @POST(Apis.checkAbility)
   Future<AuthModel> checkAbilityRequest(@Body() body);
+
+  @POST(Apis.quizResult)
+  Future<QuizResultModel> quizResultRequest(@Body() body);
+
+  @GET(Apis.statistics)
+  Future<StatisticsModel> statisticsRequest();
 }
 
 // flutter pub run build_runner build --delete-conflicting-outputs

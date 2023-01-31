@@ -1,7 +1,7 @@
 import 'dart:convert';
 /// status : 200
 /// message : "success"
-/// data : [{"id":2,"image":"https://hexeros.com/dev/web-patente/uploads/chapter/nMGGVZnxADkgm7wAHuDBn454lU0x4araCXISwVLq.png","chapter":"A Little Story"},{"id":3,"image":"https://hexeros.com/dev/web-patente/uploads/chapter/CCgsSgxZMkVpdHkRmBkTEXBUpPoG4Z2gRX7QOQHe.png","chapter":"Legends Of USA"}]
+/// data : {"Chapter":[{"id":2,"image":"https://hexeros.com/dev/web-patente/uploads/chapter/siXuMwyFHOYvsE874OFzsCjnFj18r5HSoftSMtxf.png","chapter":"A Little Story"},{"id":3,"image":"https://hexeros.com/dev/web-patente/uploads/chapter/1mLpgZvlqnqNSaOT0P4x3xOpWCa33yi1icm2WRDt.jpg","chapter":"Legends Of USA"},{"id":5,"image":"https://hexeros.com/dev/web-patente/uploads/chapter/FCA24iBIKPdOmSs55LXXlYE6fJGijnAFQwKqq507.gif","chapter":"Test"}],"Page":[{"id":1,"sequence":1,"title":"New page"},{"id":2,"sequence":2,"title":"Simple page"},{"id":3,"sequence":3,"title":"Drawing Page"}]}
 
 ChapterListModel chapterListModelFromJson(String str) => ChapterListModel.fromJson(json.decode(str));
 String chapterListModelToJson(ChapterListModel data) => json.encode(data.toJson());
@@ -9,7 +9,7 @@ class ChapterListModel {
   ChapterListModel({
       num? status, 
       String? message, 
-      List<Data>? data,}){
+      Data? data,}){
     _status = status;
     _message = message;
     _data = data;
@@ -18,47 +18,137 @@ class ChapterListModel {
   ChapterListModel.fromJson(dynamic json) {
     _status = json['status'];
     _message = json['message'];
-    if (json['data'] != null) {
-      _data = [];
-      json['data'].forEach((v) {
-        _data?.add(Data.fromJson(v));
-      });
-    }
+    _data = json['data'] != null ? Data.fromJson(json['data']) : null;
   }
   num? _status;
   String? _message;
-  List<Data>? _data;
+  Data? _data;
 ChapterListModel copyWith({  num? status,
   String? message,
-  List<Data>? data,
+  Data? data,
 }) => ChapterListModel(  status: status ?? _status,
   message: message ?? _message,
   data: data ?? _data,
 );
   num? get status => _status;
   String? get message => _message;
-  List<Data>? get data => _data;
+  Data? get data => _data;
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
     map['status'] = _status;
     map['message'] = _message;
     if (_data != null) {
-      map['data'] = _data?.map((v) => v.toJson()).toList();
+      map['data'] = _data?.toJson();
     }
     return map;
   }
 
 }
 
-/// id : 2
-/// image : "https://hexeros.com/dev/web-patente/uploads/chapter/nMGGVZnxADkgm7wAHuDBn454lU0x4araCXISwVLq.png"
-/// chapter : "A Little Story"
+/// Chapter : [{"id":2,"image":"https://hexeros.com/dev/web-patente/uploads/chapter/siXuMwyFHOYvsE874OFzsCjnFj18r5HSoftSMtxf.png","chapter":"A Little Story"},{"id":3,"image":"https://hexeros.com/dev/web-patente/uploads/chapter/1mLpgZvlqnqNSaOT0P4x3xOpWCa33yi1icm2WRDt.jpg","chapter":"Legends Of USA"},{"id":5,"image":"https://hexeros.com/dev/web-patente/uploads/chapter/FCA24iBIKPdOmSs55LXXlYE6fJGijnAFQwKqq507.gif","chapter":"Test"}]
+/// Page : [{"id":1,"sequence":1,"title":"New page"},{"id":2,"sequence":2,"title":"Simple page"},{"id":3,"sequence":3,"title":"Drawing Page"}]
 
 Data dataFromJson(String str) => Data.fromJson(json.decode(str));
 String dataToJson(Data data) => json.encode(data.toJson());
 class Data {
   Data({
+      List<ChapterList>? chapter,
+      List<Page>? page,}){
+    _chapter = chapter;
+    _page = page;
+}
+
+  Data.fromJson(dynamic json) {
+    if (json['Chapter'] != null) {
+      _chapter = [];
+      json['Chapter'].forEach((v) {
+        _chapter?.add(ChapterList.fromJson(v));
+      });
+    }
+    if (json['Page'] != null) {
+      _page = [];
+      json['Page'].forEach((v) {
+        _page?.add(Page.fromJson(v));
+      });
+    }
+  }
+  List<ChapterList>? _chapter;
+  List<Page>? _page;
+Data copyWith({  List<ChapterList>? chapter,
+  List<Page>? page,
+}) => Data(  chapter: chapter ?? _chapter,
+  page: page ?? _page,
+);
+  List<ChapterList>? get chapter => _chapter;
+  List<Page>? get page => _page;
+
+  Map<String, dynamic> toJson() {
+    final map = <String, dynamic>{};
+    if (_chapter != null) {
+      map['Chapter'] = _chapter?.map((v) => v.toJson()).toList();
+    }
+    if (_page != null) {
+      map['Page'] = _page?.map((v) => v.toJson()).toList();
+    }
+    return map;
+  }
+
+}
+
+/// id : 1
+/// sequence : 1
+/// title : "New page"
+
+Page pageFromJson(String str) => Page.fromJson(json.decode(str));
+String pageToJson(Page data) => json.encode(data.toJson());
+class Page {
+  Page({
+      num? id, 
+      num? sequence, 
+      String? title,}){
+    _id = id;
+    _sequence = sequence;
+    _title = title;
+}
+
+  Page.fromJson(dynamic json) {
+    _id = json['id'];
+    _sequence = json['sequence'];
+    _title = json['title'];
+  }
+  num? _id;
+  num? _sequence;
+  String? _title;
+Page copyWith({  num? id,
+  num? sequence,
+  String? title,
+}) => Page(  id: id ?? _id,
+  sequence: sequence ?? _sequence,
+  title: title ?? _title,
+);
+  num? get id => _id;
+  num? get sequence => _sequence;
+  String? get title => _title;
+
+  Map<String, dynamic> toJson() {
+    final map = <String, dynamic>{};
+    map['id'] = _id;
+    map['sequence'] = _sequence;
+    map['title'] = _title;
+    return map;
+  }
+
+}
+
+/// id : 2
+/// image : "https://hexeros.com/dev/web-patente/uploads/chapter/siXuMwyFHOYvsE874OFzsCjnFj18r5HSoftSMtxf.png"
+/// chapter : "A Little Story"
+
+ChapterList chapterFromJson(String str) => ChapterList.fromJson(json.decode(str));
+String chapterToJson(ChapterList data) => json.encode(data.toJson());
+class ChapterList {
+  ChapterList({
       num? id, 
       String? image, 
       String? chapter,}){
@@ -67,7 +157,7 @@ class Data {
     _chapter = chapter;
 }
 
-  Data.fromJson(dynamic json) {
+  ChapterList.fromJson(dynamic json) {
     _id = json['id'];
     _image = json['image'];
     _chapter = json['chapter'];
@@ -75,10 +165,10 @@ class Data {
   num? _id;
   String? _image;
   String? _chapter;
-Data copyWith({  num? id,
+ChapterList copyWith({  num? id,
   String? image,
   String? chapter,
-}) => Data(  id: id ?? _id,
+}) => ChapterList(  id: id ?? _id,
   image: image ?? _image,
   chapter: chapter ?? _chapter,
 );

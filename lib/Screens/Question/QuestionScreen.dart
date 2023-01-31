@@ -314,7 +314,6 @@ class _QuestionScreenState extends BaseStatefulWidgetState<QuestionScreen> {
                                                     iconName: icSpeak,
                                                     text: "Speak",
                                                     onTap: () async {
-                                                      // tts.speak(questionProviderRef.questionList[index].question!);
                                                       setState(() {
                                                         questionProviderRef.text = questionProviderRef.questionList[index].question!;
                                                         setState(() {});

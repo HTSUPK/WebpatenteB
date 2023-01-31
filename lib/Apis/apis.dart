@@ -14,6 +14,8 @@ class Apis {
   static const String fullQuiz = "quiz/full_quizlist";
   static const String notificationFlag = "user/notification_flag";
   static const String checkAbility = "check_ability";
+  static const String quizResult = "user/quiz_result";
+  static const String statistics = "user/statistics";
 }
 
 // flutter pub run build_runner build --delete-conflicting-outputs
