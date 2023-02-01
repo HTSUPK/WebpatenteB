@@ -184,7 +184,7 @@ class _RegisterScreenState extends BaseStatefulWidgetState<RegisterScreen> {
                           Map<String, dynamic> body = {
                             "name": nameController.text,
                             "email": emailController.text,
-                            "country_code": "+${_selectedDialogCountry.phoneCode}",
+                            "country_code": _selectedDialogCountry.phoneCode,
                             "mobile": phoneNoController.text,
                             "password": passwordController.text,
                             "device_id": await AppUtils.getDeviceId(),

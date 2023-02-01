@@ -1,20 +1,13 @@
 import 'dart:async';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:provider/provider.dart';
-import 'package:webpatente/Screens/Home/HomeScreen.dart';
 import '../../Providers/versionCheck_provider.dart';
-import '../../Widgets/text_widget.dart';
 import '../../base/base_stateful_widget.dart';
-import '../../resources/color_resources.dart';
 import '../../resources/image_resources.dart';
-import '../../utils/app_constants.dart';
 import '../../utils/app_utils.dart';
-import '../../utils/shared_preference_util.dart';
-import '../Auth/LoginScreen.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);
@@ -45,21 +38,7 @@ class _SplashScreenState extends BaseStatefulWidgetState<SplashScreen> {
     // TODO: implement initState
     super.initState();
     versionCheckProviderRef = Provider.of(context, listen: false);
-    Future.delayed(const Duration(seconds: 0), () {
-      PackageInfo.fromPlatform().then((PackageInfo packageInfo) async {
-        appVersion = packageInfo.version;
-        Map<String, dynamic> body = {
-          "type": AppUtils.getDeviceTypeID(),
-          // "version": packageInfo.version,
-          "version": 0,
-          "device_id": await AppUtils.getDeviceId(),
-          "device_type": AppUtils.getDeviceTypeID(),
-        };
-        // ignore: use_build_context_synchronously
-        // versionCheckProviderRef.callApiVersionCheck(body, context);
-      });
-    });
-    Timer(
+    /*Timer(
       const Duration(seconds: 3),
       () => SharedPreferenceUtil.getBool(isLoginKey) == true
           ? Navigator.pushReplacement(
@@ -74,11 +53,27 @@ class _SplashScreenState extends BaseStatefulWidgetState<SplashScreen> {
                 builder: (context) => const LoginScreen(),
               ),
             ),
-    );
+    );*/
   }
 
   @override
+  // TODO: implement shouldHaveSafeArea
+  bool get shouldHaveSafeArea => true;
+
+  @override
   Widget buildBody(BuildContext context) {
+    Future.delayed(const Duration(seconds: 0), () {
+      PackageInfo.fromPlatform().then((PackageInfo packageInfo) async {
+        appVersion = packageInfo.version;
+        Map<String, dynamic> body = {
+          "type": AppUtils.getDeviceTypeID(),
+          "version": packageInfo.version,
+          // "device_id": await AppUtils.getDeviceId(),
+          "device_id": "123456",
+        };
+        versionCheckProviderRef.callApiVersionCheck(body, context);
+      });
+    });
     return SizedBox(
       height: 690.h,
       width: 360.w,

@@ -11,7 +11,7 @@ class QuizModel {
       num? status, 
       String? message, 
       List<QuizData>? data,
-      String? timer,}){
+      int? timer,}){
     _status = status;
     _message = message;
     _data = data;
@@ -32,11 +32,11 @@ class QuizModel {
   num? _status;
   String? _message;
   List<QuizData>? _data;
-  String? _timer;
+  int? _timer;
 QuizModel copyWith({  num? status,
   String? message,
   List<QuizData>? data,
-  String? timer,
+  int? timer,
 }) => QuizModel(  status: status ?? _status,
   message: message ?? _message,
   data: data ?? _data,
@@ -45,7 +45,7 @@ QuizModel copyWith({  num? status,
   num? get status => _status;
   String? get message => _message;
   List<QuizData>? get data => _data;
-  String? get timer => _timer;
+  int? get timer => _timer;
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};

@@ -2,6 +2,8 @@ import 'dart:io';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:dio/dio.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:country_pickers/country.dart';
+import 'package:country_pickers/country_pickers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
@@ -32,8 +34,7 @@ class _EditProfileScreenState extends BaseStatefulWidgetState<EditProfileScreen>
   TextEditingController phoneNoController = TextEditingController();
   TextEditingController emailController = TextEditingController();
 
-  // final ImagePicker picker = ImagePicker();
-  // File? proImage;
+  Country _selectedDialogCountry = CountryPickerUtils.getCountryByPhoneCode('39');
 
   late ProfileProvider profileProviderRef;
 
@@ -41,7 +42,7 @@ class _EditProfileScreenState extends BaseStatefulWidgetState<EditProfileScreen>
   void initState() {
     // TODO: implement initState
     profileProviderRef = Provider.of<ProfileProvider>(context, listen: false);
-    phoneCode = SharedPreferenceUtil.getString(userPhoneCode);
+    _selectedDialogCountry = CountryPickerUtils.getCountryByPhoneCode(SharedPreferenceUtil.getString(userPhoneCode));
     nameController.text = SharedPreferenceUtil.getString(userName);
     phoneNoController.text = SharedPreferenceUtil.getString(userPhoneNo);
     emailController.text = SharedPreferenceUtil.getString(userEmail);
@@ -141,43 +142,39 @@ class _EditProfileScreenState extends BaseStatefulWidgetState<EditProfileScreen>
             TextEditingWidget(
               controller: phoneNoController,
               textInputType: TextInputType.number,
-              // textInputAction: TextInputAction.next,
-              labelText: "Mobile Number",
-              // readOnly: true,
+              textInputAction: TextInputAction.next,
+              labelText: "Enter Your Mobile Number",
               fontSize: 16,
-              onEditingComplete: () => FocusScope.of(context).unfocus(),
+              onEditingComplete: () => FocusScope.of(context).nextFocus(),
               prefixIcon: SizedBox(
                 width: 75.w,
                 child: Padding(
                   padding: EdgeInsets.symmetric(horizontal: 1.w),
-                  child: Row(
-                    children: [
-                      widthBox(6.w),
-                      Flexible(
-                          child: SizedBox(
-                        width: 60.w,
-                        height: 10.h,
-                        child: AutoSizeText(
-                          phoneCode,
-                          textAlign: TextAlign.center,
-                          style: const TextStyle(
-                            color: colorBlack,
-                            fontSize: 16,
-                            fontFamily: strFontName,
-                            fontWeight: FontWeight.w600,
+                  child: GestureDetector(
+                    onTap: _openCountryPickerDialog,
+                    child: Row(
+                      children: [
+                        widthBox(6.w),
+                        Flexible(
+                          child: GestureDetector(
+                            onTap: _openCountryPickerDialog,
+                            child: Container(
+                              child: _buildDialogItem(_selectedDialogCountry, isFromDialog: false),
+                            ),
                           ),
-                          // maxLines: 1,
                         ),
-                      )),
-                      Container(
-                        height: 30.h,
-                        padding: EdgeInsets.symmetric(horizontal: 1.w),
-                        child: VerticalDivider(
-                          color: colorBlack.withOpacity(0.3),
-                          thickness: 1,
+                        // widthBox(10.w),
+                        // SvgPicture.asset(icDropdown),
+                        Container(
+                          height: 30.h,
+                          padding: EdgeInsets.symmetric(horizontal: 1.w),
+                          child: VerticalDivider(
+                            color: colorBlack.withOpacity(0.3),
+                            thickness: 1,
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
               ),
@@ -202,6 +199,7 @@ class _EditProfileScreenState extends BaseStatefulWidgetState<EditProfileScreen>
                     "name": nameController.text,
                     "mobile": phoneNoController.text,
                     "email": emailController.text,
+                    "country_code": _selectedDialogCountry.phoneCode,
                   });
                   profileProviderRef.callApiEditUserProfile(formData);
                 }
@@ -268,42 +266,56 @@ class _EditProfileScreenState extends BaseStatefulWidgetState<EditProfileScreen>
     profileProviderRef.filePath = pickedFile.path;
   }
 
-/*void _openCountryPickerDialog() {
-  FocusScope.of(context).requestFocus(FocusNode());
-  showDialog(
-    context: context,
-    builder: (context) => Theme(
-      data: Theme.of(context).copyWith(primaryColor: Colors.pink),
-      child: CountryPickerDialog(
-        titlePadding: const EdgeInsets.all(8.0),
-        searchCursorColor: Colors.pinkAccent,
-        searchInputDecoration: const InputDecoration(hintText: 'Search...'),
-        isSearchable: true,
-        title: TextWidget(text: 'Select your country code', fontSize: 16),
-        onValuePicked: (Country country) => setState(() => _selectedDialogCountry = country),
-        itemBuilder: _buildDialogItem,
-      ),
-    ),
-  );
-}
-
-Widget _buildDialogItem(Country country, {bool isFromDialog = true}) => isFromDialog
-    ? Row(
-        children: <Widget>[
-          CountryPickerUtils.getDefaultFlagImage(country),
-          const SizedBox(width: 8.0),
-          Text("+${country.phoneCode}"),
-          const SizedBox(width: 8.0),
-          Flexible(child: Text(country.name))
-        ],
-      )
-    : SizedBox(
-        width: 60.w,
-        height: 10.h,
-        child: AutoSizeText(
-          "+${country.phoneCode}",
-          textAlign: TextAlign.center,
-          // maxLines: 1,
+  void _openCountryPickerDialog() {
+    FocusScope.of(context).requestFocus(FocusNode());
+    showDialog(
+      context: context,
+      builder: (context) => Theme(
+        data: Theme.of(context).copyWith(primaryColor: Colors.pink),
+        child: CountryPickerDialog(
+          titlePadding: const EdgeInsets.all(8.0),
+          searchCursorColor: Colors.pinkAccent,
+          searchInputDecoration: const InputDecoration(hintText: 'Search...'),
+          isSearchable: true,
+          title: TextWidget(text: 'Select your country code', fontSize: 16),
+          onValuePicked: (Country country) => setState(() => _selectedDialogCountry = country),
+          itemBuilder: _buildDialogItem,
         ),
-        );*/
+      ),
+    );
+  }
+
+  Widget _buildDialogItem(Country country, {bool isFromDialog = true}) => isFromDialog
+      ? Row(
+          children: <Widget>[
+            CountryPickerUtils.getDefaultFlagImage(country),
+            const SizedBox(width: 8.0),
+            Text(
+              "+${country.phoneCode}",
+              style: const TextStyle(
+                color: colorBlack,
+                fontSize: 16,
+                fontFamily: strFontName,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+            const SizedBox(width: 8.0),
+            Flexible(child: Text(country.name))
+          ],
+        )
+      : SizedBox(
+          width: 60.w,
+          height: 10.h,
+          child: AutoSizeText(
+            "+${country.phoneCode}",
+            style: const TextStyle(
+              color: colorBlack,
+              fontSize: 16,
+              fontFamily: strFontName,
+              fontWeight: FontWeight.w500,
+            ),
+            textAlign: TextAlign.center,
+            // maxLines: 1,
+          ),
+        );
 }

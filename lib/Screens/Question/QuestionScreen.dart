@@ -1,11 +1,10 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
-import 'package:text_to_speech/text_to_speech.dart';
 import 'package:webpatente/Widgets/text_widget.dart';
 import 'package:webpatente/resources/color_resources.dart';
+import '../../Models/ChapterList_Model.dart';
 import '../../Providers/question_provider.dart';
 import '../../Widgets/questionItem_widget.dart';
 import '../../Widgets/text_editing_widget.dart';
@@ -21,12 +20,13 @@ class QuestionScreen extends StatefulWidget {
 }
 
 class _QuestionScreenState extends BaseStatefulWidgetState<QuestionScreen> {
-  final List<String> _locations = ['Legends Of USA', 'B', 'C', 'D'];
-  String _selectedLocation = 'A';
+  // final List<String> _locations = ['Legends Of USA', 'B', 'C', 'D'];
+  // String _selectedLocation = 'A';
 
   /// Language ///
 
-  String dropDownValue = 'Hindi';
+  // String dropDownValue = 'Hindi';
+  List<String> dropDownValue = ['Hindi'];
 
   // List of items in our dropdown menu
   var items = [
@@ -42,8 +42,12 @@ class _QuestionScreenState extends BaseStatefulWidgetState<QuestionScreen> {
     questionProviderRef = Provider.of<QuestionProvider>(context, listen: false);
     Future.delayed(const Duration(seconds: 0), () {
       questionProviderRef.callApiQuestion();
+      questionProviderRef.callApiChapterList();
     });
-    _selectedLocation = _locations[0];
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      questionProviderRef.initLanguages();
+    });
+    // _selectedLocation = _locations[0];
     super.initState();
   }
 
@@ -106,13 +110,13 @@ class _QuestionScreenState extends BaseStatefulWidgetState<QuestionScreen> {
                               SizedBox(
                                 height: 25,
                                 width: screenSize.width / 2,
-                                child: PopupMenuButton<String>(
+                                child: PopupMenuButton<ChapterList>(
                                   itemBuilder: (context) {
-                                    return _locations.map((value) {
+                                    return questionProviderRef.chapterList.map((value) {
                                       return PopupMenuItem(
                                         value: value,
                                         child: TextWidget(
-                                          text: value,
+                                          text: value.chapter,
                                           fontSize: 15,
                                           fontWeight: FontWeight.w500,
                                           color: colorPrimary,
@@ -124,7 +128,7 @@ class _QuestionScreenState extends BaseStatefulWidgetState<QuestionScreen> {
                                     mainAxisSize: MainAxisSize.min,
                                     children: <Widget>[
                                       TextWidget(
-                                        text: _selectedLocation,
+                                        text: questionProviderRef.selectChapter,
                                         fontSize: 17,
                                         fontWeight: FontWeight.w600,
                                         color: colorWhite,
@@ -137,7 +141,7 @@ class _QuestionScreenState extends BaseStatefulWidgetState<QuestionScreen> {
                                   ),
                                   onSelected: (v) {
                                     setState(() {
-                                      _selectedLocation = v;
+                                      questionProviderRef.selectChapter = v.chapter!;
                                     });
                                   },
                                 ),
@@ -319,9 +323,6 @@ class _QuestionScreenState extends BaseStatefulWidgetState<QuestionScreen> {
                                                         setState(() {});
                                                       });
                                                       questionProviderRef.speak();
-                                                      if (kDebugMode) {
-                                                        print("DONE");
-                                                      }
                                                     },
                                                   ),
                                                   widthBox(10.w),
@@ -330,6 +331,7 @@ class _QuestionScreenState extends BaseStatefulWidgetState<QuestionScreen> {
                                                     text: "Translate",
                                                     onTap: () {
                                                       questionProviderRef.selectIndex(index);
+                                                      setState(() {});
                                                     },
                                                   ),
                                                 ],
@@ -370,10 +372,10 @@ class _QuestionScreenState extends BaseStatefulWidgetState<QuestionScreen> {
                                             ),
                                             child: DropdownButtonHideUnderline(
                                               child: DropdownButton(
-                                                value: dropDownValue,
+                                                value: questionProviderRef.dropDownValue[index],
                                                 isDense: true,
                                                 icon: const Icon(Icons.keyboard_arrow_down),
-                                                items: items.map((String items) {
+                                                items: questionProviderRef.items.map((String items) {
                                                   return DropdownMenuItem(
                                                     value: items,
                                                     child: Text(items),
@@ -381,7 +383,7 @@ class _QuestionScreenState extends BaseStatefulWidgetState<QuestionScreen> {
                                                 }).toList(),
                                                 onChanged: (String? newValue) {
                                                   setState(() {
-                                                    dropDownValue = newValue!;
+                                                    questionProviderRef.dropDownValue[index] = newValue!;
                                                   });
                                                 },
                                               ),

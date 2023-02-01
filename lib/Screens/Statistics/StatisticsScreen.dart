@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:webpatente/Widgets/common_appbar.dart';
 import 'package:webpatente/resources/color_resources.dart';
+import '../../Models/Statistics_Model.dart';
+import '../../Providers/statistics_provider.dart';
 import '../../Widgets/text_widget.dart';
 import '../../base/base_stateful_widget.dart';
 import '../../resources/image_resources.dart';
@@ -27,6 +30,18 @@ class _StatisticsScreenState extends BaseStatefulWidgetState<StatisticsScreen> {
     ChartData('Quiz9', 40),
   ];
 
+  late StatisticsProvider statisticsProviderRef;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    statisticsProviderRef = Provider.of<StatisticsProvider>(context, listen: false);
+    Future.delayed(const Duration(seconds: 0), () {
+      statisticsProviderRef.callApiQuizResult();
+    });
+    super.initState();
+  }
+
   @override
   // TODO: implement scaffoldBgColor
   Color? get scaffoldBgColor => colorPrimary;
@@ -44,25 +59,24 @@ class _StatisticsScreenState extends BaseStatefulWidgetState<StatisticsScreen> {
 
   @override
   Widget buildBody(BuildContext context) {
-    return Column(
-      children: [
-        Container(
-          height: 200.h,
-          width: screenSize.width,
-          color: colorPrimary,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              heightBox(35.h),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 40.w),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    return Consumer<StatisticsProvider>(builder: (_, statisticsProviderRef, __) {
+      return Column(
+        children: [
+          Container(
+            height: 200.h,
+            width: screenSize.width,
+            color: colorPrimary,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                heightBox(35.h),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     Column(
                       children: [
                         TextWidget(
-                          text: "140",
+                          text: double.parse(statisticsProviderRef.correct!).toStringAsFixed(0),
                           fontWeight: FontWeight.w800,
                           color: colorWhite,
                           fontSize: 25.sp,
@@ -78,7 +92,7 @@ class _StatisticsScreenState extends BaseStatefulWidgetState<StatisticsScreen> {
                     Column(
                       children: [
                         TextWidget(
-                          text: "20",
+                          text: statisticsProviderRef.notAnswer,
                           fontWeight: FontWeight.w800,
                           color: colorWhite,
                           fontSize: 25.sp,
@@ -94,7 +108,7 @@ class _StatisticsScreenState extends BaseStatefulWidgetState<StatisticsScreen> {
                     Column(
                       children: [
                         TextWidget(
-                          text: "90",
+                          text: double.parse(statisticsProviderRef.inCorrect!).toStringAsFixed(0),
                           fontWeight: FontWeight.w800,
                           color: colorWhite,
                           fontSize: 25.sp,
@@ -109,17 +123,14 @@ class _StatisticsScreenState extends BaseStatefulWidgetState<StatisticsScreen> {
                     )
                   ],
                 ),
-              ),
-              heightBox(32.h),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 90.w),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                heightBox(32.h),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     Column(
                       children: [
                         TextWidget(
-                          text: "60%",
+                          text: "${statisticsProviderRef.totalPassed}%",
                           fontWeight: FontWeight.w800,
                           color: colorWhite,
                           fontSize: 25.sp,
@@ -135,7 +146,7 @@ class _StatisticsScreenState extends BaseStatefulWidgetState<StatisticsScreen> {
                     Column(
                       children: [
                         TextWidget(
-                          text: "40%",
+                          text: "${statisticsProviderRef.totalFailed}%",
                           fontWeight: FontWeight.w800,
                           color: colorWhite,
                           fontSize: 25.sp,
@@ -150,56 +161,59 @@ class _StatisticsScreenState extends BaseStatefulWidgetState<StatisticsScreen> {
                     )
                   ],
                 ),
-              ),
-            ],
-          ),
-        ),
-        Expanded(
-          child: Container(
-            width: screenSize.width,
-            color: colorWhite,
-            child: Column(
-              children: [
-                heightBox(31.h),
-                TextWidget(
-                  text: "Quiz Performance",
-                  fontWeight: FontWeight.w600,
-                  fontSize: 22.sp,
-                ),
-                heightBox(10.h),
-                SfCartesianChart(
-                  primaryXAxis: CategoryAxis(
-                    majorGridLines: const MajorGridLines(
-                      width: 0,
-                    ),
-                  ),
-                  legend: Legend(isVisible: false),
-                  tooltipBehavior: TooltipBehavior(
-                    enable: true,
-                  ),
-                  series: <CartesianSeries<ChartData, String>>[
-                    ColumnSeries<ChartData, String>(
-                      dataSource: chartData,
-                      xValueMapper: (ChartData data, _) => data.x,
-                      yValueMapper: (ChartData data, _) => data.y,
-                      borderRadius: BorderRadius.circular(15),
-                      isVisibleInLegend: false,
-                      color: colorPrimary,
-                      // gradient: LinearGradient(
-                      //     colors: [colorPrimary, colorPrimary,],
-                      //     stops: [0.0, 1.0],
-                      //     begin: FractionalOffset.topCenter,
-                      //     end: FractionalOffset.bottomCenter,
-                      //     tileMode: TileMode.repeated),
-                    ),
-                  ],
-                ),
               ],
             ),
           ),
-        )
-      ],
-    );
+          Expanded(
+            child: Container(
+              width: screenSize.width,
+              color: colorWhite,
+              child: Column(
+                children: [
+                  heightBox(31.h),
+                  TextWidget(
+                    text: "Quiz Performance",
+                    fontWeight: FontWeight.w600,
+                    fontSize: 22.sp,
+                  ),
+                  heightBox(10.h),
+                  SfCartesianChart(
+                    primaryXAxis: CategoryAxis(
+                      majorGridLines: const MajorGridLines(
+                        width: 0,
+                      ),
+                    ),
+                    legend: Legend(isVisible: false),
+                    tooltipBehavior: TooltipBehavior(
+                      enable: true,
+                    ),
+                    series: <CartesianSeries<Graph, String>>[
+                      ColumnSeries<Graph, String>(
+                        dataSource: statisticsProviderRef.graphList,
+                        // xValueMapper: (Graph data, _) => data.type!.toUpperCase() + data.id!.toString(),
+                        xValueMapper: (Graph data, _) => "Quiz${data.id!}",
+                        yValueMapper: (Graph data, _) => double.parse(data.percentage!).round(),
+                        borderRadius: BorderRadius.circular(15),
+                        isVisibleInLegend: false,
+                        pointColorMapper: (Graph data, _) => data.result!.toUpperCase() == "PASS" ? colorPrimary : colorRed,
+                        // color: colorPrimary,
+                        // color: statisticsProviderRef.grapeColor,
+                        // gradient: LinearGradient(
+                        //     colors: [colorPrimary, colorPrimary,],
+                        //     stops: [0.0, 1.0],
+                        //     begin: FractionalOffset.topCenter,
+                        //     end: FractionalOffset.bottomCenter,
+                        //     tileMode: TileMode.repeated),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          )
+        ],
+      );
+    });
   }
 }
 

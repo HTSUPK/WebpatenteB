@@ -113,7 +113,13 @@ class QuizProvider extends ChangeNotifier {
 
   /// full Quiz Api///
 
-  List<QuizData> quizList = [];
+  List<QuizData> _quizList = [];
+
+  List<QuizData> get quizList => _quizList;
+
+  set quizList(List<QuizData> value) {
+    _quizList = value;
+  }
 
   Future<BaseModel<QuizModel>> callApiFullQuiz(body) async {
     QuizModel response;
@@ -123,7 +129,8 @@ class QuizProvider extends ChangeNotifier {
       response = await RestClient(RetroApi().dioData()).fullQuizRequest(body);
       if (response.status == 200) {
         quizLoader = false;
-        giveMinute = int.parse(response.timer!);
+        // giveMinute = int.parse(response.timer!);
+        giveMinute = response.timer!;
         quizList.clear();
         quizList.addAll(response.data!);
         isSelectAnswerList.clear();
@@ -160,7 +167,8 @@ class QuizProvider extends ChangeNotifier {
       response = await RestClient(RetroApi().dioData()).selectQuizRequest(body);
       if (response.status == 200) {
         quizLoader = false;
-        giveMinute = int.parse(response.timer!);
+        // giveMinute = int.parse(response.timer!);
+        giveMinute = response.timer!;
         quizList.clear();
         quizList.addAll(response.data!);
         isSelectAnswerList.clear();

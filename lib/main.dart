@@ -1,3 +1,6 @@
+import 'dart:async';
+
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -7,8 +10,10 @@ import 'Providers/profile_provider.dart';
 import 'Providers/question_provider.dart';
 import 'Providers/quiz_provider.dart';
 import 'Providers/setting_provider.dart';
+import 'Providers/statistics_provider.dart';
 import 'Providers/versionCheck_provider.dart';
 import 'Screens/Splash/SplashScreen.dart';
+import 'Widgets/NetworkOff.dart';
 import 'utils/app_utils.dart';
 import 'utils/shared_preference_util.dart';
 
@@ -37,14 +42,59 @@ void main() async {
         ChangeNotifierProvider<SettingProvider>(
           create: (context) => SettingProvider(),
         ),
+        ChangeNotifierProvider<StatisticsProvider>(
+          create: (context) => StatisticsProvider(),
+        ),
       ],
       child: const MyApp(),
     ),
   );
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  ConnectivityResult connectionStatus = ConnectivityResult.none;
+  final Connectivity connectivity = Connectivity();
+  late StreamSubscription<ConnectivityResult> connectivitySubscription;
+
+  @override
+  void initState() {
+    super.initState();
+    initConnectivity();
+    connectivitySubscription = connectivity.onConnectivityChanged.listen(_updateConnectionStatus);
+  }
+
+  @override
+  void dispose() {
+    connectivitySubscription.cancel();
+    super.dispose();
+  }
+
+  Future<void> initConnectivity() async {
+    late ConnectivityResult result;
+    try {
+      result = await connectivity.checkConnectivity();
+    } on PlatformException catch (e) {
+      // print(e.toString());
+      return;
+    }
+    if (!mounted) {
+      return Future.value(null);
+    }
+    return _updateConnectionStatus(result);
+  }
+
+  Future<void> _updateConnectionStatus(ConnectivityResult result) async {
+    setState(() {
+      connectionStatus = result;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -66,7 +116,7 @@ class MyApp extends StatelessWidget {
               child: child!,
             );
           },
-          home: const SplashScreen(),
+          home: connectionStatus == ConnectivityResult.wifi || connectionStatus == ConnectivityResult.mobile ? const SplashScreen() : const NetworkOff(),
         ),
       ),
     );

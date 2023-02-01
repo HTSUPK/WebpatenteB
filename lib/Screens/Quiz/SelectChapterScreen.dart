@@ -9,6 +9,7 @@ import '../../Providers/quiz_provider.dart';
 import '../../Widgets/chapterCard_widget.dart';
 import '../../base/base_stateful_widget.dart';
 import '../../resources/image_resources.dart';
+import '../../utils/app_utils.dart';
 import 'QuizScreen.dart';
 
 class SelectChapterScreen extends StatefulWidget {
@@ -121,17 +122,22 @@ class _SelectChapterScreenState extends BaseStatefulWidgetState<SelectChapterScr
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
       child: CommonButton(
-        text: "Let’s Start",
-        onTap: () => Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => QuizScreen(
-              where: "selected",
-              selectChapterId: quizProviderRef.selectChapterId,
-            ),
-          ),
-        ),
-      ),
+          text: "Let’s Start",
+          onTap: () {
+            if (quizProviderRef.selectChapterId.isEmpty) {
+              AppUtils.toast("Please select chapter", colorRed, colorWhite);
+            } else {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => QuizScreen(
+                    where: "selected",
+                    selectChapterId: quizProviderRef.selectChapterId,
+                  ),
+                ),
+              );
+            }
+          }),
     );
   }
 }

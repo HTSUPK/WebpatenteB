@@ -9,7 +9,7 @@ class QuestionModel {
   QuestionModel({
       num? status, 
       String? message, 
-      List<Data>? data,}){
+      List<QuestionData>? data,}){
     _status = status;
     _message = message;
     _data = data;
@@ -21,23 +21,23 @@ class QuestionModel {
     if (json['data'] != null) {
       _data = [];
       json['data'].forEach((v) {
-        _data?.add(Data.fromJson(v));
+        _data?.add(QuestionData.fromJson(v));
       });
     }
   }
   num? _status;
   String? _message;
-  List<Data>? _data;
+  List<QuestionData>? _data;
 QuestionModel copyWith({  num? status,
   String? message,
-  List<Data>? data,
+  List<QuestionData>? data,
 }) => QuestionModel(  status: status ?? _status,
   message: message ?? _message,
   data: data ?? _data,
 );
   num? get status => _status;
   String? get message => _message;
-  List<Data>? get data => _data;
+  List<QuestionData>? get data => _data;
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
@@ -59,10 +59,10 @@ QuestionModel copyWith({  num? status,
 /// ans : "1"
 /// audio : "uploads/question/audio/Hg0UbjkZXmimvulf3xMDJt61A8UpT54tWyXetarv.mp3"
 
-Data dataFromJson(String str) => Data.fromJson(json.decode(str));
-String dataToJson(Data data) => json.encode(data.toJson());
-class Data {
-  Data({
+QuestionData dataFromJson(String str) => QuestionData.fromJson(json.decode(str));
+String dataToJson(QuestionData data) => json.encode(data.toJson());
+class QuestionData {
+  QuestionData({
       num? id, 
       String? lang, 
       num? chapterId, 
@@ -79,7 +79,7 @@ class Data {
     _audio = audio;
 }
 
-  Data.fromJson(dynamic json) {
+  QuestionData.fromJson(dynamic json) {
     _id = json['id'];
     _lang = json['lang'];
     _chapterId = json['chapter_id'];
@@ -95,14 +95,14 @@ class Data {
   String? _question;
   String? _ans;
   String? _audio;
-Data copyWith({  num? id,
+QuestionData copyWith({  num? id,
   String? lang,
   num? chapterId,
   String? image,
   String? question,
   String? ans,
   String? audio,
-}) => Data(  id: id ?? _id,
+}) => QuestionData(  id: id ?? _id,
   lang: lang ?? _lang,
   chapterId: chapterId ?? _chapterId,
   image: image ?? _image,

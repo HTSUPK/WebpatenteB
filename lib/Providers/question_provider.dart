@@ -4,6 +4,7 @@ import '../Apis/Retrofit_Api.dart';
 import '../Apis/base_model.dart';
 import '../Apis/network_api.dart';
 import '../Apis/server_error.dart';
+import '../Models/ChapterList_Model.dart';
 import '../Models/Question_Model.dart';
 
 class QuestionProvider extends ChangeNotifier {
@@ -11,7 +12,12 @@ class QuestionProvider extends ChangeNotifier {
 
   /// Question ///
 
-  List<Data> questionList = [];
+  List<QuestionData> questionList = [];
+  List<String> dropDownValue = [];
+  var items = [
+    'Hindi',
+    'English',
+  ];
 
   Future<BaseModel<QuestionModel>> callApiQuestion() async {
     QuestionModel response;
@@ -23,6 +29,9 @@ class QuestionProvider extends ChangeNotifier {
         questionLoader = false;
         questionList.clear();
         questionList.addAll(response.data!);
+        for (int i = 0; i < questionList.length; i++) {
+          dropDownValue.add('Hindi');
+        }
         notifyListeners();
       }
     } catch (error, stacktrace) {
@@ -53,8 +62,7 @@ class QuestionProvider extends ChangeNotifier {
   /// Text To Spech ///
   TextToSpeech tts = TextToSpeech();
 
-  // final String defaultLanguage = 'en-US';
-  final String defaultLanguage = 'it';
+  final String defaultLanguage = 'it-IT';
 
   String text = '';
   double volume = 1; // Range: 0-1
@@ -82,8 +90,8 @@ class QuestionProvider extends ChangeNotifier {
       languages.add(lang as String);
     }
 
-    final String? defaultLangCode = await tts.getDefaultLanguage();
-    if (defaultLangCode != null && languageCodes.contains(defaultLangCode)) {
+    const String defaultLangCode = 'it-IT';
+    if (languageCodes.contains(defaultLangCode)) {
       languageCode = defaultLangCode;
     } else {
       languageCode = defaultLanguage;
@@ -116,6 +124,33 @@ class QuestionProvider extends ChangeNotifier {
     tts.setPitch(pitch);
     tts.speak(text);
     notifyListeners();
+  }
+
+  /// Chapter List ///
+
+  List<ChapterList> chapterList = [];
+  String selectChapter = "";// show chapter
+
+  Future<BaseModel<ChapterListModel>> callApiChapterList() async {
+    ChapterListModel response;
+
+    notifyListeners();
+    try {
+      response = await RestClient(RetroApi().dioData()).chapterListRequest();
+      if (response.status == 200) {
+        chapterList.clear();
+        chapterList.addAll(response.data!.chapter!);
+        selectChapter = chapterList[0].chapter!;
+        notifyListeners();
+      }
+    } catch (error, stacktrace) {
+      if (kDebugMode) {
+        print("Exception occur: $error stackTrace: $stacktrace");
+      }
+      notifyListeners();
+      return BaseModel()..setException(ServerError.withError(error: error));
+    }
+    return BaseModel()..data = response;
   }
 
   @override

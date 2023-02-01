@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
+import 'package:webpatente/resources/color_resources.dart';
 
 import '../Apis/Retrofit_Api.dart';
 import '../Apis/base_model.dart';
@@ -16,6 +17,7 @@ class StatisticsProvider extends ChangeNotifier {
   String? totalPassed = "";
   String? totalFailed = "";
   List<Graph> graphList = [];
+  Color grapeColor = colorPrimary;
 
   Future<BaseModel<StatisticsModel>> callApiQuizResult() async {
     StatisticsModel response;
@@ -28,7 +30,9 @@ class StatisticsProvider extends ChangeNotifier {
         inCorrect = response.data!.incorrect;
         totalPassed = response.data!.pass;
         totalFailed = response.data!.fail;
+        graphList.clear();
         graphList.addAll(response.data!.graph!);
+
         notifyListeners();
       }
     } catch (error, stacktrace) {
