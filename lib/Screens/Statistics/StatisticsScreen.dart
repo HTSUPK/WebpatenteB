@@ -18,17 +18,6 @@ class StatisticsScreen extends StatefulWidget {
 }
 
 class _StatisticsScreenState extends BaseStatefulWidgetState<StatisticsScreen> {
-  List<ChartData> chartData = [
-    ChartData('Quiz1', 35),
-    ChartData('Quiz2', 28),
-    ChartData('Quiz3', 34),
-    ChartData('Quiz4', 32),
-    ChartData('Quiz5', 40),
-    ChartData('Quiz6', 40),
-    ChartData('Quiz7', 40),
-    ChartData('Quiz8', 40),
-    ChartData('Quiz9', 40),
-  ];
 
   late StatisticsProvider statisticsProviderRef;
 
@@ -76,7 +65,7 @@ class _StatisticsScreenState extends BaseStatefulWidgetState<StatisticsScreen> {
                     Column(
                       children: [
                         TextWidget(
-                          text: double.parse(statisticsProviderRef.correct!).toStringAsFixed(0),
+                          text: double.tryParse(statisticsProviderRef.correct!)?.toStringAsFixed(0),
                           fontWeight: FontWeight.w800,
                           color: colorWhite,
                           fontSize: 25.sp,
@@ -108,7 +97,7 @@ class _StatisticsScreenState extends BaseStatefulWidgetState<StatisticsScreen> {
                     Column(
                       children: [
                         TextWidget(
-                          text: double.parse(statisticsProviderRef.inCorrect!).toStringAsFixed(0),
+                          text: double.tryParse(statisticsProviderRef.inCorrect!)?.toStringAsFixed(0),
                           fontWeight: FontWeight.w800,
                           color: colorWhite,
                           fontSize: 25.sp,

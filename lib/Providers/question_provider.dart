@@ -10,27 +10,44 @@ import '../Models/Question_Model.dart';
 class QuestionProvider extends ChangeNotifier {
   bool questionLoader = false;
 
+  /// Question Call Function ///
+
+  questionFunction(chapterId, pageNo) {
+    currentChapterId = chapterId;
+    currentPageNo = pageNo;
+    Map<String, dynamic> body = {
+      "chapter_id": chapterId,
+      "page": pageNo,
+    };
+    print("BODY $body");
+    callApiQuestion(body);
+  }
+
   /// Question ///
 
   List<QuestionData> questionList = [];
   List<String> dropDownValue = [];
   var items = [
-    'Hindi',
     'English',
+    'Hindi',
+    'Urdu',
   ];
+  List<String> selectLanguageCode = [];
 
-  Future<BaseModel<QuestionModel>> callApiQuestion() async {
+  Future<BaseModel<QuestionModel>> callApiQuestion(body) async {
     QuestionModel response;
     questionLoader = true;
     notifyListeners();
     try {
-      response = await RestClient(RetroApi().dioData()).questionRequest();
+      response = await RestClient(RetroApi().dioData()).questionRequest(body);
       if (response.status == 200) {
         questionLoader = false;
         questionList.clear();
+        selectLanguageCode.clear();
         questionList.addAll(response.data!);
         for (int i = 0; i < questionList.length; i++) {
-          dropDownValue.add('Hindi');
+          dropDownValue.add('English');
+          selectLanguageCode.add(questionList[i].languageTexts!.en!);
         }
         notifyListeners();
       }
@@ -45,7 +62,7 @@ class QuestionProvider extends ChangeNotifier {
     return BaseModel()..data = response;
   }
 
-  // show Translate //
+  /// show Translate ///
   int? _selectTranslateIndex = 0;
 
   int? get selectTranslateIndex => _selectTranslateIndex;
@@ -102,9 +119,6 @@ class QuestionProvider extends ChangeNotifier {
     voice = await getVoiceByLang(languageCode!);
 
     notifyListeners();
-    // if (mounted) {
-    //   setState(() {});
-    // }
   }
 
   Future<String?> getVoiceByLang(String lang) async {
@@ -129,21 +143,47 @@ class QuestionProvider extends ChangeNotifier {
   /// Chapter List ///
 
   List<ChapterList> chapterList = [];
-  String selectChapter = "";// show chapter
+  List<Page> pageList = [];
+  String selectChapter = "";
+  int _currentChapterId = 0;
+  int _currentPageNo = 1;
+
+  int get currentChapterId => _currentChapterId;
+
+  set currentChapterId(int value) {
+    _currentChapterId = value;
+  }
+
+  int get currentPageNo => _currentPageNo;
+
+  set currentPageNo(int value) {
+    _currentPageNo = value;
+  }
 
   Future<BaseModel<ChapterListModel>> callApiChapterList() async {
     ChapterListModel response;
-
+    questionLoader = true;
     notifyListeners();
     try {
       response = await RestClient(RetroApi().dioData()).chapterListRequest();
       if (response.status == 200) {
+        questionLoader = false;
         chapterList.clear();
+        pageList.clear();
         chapterList.addAll(response.data!.chapter!);
+        pageList.addAll(response.data!.page!);
         selectChapter = chapterList[0].chapter!;
+        currentChapterId = response.data!.chapter![0].id!;
+        currentPageNo = response.data!.page![0].sequence!;
+        Map<String, dynamic> body = {
+          "chapter_id": currentChapterId,
+          "page": currentPageNo,
+        };
+        callApiQuestion(body);
         notifyListeners();
       }
     } catch (error, stacktrace) {
+      questionLoader = false;
       if (kDebugMode) {
         print("Exception occur: $error stackTrace: $stacktrace");
       }

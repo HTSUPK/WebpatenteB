@@ -4,8 +4,10 @@ import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:webpatente/Widgets/text_widget.dart';
 import 'package:webpatente/resources/color_resources.dart';
+import 'package:webpatente/utils/app_utils.dart';
 import '../../Models/ChapterList_Model.dart';
 import '../../Providers/question_provider.dart';
+import '../../Widgets/chapterCard_widget.dart';
 import '../../Widgets/questionItem_widget.dart';
 import '../../Widgets/text_editing_widget.dart';
 import '../../base/base_stateful_widget.dart';
@@ -20,19 +22,7 @@ class QuestionScreen extends StatefulWidget {
 }
 
 class _QuestionScreenState extends BaseStatefulWidgetState<QuestionScreen> {
-  // final List<String> _locations = ['Legends Of USA', 'B', 'C', 'D'];
-  // String _selectedLocation = 'A';
-
-  /// Language ///
-
-  // String dropDownValue = 'Hindi';
-  List<String> dropDownValue = ['Hindi'];
-
-  // List of items in our dropdown menu
-  var items = [
-    'Hindi',
-    'English',
-  ];
+  TextEditingController pageNoController = TextEditingController();
 
   late QuestionProvider questionProviderRef;
 
@@ -41,13 +31,11 @@ class _QuestionScreenState extends BaseStatefulWidgetState<QuestionScreen> {
     // TODO: implement initState
     questionProviderRef = Provider.of<QuestionProvider>(context, listen: false);
     Future.delayed(const Duration(seconds: 0), () {
-      questionProviderRef.callApiQuestion();
       questionProviderRef.callApiChapterList();
     });
     WidgetsBinding.instance.addPostFrameCallback((_) {
       questionProviderRef.initLanguages();
     });
-    // _selectedLocation = _locations[0];
     super.initState();
   }
 
@@ -55,37 +43,23 @@ class _QuestionScreenState extends BaseStatefulWidgetState<QuestionScreen> {
   // TODO: implement scaffoldBgColor
   Color? get scaffoldBgColor => colorPrimary;
 
+
   @override
   Widget buildBody(BuildContext context) {
     return Consumer<QuestionProvider>(builder: (_, questionProviderRef, __) {
-      return questionProviderRef.questionLoader
-          ? Shimmer.fromColors(
-              baseColor: Colors.grey[300]!,
-              highlightColor: Colors.grey[100]!,
-              child: Column(
-                children: [
-                  Container(
-                    height: 170.h,
+      return Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          questionProviderRef.questionLoader
+              ? Shimmer.fromColors(
+                  baseColor: Colors.grey[300]!,
+                  highlightColor: Colors.grey[100]!,
+                  child: Container(
+                    height: 164.h,
+                    color: colorBackground,
                   ),
-                  Expanded(
-                    child: Container(
-                      color: colorBackground,
-                      child: ListView.builder(
-                          shrinkWrap: true,
-                          itemBuilder: (context, index) {
-                            return Container(
-                              height: 120.h,
-                            );
-                          }),
-                    ),
-                  )
-                ],
-              ),
-            )
-          : Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Container(
+                )
+              : Container(
                   height: 164.h,
                   color: colorPrimary,
                   padding: EdgeInsets.symmetric(horizontal: 21.w),
@@ -142,38 +116,11 @@ class _QuestionScreenState extends BaseStatefulWidgetState<QuestionScreen> {
                                   onSelected: (v) {
                                     setState(() {
                                       questionProviderRef.selectChapter = v.chapter!;
+                                      pageNoController.clear();
+                                      questionProviderRef.questionFunction(v.id, 1);
                                     });
                                   },
                                 ),
-                                // Theme(
-                                //   data: Theme.of(context).copyWith(
-                                //     canvasColor: colorRightIcon,
-                                //   ),
-                                //   child: DropdownButtonHideUnderline(
-                                //     child: DropdownButton(
-                                //       iconEnabledColor: colorWhite,
-                                //       elevation: 0,
-                                //       isDense: true,
-                                //       value: _selectedLocation,
-                                //       items: _locations.map((accountType) {
-                                //         return DropdownMenuItem(
-                                //           value: accountType,
-                                //           child: TextWidget(
-                                //             text: accountType,
-                                //             fontSize: 17,
-                                //             fontWeight: FontWeight.w600,
-                                //             color: colorWhite,
-                                //           ),
-                                //         );
-                                //       }).toList(),
-                                //       onChanged: (val) {
-                                //         setState(() {
-                                //           _selectedLocation = val!;
-                                //         });
-                                //       },
-                                //     ),
-                                //   ),
-                                // ),
                               ),
                             ],
                           ),
@@ -190,7 +137,8 @@ class _QuestionScreenState extends BaseStatefulWidgetState<QuestionScreen> {
                       ),
                       heightBox(12.h),
                       TextWidget(
-                        text: "Solutions of the group of quiz n. 362",
+                        // text: "Solutions of the group of quiz n. 362",
+                        text: questionProviderRef.pageList[questionProviderRef.currentPageNo - 1].title,
                         fontSize: 17,
                         fontWeight: FontWeight.w600,
                         color: colorWhite,
@@ -198,17 +146,37 @@ class _QuestionScreenState extends BaseStatefulWidgetState<QuestionScreen> {
                       heightBox(12.h),
                       Row(
                         children: [
-                          Image.asset(
-                            icPreviewButton,
-                            fit: BoxFit.cover,
-                            height: 51.h,
-                            width: 51.w,
+                          GestureDetector(
+                            onTap: () {
+                              if (questionProviderRef.currentPageNo != 1) {
+                                questionProviderRef.currentPageNo = --questionProviderRef.currentPageNo;
+                                pageNoController.clear();
+                                questionProviderRef.questionFunction(questionProviderRef.currentChapterId, questionProviderRef.currentPageNo);
+                              }
+                            },
+                            child: Image.asset(
+                              icPreviewButton,
+                              fit: BoxFit.cover,
+                              height: 51.h,
+                              width: 51.w,
+                            ),
                           ),
-                          Image.asset(
-                            icNextButton,
-                            fit: BoxFit.cover,
-                            height: 51.h,
-                            width: 51.w,
+                          GestureDetector(
+                            onTap: () {
+                              if (questionProviderRef.pageList.length != questionProviderRef.currentPageNo) {
+                                questionProviderRef.currentPageNo = ++questionProviderRef.currentPageNo;
+                                pageNoController.clear();
+                                questionProviderRef.questionFunction(questionProviderRef.currentChapterId, questionProviderRef.currentPageNo);
+                              } else {
+                                AppUtils.toast("No more page", colorPrimary, colorWhite);
+                              }
+                            },
+                            child: Image.asset(
+                              icNextButton,
+                              fit: BoxFit.cover,
+                              height: 51.h,
+                              width: 51.w,
+                            ),
                           ),
                           widthBox(10.w),
                           SizedBox(
@@ -217,35 +185,45 @@ class _QuestionScreenState extends BaseStatefulWidgetState<QuestionScreen> {
                             child: TextEditingWidget(
                               width: 132.w,
                               height: 50.h,
+                              controller: pageNoController,
                               textInputType: TextInputType.number,
-                              textInputAction: TextInputAction.next,
+                              textInputAction: TextInputAction.done,
                               labelText: "Write Page No",
                               labelSize: 16,
                               labelColor: colorBlack.withOpacity(0.5),
                               fontSize: 16,
-                              onEditingComplete: () => FocusScope.of(context).nextFocus(),
+                              onEditingComplete: () => FocusScope.of(context).unfocus(),
                             ),
                           ),
                           widthBox(5.w),
-                          Container(
-                            decoration: BoxDecoration(
-                              color: colorGoButton,
-                              borderRadius: BorderRadius.circular(13),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: colorBlack.withOpacity(.13),
-                                  spreadRadius: 10,
-                                  blurRadius: 12,
-                                  offset: const Offset(0, 4),
-                                ),
-                              ],
-                            ),
-                            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-                            child: TextWidget(
-                              text: "Go",
-                              color: colorBlack.withOpacity(0.5),
-                              fontWeight: FontWeight.w700,
-                              fontSize: 22.sp,
+                          GestureDetector(
+                            onTap: () {
+                              if (pageNoController.text.isEmpty) {
+                                AppUtils.toast("Please enter page number", colorRed, colorWhite);
+                              } else {
+                                questionProviderRef.questionFunction(questionProviderRef.currentChapterId, int.parse(pageNoController.text));
+                              }
+                            },
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: colorGoButton,
+                                borderRadius: BorderRadius.circular(13),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: colorBlack.withOpacity(.13),
+                                    spreadRadius: 10,
+                                    blurRadius: 12,
+                                    offset: const Offset(0, 4),
+                                  ),
+                                ],
+                              ),
+                              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+                              child: TextWidget(
+                                text: "Go",
+                                color: colorBlack.withOpacity(0.5),
+                                fontWeight: FontWeight.w700,
+                                fontSize: 22.sp,
+                              ),
                             ),
                           ),
                         ],
@@ -253,15 +231,37 @@ class _QuestionScreenState extends BaseStatefulWidgetState<QuestionScreen> {
                     ],
                   ),
                 ),
-                Expanded(
-                  child: Container(
-                    color: colorBackground,
-                    child: ListView.builder(
+          Expanded(
+            child: Container(
+              color: colorBackground,
+              child: questionProviderRef.questionLoader
+                  ? Shimmer.fromColors(
+                      baseColor: Colors.grey[300]!,
+                      highlightColor: Colors.grey[100]!,
+                      child: ListView.builder(
+                          // itemCount: 10,
+                          shrinkWrap: true,
+                          itemBuilder: (context, index) {
+                            return Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 12),
+                              child: Column(
+                                children: [
+                                  heightBox(10),
+                                  const ChapterCard(
+                                    text: "",
+                                    borderColor: colorWhite,
+                                  ),
+                                ],
+                              ),
+                            );
+                          }),
+                    )
+                  : ListView.builder(
                       itemCount: questionProviderRef.questionList.length,
                       shrinkWrap: true,
                       itemBuilder: (context, index) {
                         return Padding(
-                          padding: EdgeInsets.fromLTRB(8.w, 10.h, 8.w, 0),
+                          padding: EdgeInsets.fromLTRB(8.w, 5.h, 8.w, 5.h),
                           child: Container(
                             decoration: BoxDecoration(
                               color: colorWhite,
@@ -288,11 +288,10 @@ class _QuestionScreenState extends BaseStatefulWidgetState<QuestionScreen> {
                                       child: ClipRRect(
                                         borderRadius: BorderRadius.circular(8),
                                         child: Image.network(
-                                          // "https://hexeros.com/dev/superapp/uploads/user/user.png",
                                           questionProviderRef.questionList[index].image!,
                                           height: 55.h,
                                           width: 70.w,
-                                          fit: BoxFit.cover,
+                                          fit: BoxFit.fitHeight,
                                         ),
                                       ),
                                     ),
@@ -384,6 +383,17 @@ class _QuestionScreenState extends BaseStatefulWidgetState<QuestionScreen> {
                                                 onChanged: (String? newValue) {
                                                   setState(() {
                                                     questionProviderRef.dropDownValue[index] = newValue!;
+                                                    if (questionProviderRef.dropDownValue[index] == "English") {
+                                                      questionProviderRef.selectLanguageCode[index] =
+                                                          questionProviderRef.questionList[index].languageTexts!.en!;
+                                                    } else if (questionProviderRef.dropDownValue[index] == "Hindi") {
+                                                      questionProviderRef.selectLanguageCode[index] =
+                                                          questionProviderRef.questionList[index].languageTexts!.hi!;
+                                                    } else if (questionProviderRef.dropDownValue[index] == "Urdu") {
+                                                      questionProviderRef.selectLanguageCode[index] =
+                                                          questionProviderRef.questionList[index].languageTexts!.ur!;
+                                                    }
+                                                    setState(() {});
                                                   });
                                                 },
                                               ),
@@ -391,7 +401,7 @@ class _QuestionScreenState extends BaseStatefulWidgetState<QuestionScreen> {
                                           ),
                                           heightBox(8.h),
                                           TextWidget(
-                                            text: "Hindi: कहानी के लिए समय अवधि या सेटिंग कितनी महत्वपूर्ण थी?",
+                                            text: questionProviderRef.selectLanguageCode[index],
                                             fontWeight: FontWeight.w400,
                                             fontSize: 12.sp,
                                           ),
@@ -404,10 +414,10 @@ class _QuestionScreenState extends BaseStatefulWidgetState<QuestionScreen> {
                         );
                       },
                     ),
-                  ),
-                ),
-              ],
-            );
+            ),
+          ),
+        ],
+      );
     });
   }
 }

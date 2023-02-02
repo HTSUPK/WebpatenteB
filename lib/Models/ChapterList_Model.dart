@@ -7,7 +7,7 @@ ChapterListModel chapterListModelFromJson(String str) => ChapterListModel.fromJs
 String chapterListModelToJson(ChapterListModel data) => json.encode(data.toJson());
 class ChapterListModel {
   ChapterListModel({
-      num? status, 
+      int? status, 
       String? message, 
       Data? data,}){
     _status = status;
@@ -20,17 +20,17 @@ class ChapterListModel {
     _message = json['message'];
     _data = json['data'] != null ? Data.fromJson(json['data']) : null;
   }
-  num? _status;
+  int? _status;
   String? _message;
   Data? _data;
-ChapterListModel copyWith({  num? status,
+ChapterListModel copyWith({  int? status,
   String? message,
   Data? data,
 }) => ChapterListModel(  status: status ?? _status,
   message: message ?? _message,
   data: data ?? _data,
 );
-  num? get status => _status;
+  int? get status => _status;
   String? get message => _message;
   Data? get data => _data;
 
@@ -104,8 +104,8 @@ Page pageFromJson(String str) => Page.fromJson(json.decode(str));
 String pageToJson(Page data) => json.encode(data.toJson());
 class Page {
   Page({
-      num? id, 
-      num? sequence, 
+      int? id, 
+      int? sequence, 
       String? title,}){
     _id = id;
     _sequence = sequence;
@@ -117,18 +117,18 @@ class Page {
     _sequence = json['sequence'];
     _title = json['title'];
   }
-  num? _id;
-  num? _sequence;
+  int? _id;
+  int? _sequence;
   String? _title;
-Page copyWith({  num? id,
-  num? sequence,
+Page copyWith({  int? id,
+  int? sequence,
   String? title,
 }) => Page(  id: id ?? _id,
   sequence: sequence ?? _sequence,
   title: title ?? _title,
 );
-  num? get id => _id;
-  num? get sequence => _sequence;
+  int? get id => _id;
+  int? get sequence => _sequence;
   String? get title => _title;
 
   Map<String, dynamic> toJson() {
@@ -149,7 +149,7 @@ ChapterList chapterFromJson(String str) => ChapterList.fromJson(json.decode(str)
 String chapterToJson(ChapterList data) => json.encode(data.toJson());
 class ChapterList {
   ChapterList({
-      num? id, 
+      int? id, 
       String? image, 
       String? chapter,}){
     _id = id;
@@ -162,17 +162,17 @@ class ChapterList {
     _image = json['image'];
     _chapter = json['chapter'];
   }
-  num? _id;
+  int? _id;
   String? _image;
   String? _chapter;
-ChapterList copyWith({  num? id,
+ChapterList copyWith({  int? id,
   String? image,
   String? chapter,
 }) => ChapterList(  id: id ?? _id,
   image: image ?? _image,
   chapter: chapter ?? _chapter,
 );
-  num? get id => _id;
+  int? get id => _id;
   String? get image => _image;
   String? get chapter => _chapter;
 

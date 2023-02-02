@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:package_info_plus/package_info_plus.dart';
@@ -19,18 +18,6 @@ class SplashScreen extends StatefulWidget {
 class _SplashScreenState extends BaseStatefulWidgetState<SplashScreen> {
   late VersionCheckProvider versionCheckProviderRef;
 
-  // PackageInfo packageInfo = await PackageInfo.fromPlatform();
-  //     // ignore: use_build_context_synchronously
-  //     versionCheckProviderRef = Provider.of(context, listen: false);
-  //     Future.delayed(const Duration(seconds: 0), () {
-  //       Map<String, dynamic> body = {
-  //         "type": "android",
-  //         "version": packageInfo.version,
-  //         "push_token": "",
-  //         "device_id": "123456",
-  //         "device_type": "android",
-  //       };
-  //     });
   String appVersion = "";
 
   @override
@@ -68,8 +55,8 @@ class _SplashScreenState extends BaseStatefulWidgetState<SplashScreen> {
         Map<String, dynamic> body = {
           "type": AppUtils.getDeviceTypeID(),
           "version": packageInfo.version,
-          // "device_id": await AppUtils.getDeviceId(),
-          "device_id": "123456",
+          "device_id": await AppUtils.getDeviceId(),
+          // "device_id": "123456",
         };
         versionCheckProviderRef.callApiVersionCheck(body, context);
       });

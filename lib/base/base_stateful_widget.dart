@@ -13,6 +13,7 @@ abstract class BaseStatefulWidgetState<StateMVC extends StatefulWidget> extends 
   bool shouldShowProgress = false;
   bool shouldHaveSafeArea = true;
   final rootScaffoldKey = GlobalKey<ScaffoldState>();
+  bool resizeToAvoidBottomInset = true;
   late Size screenSize;
   bool isBackgroundImage = false;
   bool extendBodyBehindAppBar = false;
@@ -142,6 +143,7 @@ abstract class BaseStatefulWidgetState<StateMVC extends StatefulWidget> extends 
       onTap: () => FocusScope.of(rootScaffoldKey.currentContext!).requestFocus(FocusNode()),
       child: Scaffold(
         key: rootScaffoldKey,
+        resizeToAvoidBottomInset: resizeToAvoidBottomInset,
         extendBody: false,
         extendBodyBehindAppBar: extendBodyBehindAppBar,
         backgroundColor: scaffoldBgColor,

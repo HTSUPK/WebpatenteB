@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:webpatente/resources/color_resources.dart';
-
 import '../base/base_stateful_widget.dart';
 
 class NetworkOff extends StatefulWidget {

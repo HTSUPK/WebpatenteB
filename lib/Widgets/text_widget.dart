@@ -45,7 +45,7 @@ class _TextWidgetState extends State<TextWidget> {
       behavior: HitTestBehavior.opaque,
       onTap: widget.onTap,
       child: Text(
-        widget.text!,
+        widget.text ?? "",
         textAlign: widget.textAlign,
         maxLines: widget.maxLines,
         softWrap: true,

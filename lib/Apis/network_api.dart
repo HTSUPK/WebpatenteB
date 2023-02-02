@@ -39,8 +39,8 @@ abstract class RestClient {
   @POST(Apis.versionChecker)
   Future<VersionCheckModel> versionCheckRequest(@Body() body);
 
-  @GET(Apis.question)
-  Future<QuestionModel> questionRequest();
+  @POST(Apis.question)
+  Future<QuestionModel> questionRequest(@Body() body);
 
   @GET(Apis.chapterList)
   Future<ChapterListModel> chapterListRequest();

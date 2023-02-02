@@ -24,19 +24,20 @@ class VersionCheckProvider extends ChangeNotifier {
       if (responses.status == 200) {
         Timer(
           const Duration(seconds: 3),
-          () => SharedPreferenceUtil.getBool(isLoginKey) == true
+              () =>
+          SharedPreferenceUtil.getBool(isLoginKey) == true
               ? Navigator.pushReplacement(
-                  contexts,
-                  MaterialPageRoute(
-                    builder: (context) => const HomeScreen(),
-                  ),
-                )
+            contexts,
+            MaterialPageRoute(
+              builder: (context) => const HomeScreen(),
+            ),
+          )
               : Navigator.pushReplacement(
-                  contexts,
-                  MaterialPageRoute(
-                    builder: (context) => const LoginScreen(),
-                  ),
-                ),
+            contexts,
+            MaterialPageRoute(
+              builder: (context) => const LoginScreen(),
+            ),
+          ),
         );
         notifyListeners();
       }
@@ -47,75 +48,76 @@ class VersionCheckProvider extends ChangeNotifier {
           await showDialog<void>(
             context: contexts,
             barrierDismissible: false,
-            builder: (BuildContext context) => AlertDialog(
-              backgroundColor: colorPrimary,
-              title: TextWidget(
-                text: "Update",
-                fontSize: 18,
-                color: colorWhite,
-                textAlign: TextAlign.center,
-                fontWeight: FontWeight.w600,
-              ),
-              content: TextWidget(
-                text: error.response!.data['message'].toString(),
-                color: colorWhite,
-                textAlign: TextAlign.center,
-                fontWeight: FontWeight.w500,
-              ),
-              actions: <Widget>[
-                error.response!.data['data']['is_force_update'] == "0" ?
-                TextButton(
-                  onPressed: () {
-                    Navigator.of(contexts).pop();
-                    Timer(
-                      const Duration(seconds: 3),
-                      () => SharedPreferenceUtil.getBool(isLoginKey) == true
-                          ? Navigator.pushReplacement(
-                              contexts,
-                              MaterialPageRoute(
-                                builder: (context) => const HomeScreen(),
-                              ),
-                            )
-                          : Navigator.pushReplacement(
-                              contexts,
-                              MaterialPageRoute(
-                                builder: (context) => const LoginScreen(),
-                              ),
-                            ),
-                    );
-                    notifyListeners();
-                  },
-                  child: TextWidget(
-                    text: "Cancel",
-                    color: colorWhite,
-                    textAlign: TextAlign.center,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ) : const SizedBox(),
-                TextButton(
-                  onPressed: () async {
-                    Navigator.of(context).pop();
-                    // authProviderRef.callApiLogout(this.context);
-                  },
-                  child: TextWidget(
+            builder: (BuildContext context) =>
+                AlertDialog(
+                  backgroundColor: colorPrimary,
+                  title: TextWidget(
                     text: "Update",
+                    fontSize: 18,
                     color: colorWhite,
                     textAlign: TextAlign.center,
                     fontWeight: FontWeight.w600,
                   ),
+                  content: TextWidget(
+                    text: error.response!.data['message'].toString(),
+                    color: colorWhite,
+                    textAlign: TextAlign.center,
+                    fontWeight: FontWeight.w500,
+                  ),
+                  actions: <Widget>[
+                    error.response!.data['data']['is_force_update'] == "0" ?
+                    TextButton(
+                      onPressed: () {
+                        Navigator.of(contexts).pop();
+                        Timer(
+                          const Duration(seconds: 3),
+                              () =>
+                          SharedPreferenceUtil.getBool(isLoginKey) == true
+                              ? Navigator.pushReplacement(
+                            contexts,
+                            MaterialPageRoute(
+                              builder: (context) => const HomeScreen(),
+                            ),
+                          )
+                              : Navigator.pushReplacement(
+                            contexts,
+                            MaterialPageRoute(
+                              builder: (context) => const LoginScreen(),
+                            ),
+                          ),
+                        );
+                        notifyListeners();
+                      },
+                      child: TextWidget(
+                        text: "Cancel",
+                        color: colorWhite,
+                        textAlign: TextAlign.center,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ) : const SizedBox(),
+                    TextButton(
+                      onPressed: () async {
+                        Navigator.of(context).pop();
+                        // authProviderRef.callApiLogout(this.context);
+                      },
+                      child: TextWidget(
+                        text: "Update",
+                        color: colorWhite,
+                        textAlign: TextAlign.center,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ],
                 ),
-              ],
-            ),
           );
           // return error.response!.data;
         }
-        // return null;
-      } else {
-        // return BaseModel()..setException(ServerError.withError(error: error));
-      }
-      return BaseModel()..setException(ServerError.withError(error: error));
+      } else {}
+      return BaseModel()
+        ..setException(ServerError.withError(error: error));
     }
-    return BaseModel()..data = responses;
+    return BaseModel()
+      ..data = responses;
   }
 
   @override
