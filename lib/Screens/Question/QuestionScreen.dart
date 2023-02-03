@@ -43,7 +43,6 @@ class _QuestionScreenState extends BaseStatefulWidgetState<QuestionScreen> {
   // TODO: implement scaffoldBgColor
   Color? get scaffoldBgColor => colorPrimary;
 
-
   @override
   Widget buildBody(BuildContext context) {
     return Consumer<QuestionProvider>(builder: (_, questionProviderRef, __) {
@@ -135,11 +134,17 @@ class _QuestionScreenState extends BaseStatefulWidgetState<QuestionScreen> {
                           ),
                         ],
                       ),
-                      heightBox(12.h),
+                      heightBox(10.h),
                       TextWidget(
-                        // text: "Solutions of the group of quiz n. 362",
                         text: questionProviderRef.pageList[questionProviderRef.currentPageNo - 1].title,
                         fontSize: 17,
+                        fontWeight: FontWeight.w600,
+                        color: colorWhite,
+                      ),
+                      // heightBox(12.h),
+                      TextWidget(
+                        text: "Page no. : ${questionProviderRef.currentPageNo}",
+                        fontSize: 14,
                         fontWeight: FontWeight.w600,
                         color: colorWhite,
                       ),
@@ -217,7 +222,7 @@ class _QuestionScreenState extends BaseStatefulWidgetState<QuestionScreen> {
                                   ),
                                 ],
                               ),
-                              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+                              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
                               child: TextWidget(
                                 text: "Go",
                                 color: colorBlack.withOpacity(0.5),

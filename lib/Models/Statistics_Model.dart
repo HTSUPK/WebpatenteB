@@ -58,7 +58,8 @@ class Data {
   Data({
       String? correct, 
       String? incorrect, 
-      String? pass, 
+      String? notAnswered,
+      String? pass,
       String? fail, 
       List<Graph>? graph,}){
     _correct = correct;
@@ -71,6 +72,7 @@ class Data {
   Data.fromJson(dynamic json) {
     _correct = json['correct'];
     _incorrect = json['incorrect'];
+    _notAnswered = json['not_answered'];
     _pass = json['pass'];
     _fail = json['fail'];
     if (json['graph'] != null) {
@@ -82,22 +84,26 @@ class Data {
   }
   String? _correct;
   String? _incorrect;
+  String? _notAnswered;
   String? _pass;
   String? _fail;
   List<Graph>? _graph;
 Data copyWith({  String? correct,
   String? incorrect,
+  String? notAnswered,
   String? pass,
   String? fail,
   List<Graph>? graph,
 }) => Data(  correct: correct ?? _correct,
   incorrect: incorrect ?? _incorrect,
+  notAnswered: notAnswered ?? _notAnswered,
   pass: pass ?? _pass,
   fail: fail ?? _fail,
   graph: graph ?? _graph,
 );
   String? get correct => _correct;
   String? get incorrect => _incorrect;
+  String? get notAnswered => _notAnswered;
   String? get pass => _pass;
   String? get fail => _fail;
   List<Graph>? get graph => _graph;
@@ -106,6 +112,7 @@ Data copyWith({  String? correct,
     final map = <String, dynamic>{};
     map['correct'] = _correct;
     map['incorrect'] = _incorrect;
+    map['not_answered'] = _notAnswered;
     map['pass'] = _pass;
     map['fail'] = _fail;
     if (_graph != null) {

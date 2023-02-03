@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
+import 'package:shimmer/shimmer.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:webpatente/Widgets/common_appbar.dart';
 import 'package:webpatente/resources/color_resources.dart';
@@ -18,7 +19,6 @@ class StatisticsScreen extends StatefulWidget {
 }
 
 class _StatisticsScreenState extends BaseStatefulWidgetState<StatisticsScreen> {
-
   late StatisticsProvider statisticsProviderRef;
 
   @override
@@ -49,8 +49,21 @@ class _StatisticsScreenState extends BaseStatefulWidgetState<StatisticsScreen> {
   @override
   Widget buildBody(BuildContext context) {
     return Consumer<StatisticsProvider>(builder: (_, statisticsProviderRef, __) {
-      return Column(
+      return
+        // statisticsProviderRef.statisticsLoader ?
+
+        Column(
         children: [
+          statisticsProviderRef.statisticsLoader ?
+          Shimmer.fromColors(
+            baseColor: Colors.grey[200]!,
+            highlightColor: Colors.grey[350]!,
+            child: Container(
+              color: colorBackground,
+              height:200.h,
+              width: screenSize.width,
+            ),
+          ) :
           Container(
             height: 200.h,
             width: screenSize.width,
@@ -81,7 +94,7 @@ class _StatisticsScreenState extends BaseStatefulWidgetState<StatisticsScreen> {
                     Column(
                       children: [
                         TextWidget(
-                          text: statisticsProviderRef.notAnswer,
+                          text: double.tryParse(statisticsProviderRef.notAnswer!)?.toStringAsFixed(0),
                           fontWeight: FontWeight.w800,
                           color: colorWhite,
                           fontSize: 25.sp,
@@ -154,7 +167,18 @@ class _StatisticsScreenState extends BaseStatefulWidgetState<StatisticsScreen> {
             ),
           ),
           Expanded(
-            child: Container(
+            child:
+            statisticsProviderRef.statisticsLoader ?
+            Shimmer.fromColors(
+              baseColor: Colors.grey[200]!,
+              highlightColor: Colors.grey[350]!,
+              child: Container(
+                color: colorBackground,
+                // height:200.h,
+                width: screenSize.width,
+              ),
+            ) :
+            Container(
               width: screenSize.width,
               color: colorWhite,
               child: Column(
@@ -166,6 +190,7 @@ class _StatisticsScreenState extends BaseStatefulWidgetState<StatisticsScreen> {
                     fontSize: 22.sp,
                   ),
                   heightBox(10.h),
+
                   SfCartesianChart(
                     primaryXAxis: CategoryAxis(
                       majorGridLines: const MajorGridLines(
@@ -179,20 +204,12 @@ class _StatisticsScreenState extends BaseStatefulWidgetState<StatisticsScreen> {
                     series: <CartesianSeries<Graph, String>>[
                       ColumnSeries<Graph, String>(
                         dataSource: statisticsProviderRef.graphList,
-                        // xValueMapper: (Graph data, _) => data.type!.toUpperCase() + data.id!.toString(),
+                        width: statisticsProviderRef.graphList.length < 3 ? 0.1 : 0.4,
                         xValueMapper: (Graph data, _) => "Quiz${data.id!}",
                         yValueMapper: (Graph data, _) => double.parse(data.percentage!).round(),
-                        borderRadius: BorderRadius.circular(15),
+                        borderRadius: BorderRadius.circular(12),
                         isVisibleInLegend: false,
                         pointColorMapper: (Graph data, _) => data.result!.toUpperCase() == "PASS" ? colorPrimary : colorRed,
-                        // color: colorPrimary,
-                        // color: statisticsProviderRef.grapeColor,
-                        // gradient: LinearGradient(
-                        //     colors: [colorPrimary, colorPrimary,],
-                        //     stops: [0.0, 1.0],
-                        //     begin: FractionalOffset.topCenter,
-                        //     end: FractionalOffset.bottomCenter,
-                        //     tileMode: TileMode.repeated),
                       ),
                     ],
                   ),

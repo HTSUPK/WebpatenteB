@@ -65,7 +65,13 @@ class QuizProvider extends ChangeNotifier {
   String minuteString = "00", secondString = "00";
   int minutes = 0, seconds = 0, isSelect = 0;
   late Timer timer;
-  double progress = 0;
+  double _progress = 0;
+
+  double get progress => _progress;
+
+  set progress(double value) {
+    _progress = value;
+  }
 
   void startSecond() {
     if (seconds < 59) {

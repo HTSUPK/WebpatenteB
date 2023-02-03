@@ -13,6 +13,7 @@ import '../../resources/color_resources.dart';
 import '../../resources/image_resources.dart';
 import '../../resources/strings.dart';
 import '../../utils/app_utils.dart';
+import '../Settings/TermAndConditionScreen.dart';
 import 'LoginScreen.dart';
 
 class RegisterScreen extends StatefulWidget {
@@ -94,6 +95,15 @@ class _RegisterScreenState extends BaseStatefulWidgetState<RegisterScreen> {
                       textInputAction: TextInputAction.next,
                       labelText: "Email",
                       fontSize: 16,
+                      onFieldSubmitted: (value) {
+                        Map<String, dynamic> body = {
+                          "type": "email",
+                          "value": value,
+                        };
+                        Future.delayed(const Duration(seconds: 0), () {
+                          authProviderRef.callApiCheckAbility(body);
+                        });
+                      },
                       onEditingComplete: () => FocusScope.of(context).nextFocus(),
                     ),
                     heightBox(12.h),
@@ -204,11 +214,17 @@ class _RegisterScreenState extends BaseStatefulWidgetState<RegisterScreen> {
                       fontFamily: strFontName,
                     ),
                     TextWidget(
-                      text: "terms & conditions",
+                      text: "Terms & Conditions",
                       fontSize: 16,
                       color: colorPrimary,
                       fontWeight: FontWeight.w400,
                       fontFamily: strFontName,
+                      onTap: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const TermAndConditionScreen(),
+                        ),
+                      ),
                     ),
                     heightBox(10.h),
                     // Spacer(),

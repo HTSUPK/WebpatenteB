@@ -26,6 +26,8 @@ class _SelectChapterScreenState extends BaseStatefulWidgetState<SelectChapterScr
   void initState() {
     // TODO: implement initState
     quizProviderRef = Provider.of(context, listen: false);
+    quizProviderRef.selectChapterId.clear();
+    quizProviderRef.selectChapter.clear();
     Future.delayed(const Duration(seconds: 0), () {
       quizProviderRef.callApiChapterList();
     });

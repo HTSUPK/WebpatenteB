@@ -29,14 +29,6 @@ class _LoginScreenState extends BaseStatefulWidgetState<LoginScreen> {
   TextEditingController passwordController = TextEditingController();
 
   @override
-  void initState() {
-    // TODO: implement initState
-    emailController.text = "test@gmail.com";
-    passwordController.text = "123456";
-    super.initState();
-  }
-
-  @override
   // TODO: implement scaffoldBgColor
   Color? get scaffoldBgColor => colorBackground;
 
@@ -57,7 +49,7 @@ class _LoginScreenState extends BaseStatefulWidgetState<LoginScreen> {
                 icon,
                 height: 120.h,
                 width: 135.w,
-                fit: BoxFit.cover,
+                fit: BoxFit.fill,
               ),
               heightBox(48.h),
               TextWidget(
@@ -81,12 +73,13 @@ class _LoginScreenState extends BaseStatefulWidgetState<LoginScreen> {
                 textInputAction: TextInputAction.next,
                 labelText: "Email",
                 fontSize: 16,
-                onChanged: (value) {
+                onChanged: (value) {},
+                onFieldSubmitted: (value) {
                   Map<String, dynamic> body = {
                     "type": "email",
                     "value": value,
                   };
-                  Future.delayed(const Duration(seconds: 2), () {
+                  Future.delayed(const Duration(seconds: 0), () {
                     authProviderRef.callApiCheckAbility(body);
                   });
                 },

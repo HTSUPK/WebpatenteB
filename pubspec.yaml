@@ -83,6 +83,8 @@ flutter_icons:
 flutter_native_splash:
   image: assets/icons/icon.png
   image_dark: assets/icons/icon.png
+  color: "#FFFFFF"
+  color_dark: "#FFFFFF"
   android: true
   ios: true
   android_gravity: center
@@ -90,6 +92,9 @@ flutter_native_splash:
 android_12:
   image: assets/icons/icon.png
   image_dark: assets/icons/icon.png
+  android_gravity: fill
+  color_android: "#FFFFFF"
+  color_dark_android: "#FFFFFF"
 
 
 

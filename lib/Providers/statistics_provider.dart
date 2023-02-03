@@ -9,24 +9,29 @@ import '../Apis/server_error.dart';
 import '../Models/Statistics_Model.dart';
 
 class StatisticsProvider extends ChangeNotifier {
+
+  bool statisticsLoader = false;
+
   /// Statistics ///
 
-  String? correct = "";
-  String? notAnswer = "";
-  String? inCorrect = "";
-  String? totalPassed = "";
-  String? totalFailed = "";
+  String? correct = "0";
+  String? notAnswer = "0";
+  String? inCorrect = "0";
+  String? totalPassed = "0";
+  String? totalFailed = "0";
   List<Graph> graphList = [];
   Color grapeColor = colorPrimary;
 
   Future<BaseModel<StatisticsModel>> callApiQuizResult() async {
     StatisticsModel response;
+    statisticsLoader = true;
     notifyListeners();
     try {
       response = await RestClient(RetroApi().dioData()).statisticsRequest();
       if (response.status == 200) {
+        statisticsLoader = false;
         correct = response.data!.correct;
-        // notAnswer = response.data.;
+        notAnswer = response.data!.notAnswered;
         inCorrect = response.data!.incorrect;
         totalPassed = response.data!.pass;
         totalFailed = response.data!.fail;
@@ -36,6 +41,7 @@ class StatisticsProvider extends ChangeNotifier {
         notifyListeners();
       }
     } catch (error, stacktrace) {
+      statisticsLoader = false;
       if (kDebugMode) {
         print("Exception occur: $error stackTrace: $stacktrace");
       }

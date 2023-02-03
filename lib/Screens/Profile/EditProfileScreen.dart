@@ -123,7 +123,7 @@ class _EditProfileScreenState extends BaseStatefulWidgetState<EditProfileScreen>
             TextEditingWidget(
               controller: nameController,
               textInputType: TextInputType.name,
-              textInputAction: TextInputAction.done,
+              textInputAction: TextInputAction.next,
               labelText: "Your Name",
               fontSize: 16,
               onEditingComplete: () => FocusScope.of(context).nextFocus(),
@@ -132,20 +132,20 @@ class _EditProfileScreenState extends BaseStatefulWidgetState<EditProfileScreen>
             TextEditingWidget(
               controller: emailController,
               textInputType: TextInputType.emailAddress,
-              // textInputAction: TextInputAction.next,
+              textInputAction: TextInputAction.next,
               readOnly: true,
               labelText: "Email",
               fontSize: 16,
-              // onEditingComplete: () => FocusScope.of(context).nextFocus(),
+              onEditingComplete: () => FocusScope.of(context).nextFocus(),
             ),
             heightBox(12.h),
             TextEditingWidget(
               controller: phoneNoController,
               textInputType: TextInputType.number,
-              textInputAction: TextInputAction.next,
+              textInputAction: TextInputAction.done,
               labelText: "Enter Your Mobile Number",
               fontSize: 16,
-              onEditingComplete: () => FocusScope.of(context).nextFocus(),
+              onEditingComplete: () => FocusScope.of(context).unfocus(),
               prefixIcon: SizedBox(
                 width: 75.w,
                 child: Padding(

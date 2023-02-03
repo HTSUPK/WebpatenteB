@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -59,42 +58,42 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  ConnectivityResult connectionStatus = ConnectivityResult.none;
-  final Connectivity connectivity = Connectivity();
-  late StreamSubscription<ConnectivityResult> connectivitySubscription;
-
-  @override
-  void initState() {
-    super.initState();
-    initConnectivity();
-    connectivitySubscription = connectivity.onConnectivityChanged.listen(_updateConnectionStatus);
-  }
-
-  @override
-  void dispose() {
-    connectivitySubscription.cancel();
-    super.dispose();
-  }
-
-  Future<void> initConnectivity() async {
-    late ConnectivityResult result;
-    try {
-      result = await connectivity.checkConnectivity();
-    } on PlatformException catch (e) {
-      // print(e.toString());
-      return;
-    }
-    if (!mounted) {
-      return Future.value(null);
-    }
-    return _updateConnectionStatus(result);
-  }
-
-  Future<void> _updateConnectionStatus(ConnectivityResult result) async {
-    setState(() {
-      connectionStatus = result;
-    });
-  }
+  // ConnectivityResult connectionStatus = ConnectivityResult.none;
+  // final Connectivity connectivity = Connectivity();
+  // late StreamSubscription<ConnectivityResult> connectivitySubscription;
+  //
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   initConnectivity();
+  //   connectivitySubscription = connectivity.onConnectivityChanged.listen(_updateConnectionStatus);
+  // }
+  //
+  // @override
+  // void dispose() {
+  //   connectivitySubscription.cancel();
+  //   super.dispose();
+  // }
+  //
+  // Future<void> initConnectivity() async {
+  //   late ConnectivityResult result;
+  //   try {
+  //     result = await connectivity.checkConnectivity();
+  //   } on PlatformException catch (e) {
+  //     // print(e.toString());
+  //     return;
+  //   }
+  //   if (!mounted) {
+  //     return Future.value(null);
+  //   }
+  //   return _updateConnectionStatus(result);
+  // }
+  //
+  // Future<void> _updateConnectionStatus(ConnectivityResult result) async {
+  //   setState(() {
+  //     connectionStatus = result;
+  //   });
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -116,7 +115,7 @@ class _MyAppState extends State<MyApp> {
               child: child!,
             );
           },
-          home: connectionStatus == ConnectivityResult.wifi || connectionStatus == ConnectivityResult.mobile ? const SplashScreen() : const NetworkOff(),
+          home: const SplashScreen(),
         ),
       ),
     );

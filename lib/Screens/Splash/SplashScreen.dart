@@ -18,40 +18,21 @@ class SplashScreen extends StatefulWidget {
 class _SplashScreenState extends BaseStatefulWidgetState<SplashScreen> {
   late VersionCheckProvider versionCheckProviderRef;
 
-  String appVersion = "";
-
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     versionCheckProviderRef = Provider.of(context, listen: false);
-    /*Timer(
-      const Duration(seconds: 3),
-      () => SharedPreferenceUtil.getBool(isLoginKey) == true
-          ? Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                builder: (context) => const HomeScreen(),
-              ),
-            )
-          : Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                builder: (context) => const LoginScreen(),
-              ),
-            ),
-    );*/
   }
 
   @override
   // TODO: implement shouldHaveSafeArea
-  bool get shouldHaveSafeArea => true;
+  bool get shouldHaveSafeArea => false;
 
   @override
   Widget buildBody(BuildContext context) {
     Future.delayed(const Duration(seconds: 0), () {
       PackageInfo.fromPlatform().then((PackageInfo packageInfo) async {
-        appVersion = packageInfo.version;
         Map<String, dynamic> body = {
           "type": AppUtils.getDeviceTypeID(),
           "version": packageInfo.version,
@@ -61,13 +42,9 @@ class _SplashScreenState extends BaseStatefulWidgetState<SplashScreen> {
         versionCheckProviderRef.callApiVersionCheck(body, context);
       });
     });
-    return SizedBox(
-      height: 690.h,
-      width: 360.w,
-      child: Image.asset(
-        splash,
-        fit: BoxFit.cover,
-      ),
+    return Image.asset(
+      splash,
+      fit: BoxFit.cover,
     );
   }
 }
