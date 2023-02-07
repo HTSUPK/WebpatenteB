@@ -45,12 +45,12 @@ class QuizProvider extends ChangeNotifier {
 
   /// Quiz Function ///
 
-  int _giveMinute = 0;
+  int _timerMinute = 0;
 
-  int get giveMinute => _giveMinute;
+  int get timerMinute => _timerMinute;
 
-  set giveMinute(int value) {
-    _giveMinute = value;
+  set timerMinute(int value) {
+    _timerMinute = value;
   }
 
   List<Result> isSelectAnswerList = [];
@@ -62,10 +62,8 @@ class QuizProvider extends ChangeNotifier {
   }
 
   /// Timer Function ///
-  String minuteString = "00", secondString = "00";
-  int minutes = 0, seconds = 0, isSelect = 0;
-  late Timer timer;
-  double _progress = 0;
+
+  double _progress = 1.0;
 
   double get progress => _progress;
 
@@ -73,48 +71,69 @@ class QuizProvider extends ChangeNotifier {
     _progress = value;
   }
 
-  void startSecond() {
-    if (seconds < 59) {
-      seconds++;
-      secondString = seconds.toString();
-      if (secondString.length == 1) {
-        secondString = "0$secondString";
-        notifyListeners();
-      }
-    } else {
-      startMinute();
-    }
-  }
+  // void startSecond() {
+  //   if (seconds < 59) {
+  //     seconds++;
+  //     secondString = seconds.toString();
+  //     if (secondString.length == 1) {
+  //       secondString = "0$secondString";
+  //       notifyListeners();
+  //     }
+  //   } else {
+  //     startMinute();
+  //   }
+  // }
+  //
+  // void startMinute() {
+  //   if (minutes < 59) {
+  //     seconds = 0;
+  //     secondString = "00";
+  //     minutes++;
+  //     minuteString = minutes.toString();
+  //     if (minuteString.length == 1) {
+  //       minuteString = "0$minuteString";
+  //       notifyListeners();
+  //     }
+  //   }
+  // }
 
-  void startMinute() {
-    if (minutes < 59) {
-      seconds = 0;
-      secondString = "00";
-      minutes++;
-      minuteString = minutes.toString();
-      if (minuteString.length == 1) {
-        minuteString = "0$minuteString";
-        notifyListeners();
-      }
-    }
-  }
-
-  totalProgressTime(context) {
-    int currentSecond = int.parse(secondString) + (int.parse(minuteString) * 60);
-    progress = currentSecond / (giveMinute * 60);
-    // progress = currentSecond / (0.5 * 60);
-    if (progress == 1) {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-          builder: (context) => ResultScreen(
-            result: isSelectAnswerList,
-            time: "$minuteString:$secondString",
-          ),
-        ),
-      );
+  totalProgressTime() {
+  // totalProgressTime(context) {
+    progress = 1.0 - (currentSeconds / timerMaxSeconds);
+    if (progress == 0.0) {
+      // Navigator.pushReplacement(
+      //   context,
+      //   MaterialPageRoute(
+      //     builder: (context) => ResultScreen(
+      //       result: isSelectAnswerList,
+      //       time: "$minuteString:$secondString",
+      //     ),
+      //   ),
+      // );
     }
     notifyListeners();
+  }
+
+  ///
+  int timerMaxSeconds = 0;
+  int currentSeconds = 0;
+
+  late Timer quizTimer;
+
+  String get timerText =>
+      '${((timerMaxSeconds - currentSeconds) ~/ 60).toString().padLeft(2, '0')}: ${((timerMaxSeconds - currentSeconds) % 60).toString().padLeft(2, '0')}';
+
+  final interval = const Duration(seconds: 1);
+
+  startTimeout([int? milliseconds]) {
+    var duration = interval;
+    quizTimer = Timer.periodic(duration, (timer) {
+      print(timer.tick);
+      currentSeconds = timer.tick;
+      totalProgressTime();
+      if (timer.tick >= timerMaxSeconds) timer.cancel();
+      notifyListeners();
+    });
   }
 
   /// full Quiz Api///
@@ -135,8 +154,11 @@ class QuizProvider extends ChangeNotifier {
       response = await RestClient(RetroApi().dioData()).fullQuizRequest(body);
       if (response.status == 200) {
         quizLoader = false;
-        // giveMinute = int.parse(response.timer!);
-        giveMinute = response.timer!;
+        quizTimer.cancel();  // Timer clear
+        currentSeconds = 0;  // Timer clear
+        timerMinute = response.timer!;
+        timerMaxSeconds = timerMinute * 60;
+        startTimeout();
         quizList.clear();
         quizList.addAll(response.data!);
         isSelectAnswerList.clear();
@@ -173,8 +195,11 @@ class QuizProvider extends ChangeNotifier {
       response = await RestClient(RetroApi().dioData()).selectQuizRequest(body);
       if (response.status == 200) {
         quizLoader = false;
-        // giveMinute = int.parse(response.timer!);
-        giveMinute = response.timer!;
+        quizTimer.cancel();  // Timer clear
+        currentSeconds = 0;  // Timer clear
+        timerMinute = response.timer!;
+        timerMaxSeconds = timerMinute * 60;
+        startTimeout();
         quizList.clear();
         quizList.addAll(response.data!);
         isSelectAnswerList.clear();
@@ -241,7 +266,8 @@ class QuizProvider extends ChangeNotifier {
     print("AnswerMap $selectAnswerList");
     print("ConvertAnswerMap $selectAnswerConvert");
     Map<String, dynamic> body = {
-      "time": (int.parse(minuteString) + 1).toString(),
+      // "time": (int.parse(minuteString) + 1).toString(),
+      "time": ((timerMinute - ((timerMaxSeconds - currentSeconds) / 60)).round() + 1).toString(),
       "payload": selectAnswerConvert,
       "type": quizType,
       "correct_answer": correct.toString(),
@@ -249,7 +275,7 @@ class QuizProvider extends ChangeNotifier {
       "incorrect": incorrect.toString(),
     };
     Future.delayed(const Duration(seconds: 0), () {
-      callApiQuizResult(body);
+      // callApiQuizResult(body);
     });
   }
 

@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
-import 'package:webpatente/Widgets/text_widget.dart';
-import 'package:webpatente/resources/color_resources.dart';
-import 'package:webpatente/utils/app_utils.dart';
+import '../../Widgets/text_widget.dart';
+import '../../resources/color_resources.dart';
+import '../../utils/app_utils.dart';
 import '../../Models/ChapterList_Model.dart';
 import '../../Providers/question_provider.dart';
 import '../../Widgets/chapterCard_widget.dart';
@@ -82,7 +82,7 @@ class _QuestionScreenState extends BaseStatefulWidgetState<QuestionScreen> {
                               ),
                               SizedBox(
                                 height: 25,
-                                width: screenSize.width / 2,
+                                width: screenSize.width / 1.5,
                                 child: PopupMenuButton<ChapterList>(
                                   itemBuilder: (context) {
                                     return questionProviderRef.chapterList.map((value) {
@@ -100,11 +100,16 @@ class _QuestionScreenState extends BaseStatefulWidgetState<QuestionScreen> {
                                   child: Row(
                                     mainAxisSize: MainAxisSize.min,
                                     children: <Widget>[
-                                      TextWidget(
-                                        text: questionProviderRef.selectChapter,
-                                        fontSize: 17,
-                                        fontWeight: FontWeight.w600,
-                                        color: colorWhite,
+                                      SizedBox(
+                                        width: screenSize.width / 2,
+                                        child: TextWidget(
+                                          text: questionProviderRef.selectChapter,
+                                          fontSize: 17,
+                                          fontWeight: FontWeight.w600,
+                                          color: colorWhite,
+                                          textOverflow: TextOverflow.ellipsis,
+                                          maxLines: 1,
+                                        ),
                                       ),
                                       const Icon(
                                         Icons.arrow_drop_down,
@@ -140,6 +145,8 @@ class _QuestionScreenState extends BaseStatefulWidgetState<QuestionScreen> {
                         fontSize: 17,
                         fontWeight: FontWeight.w600,
                         color: colorWhite,
+                        textOverflow: TextOverflow.ellipsis,
+                        maxLines: 1,
                       ),
                       // heightBox(12.h),
                       TextWidget(

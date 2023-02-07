@@ -62,24 +62,16 @@ class _QuizScreenState extends BaseStatefulWidgetState<QuizScreen> {
         quizProviderRef.callApiSelectedQuiz(body);
       });
     }
-    quizProviderRef.progress = 0;
-    quizProviderRef.minutes = 0;
-    quizProviderRef.seconds = 0;
-    quizProviderRef.minuteString = "00";
-    quizProviderRef.secondString = "00";
 
-    /// Start Timer ///
-    quizProviderRef.timer = Timer.periodic(const Duration(seconds: 1), (timer) {
-      quizProviderRef.startSecond();
-      quizProviderRef.totalProgressTime(context);
-    });
     super.initState();
   }
 
   @override
   void dispose() {
     // TODO: implement dispose
-    quizProviderRef.timer.cancel();
+    quizProviderRef.quizTimer.cancel();
+    quizProviderRef.timerMaxSeconds = 0;
+    quizProviderRef.currentSeconds = 0;
     super.dispose();
   }
 
@@ -99,6 +91,14 @@ class _QuizScreenState extends BaseStatefulWidgetState<QuizScreen> {
             title: '',
             backgroundColor: colorBackground,
           );
+  }
+
+  formatTime({required int time}) {
+    int sec = time % 60;
+    int min = (time / 60).floor();
+    String minute = min.toString().length <= 1 ? "0$min" : "$min";
+    String second = sec.toString().length <= 1 ? "0$sec" : "$sec";
+    return "$minute : $second";
   }
 
   @override
@@ -153,7 +153,8 @@ class _QuizScreenState extends BaseStatefulWidgetState<QuizScreen> {
                                             ),
                                             widthBox(5.w),
                                             TextWidget(
-                                              text: "${quizProviderRef.minuteString}:${quizProviderRef.secondString}",
+                                              text: "${quizProviderRef.timerText}",
+                                              // text: "${quizProviderRef.minuteString}:${quizProviderRef.secondString}",
                                               fontSize: 16,
                                               fontWeight: FontWeight.w600,
                                             ),
@@ -403,7 +404,10 @@ class _QuizScreenState extends BaseStatefulWidgetState<QuizScreen> {
                         children: [
                           AnswerButton(
                               text: "True",
-                              backgroundColor: quizProviderRef.isSelectAnswerList[isSelect].isAnswered == 1 ? colorDarkGreen : colorAnsBackGround,
+                              backgroundColor: quizProviderRef.isSelectAnswerList[isSelect].isAnswered == 1 &&
+                                      quizProviderRef.isSelectAnswerList[isSelect].yourAnswer == "true"
+                                  ? colorDarkGreen
+                                  : colorAnsBackGround,
                               onTap: () {
                                 setState(() {
                                   quizProviderRef.onSelect("true", isSelect);
@@ -415,7 +419,10 @@ class _QuizScreenState extends BaseStatefulWidgetState<QuizScreen> {
                               }),
                           AnswerButton(
                             text: "False",
-                            backgroundColor: quizProviderRef.isSelectAnswerList[isSelect].isAnswered == 1 ? colorRed : colorAnsBackGround,
+                            backgroundColor: quizProviderRef.isSelectAnswerList[isSelect].isAnswered == 1 &&
+                                    quizProviderRef.isSelectAnswerList[isSelect].yourAnswer == "false"
+                                ? colorRed
+                                : colorAnsBackGround,
                             onTap: () {
                               setState(() {
                                 quizProviderRef.onSelect("false", isSelect);
@@ -441,7 +448,7 @@ class _QuizScreenState extends BaseStatefulWidgetState<QuizScreen> {
                                     MaterialPageRoute(
                                         builder: (context) => ResultScreen(
                                               result: quizProviderRef.isSelectAnswerList,
-                                              time: "${quizProviderRef.minuteString}:${quizProviderRef.secondString}",
+                                              time: formatTime(time: quizProviderRef.currentSeconds),
                                             )));
                               },
                             ),
