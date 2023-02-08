@@ -154,7 +154,7 @@ class QuizProvider extends ChangeNotifier {
       response = await RestClient(RetroApi().dioData()).fullQuizRequest(body);
       if (response.status == 200) {
         quizLoader = false;
-        quizTimer.cancel();  // Timer clear
+        // quizTimer.cancel();  // Timer clear
         currentSeconds = 0;  // Timer clear
         timerMinute = response.timer!;
         timerMaxSeconds = timerMinute * 60;
@@ -275,7 +275,7 @@ class QuizProvider extends ChangeNotifier {
       "incorrect": incorrect.toString(),
     };
     Future.delayed(const Duration(seconds: 0), () {
-      // callApiQuizResult(body);
+      callApiQuizResult(body);
     });
   }
 

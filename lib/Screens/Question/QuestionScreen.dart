@@ -1,3 +1,4 @@
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
@@ -26,6 +27,9 @@ class _QuestionScreenState extends BaseStatefulWidgetState<QuestionScreen> {
 
   late QuestionProvider questionProviderRef;
 
+  bool isPlaying = false;
+  final audioPlayer = AudioPlayer();
+
   @override
   void initState() {
     // TODO: implement initState
@@ -36,7 +40,20 @@ class _QuestionScreenState extends BaseStatefulWidgetState<QuestionScreen> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       questionProviderRef.initLanguages();
     });
+
+    // audioPlayer.onPlayerStateChanged.listen((state) {
+    //   setState(() {
+    //     isPlaying = state == PlayerState.playing;
+    //   });
+    // });
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    audioPlayer.dispose();
+    super.dispose();
   }
 
   @override
@@ -141,7 +158,8 @@ class _QuestionScreenState extends BaseStatefulWidgetState<QuestionScreen> {
                       ),
                       heightBox(10.h),
                       TextWidget(
-                        text: questionProviderRef.pageList[questionProviderRef.currentPageNo - 1].title,
+                        // text: questionProviderRef.pageList[questionProviderRef.currentPageNo - 1].title,
+                        text: questionProviderRef.pageList[questionProviderRef.currentSequence - 1].title,
                         fontSize: 17,
                         fontWeight: FontWeight.w600,
                         color: colorWhite,
@@ -150,7 +168,8 @@ class _QuestionScreenState extends BaseStatefulWidgetState<QuestionScreen> {
                       ),
                       // heightBox(12.h),
                       TextWidget(
-                        text: "Page no. : ${questionProviderRef.currentPageNo}",
+                        // text: "Page no. : ${questionProviderRef.currentPageNo}",
+                        text: "Page no. : ${questionProviderRef.currentSequence}",
                         fontSize: 14,
                         fontWeight: FontWeight.w600,
                         color: colorWhite,
@@ -160,7 +179,8 @@ class _QuestionScreenState extends BaseStatefulWidgetState<QuestionScreen> {
                         children: [
                           GestureDetector(
                             onTap: () {
-                              if (questionProviderRef.currentPageNo != 1) {
+                              // if (questionProviderRef.currentPageNo != 1) {
+                              if (questionProviderRef.currentSequence != 1) {
                                 questionProviderRef.currentPageNo = --questionProviderRef.currentPageNo;
                                 pageNoController.clear();
                                 questionProviderRef.questionFunction(questionProviderRef.currentChapterId, questionProviderRef.currentPageNo);
@@ -175,7 +195,8 @@ class _QuestionScreenState extends BaseStatefulWidgetState<QuestionScreen> {
                           ),
                           GestureDetector(
                             onTap: () {
-                              if (questionProviderRef.pageList.length != questionProviderRef.currentPageNo) {
+                              // if (questionProviderRef.pageList.length != questionProviderRef.currentPageNo) {
+                              if (questionProviderRef.pageList.length != questionProviderRef.currentSequence) {
                                 questionProviderRef.currentPageNo = ++questionProviderRef.currentPageNo;
                                 pageNoController.clear();
                                 questionProviderRef.questionFunction(questionProviderRef.currentChapterId, questionProviderRef.currentPageNo);
@@ -213,7 +234,15 @@ class _QuestionScreenState extends BaseStatefulWidgetState<QuestionScreen> {
                               if (pageNoController.text.isEmpty) {
                                 AppUtils.toast("Please enter page number", colorRed, colorWhite);
                               } else {
-                                questionProviderRef.questionFunction(questionProviderRef.currentChapterId, int.parse(pageNoController.text));
+                                var value =
+                                    questionProviderRef.pageList.indexWhere((element) => element.sequence == int.parse(pageNoController.text));
+
+                                if (value != -1) {
+                                  questionProviderRef.questionFunction(questionProviderRef.currentChapterId, questionProviderRef.pageList[value].id);
+                                  print('ID ${questionProviderRef.pageList[value].id}');
+                                } else {
+                                  AppUtils.toast("No Page", colorRed, colorWhite);
+                                }
                               }
                             },
                             child: Container(
@@ -288,6 +317,7 @@ class _QuestionScreenState extends BaseStatefulWidgetState<QuestionScreen> {
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
+                                    questionProviderRef.questionList[index].image != "" && questionProviderRef.questionList[index].image != null ?
                                     GestureDetector(
                                       onTap: () => Navigator.push(
                                         context,
@@ -301,10 +331,20 @@ class _QuestionScreenState extends BaseStatefulWidgetState<QuestionScreen> {
                                         borderRadius: BorderRadius.circular(8),
                                         child: Image.network(
                                           questionProviderRef.questionList[index].image!,
+                                          // "https://www.emca-online.eu/assets/images/dummy.png",
                                           height: 55.h,
                                           width: 70.w,
-                                          fit: BoxFit.fitHeight,
+                                          fit: BoxFit.cover,
                                         ),
+                                      ),
+                                    ):
+                                    ClipRRect(
+                                      borderRadius: BorderRadius.circular(8),
+                                      child: Image.asset(
+                                        icDummyNoImage,
+                                        height: 55.h,
+                                        width: 70.w,
+                                        fit: BoxFit.cover,
                                       ),
                                     ),
                                     widthBox(10.w),
@@ -325,17 +365,23 @@ class _QuestionScreenState extends BaseStatefulWidgetState<QuestionScreen> {
                                               heightBox(5.h),
                                               Row(
                                                 children: [
-                                                  QuestionItem(
-                                                    iconName: icSpeak,
-                                                    text: "Speak",
-                                                    onTap: () async {
-                                                      setState(() {
-                                                        questionProviderRef.text = questionProviderRef.questionList[index].question!;
-                                                        setState(() {});
-                                                      });
-                                                      questionProviderRef.speak();
-                                                    },
-                                                  ),
+                                                  questionProviderRef.questionList[index].audio != "" && questionProviderRef.questionList[index].audio != null
+                                                      ? QuestionItem(
+                                                          iconName: icSpeak,
+                                                          text: "Speak",
+                                                          onTap: () async {
+                                                            /// AUDIO ///
+                                                            await audioPlayer.play(UrlSource(questionProviderRef.questionList[index].audio!));
+                                                            // await audioPlayer.play(UrlSource('https://www.kozco.com/tech/piano2-CoolEdit.mp3'));
+                                                            setState(() {});
+                                                            // setState(() {
+                                                            //   questionProviderRef.text = questionProviderRef.questionList[index].question!;
+                                                            //   setState(() {});
+                                                            // });
+                                                            // questionProviderRef.speak();
+                                                          },
+                                                        )
+                                                      : const SizedBox(),
                                                   widthBox(10.w),
                                                   QuestionItem(
                                                     iconName: icTranslate,

@@ -203,6 +203,7 @@ class _RegisterScreenState extends BaseStatefulWidgetState<RegisterScreen> {
                           };
                           // ignore: use_build_context_synchronously
                           authProviderRef.callApiRegister(body, context);
+                          // print("DATA $body");
                         }
                       },
                     ),

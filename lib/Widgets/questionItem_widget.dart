@@ -24,8 +24,8 @@ class QuestionItem extends StatefulWidget {
 class _QuestionItemState extends State<QuestionItem> {
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      // behavior: HitTestBehavior.opaque,
+    return GestureDetector(
+      behavior: HitTestBehavior.opaque,
       onTap: widget.onTap,
       child: Row(
         children: [

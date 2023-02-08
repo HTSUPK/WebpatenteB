@@ -53,9 +53,11 @@ class AuthProvider extends ChangeNotifier {
         authLoader = false;
         SharedPreferenceUtil.putBool(isLoginKey, true);
         SharedPreferenceUtil.putString(token, response.data!.token);
-        SharedPreferenceUtil.putString(userName, response.data!.name);
         SharedPreferenceUtil.putString(notificationFlag, response.data!.notification);
+        SharedPreferenceUtil.putString(userName, response.data!.name);
         SharedPreferenceUtil.putString(userEmail, response.data!.email);
+        SharedPreferenceUtil.putString(userPhoneCode, response.data!.countryCode);
+        SharedPreferenceUtil.putString(userPhoneNo, response.data!.mobile);
         SharedPreferenceUtil.putString(userProfileImage, response.data!.profileImage);
         AppUtils.toast(response.message!, colorPrimary, colorWhite);
         Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const HomeScreen()));
@@ -90,6 +92,8 @@ class AuthProvider extends ChangeNotifier {
         SharedPreferenceUtil.putString(notificationFlag, response.data!.notification);
         SharedPreferenceUtil.putString(userName, response.data!.name);
         SharedPreferenceUtil.putString(userEmail, response.data!.email);
+        SharedPreferenceUtil.putString(userPhoneCode, response.data!.countryCode);
+        SharedPreferenceUtil.putString(userPhoneNo, response.data!.mobile);
         SharedPreferenceUtil.putString(userProfileImage, response.data!.profileImage);
         AppUtils.toast(response.message!, colorPrimary, colorWhite);
         Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const HomeScreen()));

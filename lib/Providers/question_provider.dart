@@ -147,6 +147,13 @@ class QuestionProvider extends ChangeNotifier {
   String selectChapter = "";
   int _currentChapterId = 0;
   int _currentPageNo = 1;
+  int _currentSequence = 1;
+
+  int get currentSequence => _currentSequence;
+
+  set currentSequence(int value) {
+    _currentSequence = value;
+  }
 
   int get currentChapterId => _currentChapterId;
 
@@ -174,7 +181,8 @@ class QuestionProvider extends ChangeNotifier {
         pageList.addAll(response.data!.page!);
         selectChapter = chapterList[0].chapter!;
         currentChapterId = response.data!.chapter![0].id!;
-        currentPageNo = response.data!.page![0].sequence!;
+        currentSequence = response.data!.page![0].sequence!;
+        currentPageNo = response.data!.page![0].id!;
         Map<String, dynamic> body = {
           "chapter_id": currentChapterId,
           "page": currentPageNo,

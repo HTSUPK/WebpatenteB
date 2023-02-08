@@ -1,4 +1,5 @@
 const icDummy = "assets/images/ic_dummy.png";
+const icDummyNoImage = "assets/images/ic_dummy_noImage.png";
 
 // Splash
 const splash = "assets/images/ic_splash.png";

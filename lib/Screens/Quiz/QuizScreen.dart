@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
@@ -13,6 +14,7 @@ import '../../Widgets/text_widget.dart';
 import '../../base/base_stateful_widget.dart';
 import '../../resources/color_resources.dart';
 import '../../resources/image_resources.dart';
+import '../Question/PictureFullViewScreen.dart';
 import 'ResultScreen.dart';
 
 class QuizScreen extends StatefulWidget {
@@ -33,6 +35,7 @@ class _QuizScreenState extends BaseStatefulWidgetState<QuizScreen> {
   int isSelect = 0;
 
   late QuizProvider quizProviderRef;
+  final audioPlayer = AudioPlayer();
 
   @override
   void initState() {
@@ -153,7 +156,7 @@ class _QuizScreenState extends BaseStatefulWidgetState<QuizScreen> {
                                             ),
                                             widthBox(5.w),
                                             TextWidget(
-                                              text: "${quizProviderRef.timerText}",
+                                              text: quizProviderRef.timerText,
                                               // text: "${quizProviderRef.minuteString}:${quizProviderRef.secondString}",
                                               fontSize: 16,
                                               fontWeight: FontWeight.w600,
@@ -297,17 +300,39 @@ class _QuizScreenState extends BaseStatefulWidgetState<QuizScreen> {
                                   child: Column(
                                     mainAxisSize: MainAxisSize.min,
                                     children: [
-                                      ClipRRect(
-                                        borderRadius: BorderRadius.circular(8),
-                                        child: Image.network(
-                                          // icQuizImage,
-                                          quizProviderRef.quizList[isSelect].image!,
-                                          height: 245.h,
-                                          width: 310.w,
-                                          fit: BoxFit.cover,
-                                        ),
-                                      ),
-                                      heightBox(5.h),
+                                      quizProviderRef.quizList[isSelect].image != "" && quizProviderRef.quizList[isSelect].image != null
+                                          ? GestureDetector(
+                                              onTap: () {
+                                                Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                    builder: (context) => PictureFullViewScreen(
+                                                      image: quizProviderRef.quizList[isSelect].image!,
+                                                    ),
+                                                  ),
+                                                );
+                                              },
+                                              child: ClipRRect(
+                                                borderRadius: BorderRadius.circular(8),
+                                                child: Image.network(
+                                                  // icQuizImage,
+                                                  quizProviderRef.quizList[isSelect].image!,
+                                                  height: 145.h,
+                                                  width: 200.w,
+                                                  fit: BoxFit.cover,
+                                                ),
+                                              ),
+                                            )
+                                          : ClipRRect(
+                                              borderRadius: BorderRadius.circular(8),
+                                              child: Image.asset(
+                                                icDummyNoImage,
+                                                height: 145.h,
+                                                width: 200.w,
+                                                fit: BoxFit.cover,
+                                              ),
+                                            ),
+                                      heightBox(10.h),
                                       Padding(
                                         padding: EdgeInsets.symmetric(horizontal: 12.w),
                                         child: TextWidget(
@@ -336,18 +361,23 @@ class _QuizScreenState extends BaseStatefulWidgetState<QuizScreen> {
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: [
-                                      GestureDetector(
-                                        onTap: () {
-                                          setState(() {
-                                            Provider.of<QuestionProvider>(context, listen: false).text = quizProviderRef.quizList[isSelect].question!;
-                                            Provider.of<QuestionProvider>(context, listen: false).speak();
-                                            setState(() {});
-                                          });
-                                        },
-                                        child: SvgPicture.asset(
-                                          icSound,
-                                        ),
-                                      ),
+                                      quizProviderRef.quizList[isSelect].audio != "" && quizProviderRef.quizList[isSelect].audio != null
+                                          ? GestureDetector(
+                                              onTap: () async {
+                                                /// AUDIO ///
+                                                await audioPlayer.play(UrlSource(quizProviderRef.quizList[isSelect].audio!));
+                                                // await audioPlayer.play(UrlSource('https://www.kozco.com/tech/piano2-CoolEdit.mp3'));
+                                                // setState(() {
+                                                //   Provider.of<QuestionProvider>(context, listen: false).text = quizProviderRef.quizList[isSelect].question!;
+                                                //   Provider.of<QuestionProvider>(context, listen: false).speak();
+                                                //   setState(() {});
+                                                // });
+                                              },
+                                              child: SvgPicture.asset(
+                                                icSound,
+                                              ),
+                                            )
+                                          : const SizedBox(),
                                       TextWidget(
                                         text: "${isSelect + 1} of ${quizProviderRef.quizList.length}",
                                         fontSize: 18,
