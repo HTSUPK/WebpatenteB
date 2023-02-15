@@ -202,7 +202,7 @@ class _HomeScreenState extends BaseStatefulWidgetState<HomeScreen> {
   }
 
   showBottomSheet() {
-    int isSelect = 1;
+    int isSelect = 0;
     List<String> quizName = [
       "Full Quiz",
       "Selected Only",

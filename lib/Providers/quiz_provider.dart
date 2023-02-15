@@ -98,7 +98,7 @@ class QuizProvider extends ChangeNotifier {
   // }
 
   totalProgressTime() {
-  // totalProgressTime(context) {
+    // totalProgressTime(context) {
     progress = 1.0 - (currentSeconds / timerMaxSeconds);
     if (progress == 0.0) {
       // Navigator.pushReplacement(
@@ -155,7 +155,7 @@ class QuizProvider extends ChangeNotifier {
       if (response.status == 200) {
         quizLoader = false;
         // quizTimer.cancel();  // Timer clear
-        currentSeconds = 0;  // Timer clear
+        currentSeconds = 0; // Timer clear
         timerMinute = response.timer!;
         timerMaxSeconds = timerMinute * 60;
         startTimeout();
@@ -167,7 +167,7 @@ class QuizProvider extends ChangeNotifier {
             id: i,
             image: response.data![i].image,
             question: response.data![i].question,
-            correct: response.data![i].answer,
+            correct: response.data![i].answer == "1" ? "true" : "false",
             yourAnswer: "",
             isAnswered: 0,
           ));
@@ -195,8 +195,8 @@ class QuizProvider extends ChangeNotifier {
       response = await RestClient(RetroApi().dioData()).selectQuizRequest(body);
       if (response.status == 200) {
         quizLoader = false;
-        quizTimer.cancel();  // Timer clear
-        currentSeconds = 0;  // Timer clear
+        quizTimer.cancel(); // Timer clear
+        currentSeconds = 0; // Timer clear
         timerMinute = response.timer!;
         timerMaxSeconds = timerMinute * 60;
         startTimeout();
@@ -256,13 +256,13 @@ class QuizProvider extends ChangeNotifier {
     selectAnswerList.clear();
     for (int j = 0; j < isSelectAnswerList.length; j++) {
       Map<String, dynamic> answerMap = {
-        "name": isSelectAnswerList[j].question,
+        "question": isSelectAnswerList[j].question,
         "your_answer": isSelectAnswerList[j].yourAnswer,
         "correct": isSelectAnswerList[j].correct,
       };
       selectAnswerList.add(answerMap);
-      selectAnswerConvert = json.encode(selectAnswerList);
     }
+    selectAnswerConvert = json.encode(selectAnswerList);
     print("AnswerMap $selectAnswerList");
     print("ConvertAnswerMap $selectAnswerConvert");
     Map<String, dynamic> body = {
@@ -285,13 +285,13 @@ class QuizProvider extends ChangeNotifier {
     try {
       response = await RestClient(RetroApi().dioData()).quizResultRequest(body);
       if (response.status == 200) {
-        print("${response.data!}");
+        print("Result ${response.data!}");
         notifyListeners();
       }
     } catch (error, stacktrace) {
-      if (kDebugMode) {
-        print("Exception occur: $error stackTrace: $stacktrace");
-      }
+      // if (kDebugMode) {
+      //   print("Exception occur: $error stackTrace: $stacktrace");
+      // }
       notifyListeners();
       return BaseModel()..setException(ServerError.withError(error: error));
     }

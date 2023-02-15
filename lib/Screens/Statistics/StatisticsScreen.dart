@@ -65,13 +65,13 @@ class _StatisticsScreenState extends BaseStatefulWidgetState<StatisticsScreen> {
                   ),
                 )
               : Container(
-                  height: 200.h,
+                  height: 230.h,
                   width: screenSize.width,
                   color: colorPrimary,
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      heightBox(35.h),
+                      heightBox(10.h),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
@@ -81,7 +81,7 @@ class _StatisticsScreenState extends BaseStatefulWidgetState<StatisticsScreen> {
                                 text: double.tryParse(statisticsProviderRef.correct!)?.toStringAsFixed(0),
                                 fontWeight: FontWeight.w800,
                                 color: colorWhite,
-                                fontSize: 25.sp,
+                                fontSize: 22.sp,
                               ),
                               TextWidget(
                                 text: "Correct",
@@ -97,7 +97,7 @@ class _StatisticsScreenState extends BaseStatefulWidgetState<StatisticsScreen> {
                                 text: double.tryParse(statisticsProviderRef.notAnswer!)?.toStringAsFixed(0),
                                 fontWeight: FontWeight.w800,
                                 color: colorWhite,
-                                fontSize: 25.sp,
+                                fontSize: 22.sp,
                               ),
                               TextWidget(
                                 text: "Not Answered",
@@ -113,7 +113,7 @@ class _StatisticsScreenState extends BaseStatefulWidgetState<StatisticsScreen> {
                                 text: double.tryParse(statisticsProviderRef.inCorrect!)?.toStringAsFixed(0),
                                 fontWeight: FontWeight.w800,
                                 color: colorWhite,
-                                fontSize: 25.sp,
+                                fontSize: 22.sp,
                               ),
                               TextWidget(
                                 text: "Incorrect",
@@ -125,7 +125,14 @@ class _StatisticsScreenState extends BaseStatefulWidgetState<StatisticsScreen> {
                           )
                         ],
                       ),
-                      heightBox(32.h),
+                      heightBox(10.h),
+                      TextWidget(
+                        text: "All Quiz",
+                        fontWeight: FontWeight.w700,
+                        color: colorWhite,
+                        fontSize: 22,
+                      ),
+                      heightBox(10.h),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
@@ -135,7 +142,7 @@ class _StatisticsScreenState extends BaseStatefulWidgetState<StatisticsScreen> {
                                 text: "${statisticsProviderRef.totalPassed}%",
                                 fontWeight: FontWeight.w800,
                                 color: colorWhite,
-                                fontSize: 25.sp,
+                                fontSize: 22.sp,
                               ),
                               TextWidget(
                                 text: "Total Passed",
@@ -151,7 +158,52 @@ class _StatisticsScreenState extends BaseStatefulWidgetState<StatisticsScreen> {
                                 text: "${statisticsProviderRef.totalFailed}%",
                                 fontWeight: FontWeight.w800,
                                 color: colorWhite,
-                                fontSize: 25.sp,
+                                fontSize: 22.sp,
+                              ),
+                              TextWidget(
+                                text: "Total Failed",
+                                fontWeight: FontWeight.w500,
+                                color: colorWhite,
+                                fontSize: 14.sp,
+                              ),
+                            ],
+                          )
+                        ],
+                      ),
+                      heightBox(10.h),
+                      TextWidget(
+                        text: "Last 20 Quiz",
+                        fontWeight: FontWeight.w700,
+                        color: colorWhite,
+                        fontSize: 22,
+                      ),
+                      heightBox(10.h),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          Column(
+                            children: [
+                              TextWidget(
+                                text: "${statisticsProviderRef.latestPassed}%",
+                                fontWeight: FontWeight.w800,
+                                color: colorWhite,
+                                fontSize: 22.sp,
+                              ),
+                              TextWidget(
+                                text: "Total Passed",
+                                fontWeight: FontWeight.w500,
+                                color: colorWhite,
+                                fontSize: 14.sp,
+                              ),
+                            ],
+                          ),
+                          Column(
+                            children: [
+                              TextWidget(
+                                text: "${statisticsProviderRef.latestFailed}%",
+                                fontWeight: FontWeight.w800,
+                                color: colorWhite,
+                                fontSize: 22.sp,
                               ),
                               TextWidget(
                                 text: "Total Failed",
@@ -198,7 +250,7 @@ class _StatisticsScreenState extends BaseStatefulWidgetState<StatisticsScreen> {
                               width: 0,
                             ),
                             autoScrollingMode: AutoScrollingMode.start,
-                            autoScrollingDelta: 5,
+                            autoScrollingDelta: 10,
                           ),
                           legend: Legend(isVisible: false),
                           tooltipBehavior: TooltipBehavior(
@@ -208,7 +260,7 @@ class _StatisticsScreenState extends BaseStatefulWidgetState<StatisticsScreen> {
                             ColumnSeries<Graph, String>(
                               dataSource: statisticsProviderRef.graphList,
                               width: statisticsProviderRef.graphList.length < 3 ? 0.1 : 0.4,
-                              xValueMapper: (Graph data, index) => "Quiz ${index +1}",
+                              xValueMapper: (Graph data, index) => "Q${index +1}",
                               yValueMapper: (Graph data, _) => double.parse(data.percentage!).round(),
                               borderRadius: BorderRadius.circular(12),
                               isVisibleInLegend: false,

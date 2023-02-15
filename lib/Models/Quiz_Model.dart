@@ -93,9 +93,9 @@ class QuizData {
     _image = json['image'];
     _chapterId = json['chapter_id'];
     _question = json['question'];
-    _answer = json['answer'];
+    _answer = json['ans'];
     _audio = json['audio'];
-    _chapter = json['chapter'] != null ? Chapter.fromJson(json['chapter']) : null;
+    _chapter = json['quiz_chapter'] != null ? Chapter.fromJson(json['chapter']) : null;
   }
   num? _id;
   String? _image;
@@ -133,10 +133,10 @@ QuizData copyWith({  num? id,
     map['image'] = _image;
     map['chapter_id'] = _chapterId;
     map['question'] = _question;
-    map['answer'] = _answer;
+    map['ans'] = _answer;
     map['audio'] = _audio;
     if (_chapter != null) {
-      map['chapter'] = _chapter?.toJson();
+      map['quiz_chapter'] = _chapter?.toJson();
     }
     return map;
   }

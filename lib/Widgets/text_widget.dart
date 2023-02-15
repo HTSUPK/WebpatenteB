@@ -9,6 +9,7 @@ class TextWidget extends StatefulWidget {
   final double? fontSize;
   final double? letterSpacing;
   final TextAlign? textAlign;
+  final TextDirection? textDirection;
   final GestureTapCallback? onTap;
   final FontWeight? fontWeight;
   final String? fontFamily;
@@ -25,6 +26,7 @@ class TextWidget extends StatefulWidget {
     this.fontFamily = strFontName,
     this.letterSpacing,
     this.textAlign,
+    this.textDirection,
     this.onTap,
     this.fontWeight = FontWeight.normal,
     this.textOverflow,
@@ -48,6 +50,7 @@ class _TextWidgetState extends State<TextWidget> {
         widget.text ?? "",
         textAlign: widget.textAlign,
         maxLines: widget.maxLines,
+        textDirection: widget.textDirection ?? TextDirection.ltr,
         softWrap: true,
         overflow: widget.textOverflow,
         style: widget.textStyle ??

@@ -19,6 +19,8 @@ class StatisticsProvider extends ChangeNotifier {
   String? inCorrect = "0";
   String? totalPassed = "0";
   String? totalFailed = "0";
+  String? latestPassed = "0";
+  String? latestFailed = "0";
   List<Graph> graphList = [];
   Color grapeColor = colorPrimary;
 
@@ -35,8 +37,10 @@ class StatisticsProvider extends ChangeNotifier {
         inCorrect = response.data!.incorrect;
         totalPassed = response.data!.pass;
         totalFailed = response.data!.fail;
+        latestPassed = response.data!.latestPass;
+        latestFailed = response.data!.latestFail;
         graphList.clear();
-        graphList.addAll(response.data!.graph!);
+        graphList.addAll(response.data!.graph!.reversed);
 
         notifyListeners();
       }

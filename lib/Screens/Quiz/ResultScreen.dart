@@ -33,6 +33,9 @@ class _ResultScreenState extends BaseStatefulWidgetState<ResultScreen> {
     super.initState();
   }
 
+  // List<String> strCorrectAns = [];
+  // List<String> strYourAns = [];
+
   @override
   // TODO: implement scaffoldBgColor
   Color? get scaffoldBgColor => colorPrimary;
@@ -112,6 +115,21 @@ class _ResultScreenState extends BaseStatefulWidgetState<ResultScreen> {
                   shrinkWrap: true,
                   scrollDirection: Axis.vertical,
                   itemBuilder: (context, index) {
+                    /// User Answer ///
+                   String strCorrectAns = "";
+                    if(widget.result![index].correct == "true"){
+                      strCorrectAns = "Vero";
+                    }else{
+                      strCorrectAns = "Falso";
+                    }
+
+                    /// Correct Answer ///
+                   String strYourAns = "";
+                   if(widget.result![index].yourAnswer == "true"){
+                     strYourAns = "Vero";
+                   }else{
+                     strYourAns = "Falso";
+                   }
                     return Padding(
                       padding: EdgeInsets.fromLTRB(8.w, 10.h, 8.w, 0),
                       child: Column(
@@ -125,15 +143,17 @@ class _ResultScreenState extends BaseStatefulWidgetState<ResultScreen> {
                             child: Row(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
+                                widget.result![index].image != "" ?
                                 ClipRRect(
                                   borderRadius: BorderRadius.circular(8),
-                                  child: Image.network(
+                                  child:
+                                  Image.network(
                                     widget.result![index].image!,
                                     height: 55.h,
                                     width: 70.w,
                                     fit: BoxFit.cover,
                                   ),
-                                ),
+                                ) : const SizedBox() ,
                                 widthBox(10.w),
                                 Expanded(
                                   child: Column(
@@ -147,16 +167,18 @@ class _ResultScreenState extends BaseStatefulWidgetState<ResultScreen> {
                                       ),
                                       heightBox(7.h),
                                       TextWidget(
-                                        text: "Your Answer: ${widget.result![index].yourAnswer!}",
+                                        // text: "Your Answer: ${widget.result![index].yourAnswer!}",
+                                        text: "Your Answer: $strYourAns",
                                         fontSize: 17,
                                         fontWeight: FontWeight.w700,
-                                        color: widget.result![index].yourAnswer!.toUpperCase() == widget.result![index].correct!.toUpperCase()
+                                        color: widget.result![index].yourAnswer == widget.result![index].correct
                                             ? colorPrimary
                                             : colorRed,
                                       ),
                                       heightBox(3.h),
                                       TextWidget(
-                                        text: "Correct Answer: ${widget.result![index].correct!}",
+                                        // text: "Correct Answer: ${widget.result![index].correct!}",
+                                        text: "Correct Answer: $strCorrectAns",
                                         fontSize: 17,
                                         fontWeight: FontWeight.w700,
                                       ),

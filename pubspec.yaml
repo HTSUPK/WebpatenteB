@@ -55,6 +55,8 @@ dependencies:
   flutter_spinkit: ^5.1.0
   connectivity_plus: ^3.0.2
   audioplayers: ^3.0.1
+  cached_network_image: ^3.2.3
+  readmore: ^2.2.0
 
 dev_dependencies:
   flutter_test:

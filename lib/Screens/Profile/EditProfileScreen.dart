@@ -261,7 +261,6 @@ class _EditProfileScreenState extends BaseStatefulWidgetState<EditProfileScreen>
 
   void camera() async {
     final pickedFile = await profileProviderRef.picker.pickImage(source: ImageSource.camera);
-
     profileProviderRef.proImage = File(pickedFile!.path);
     profileProviderRef.filePath = pickedFile.path;
   }

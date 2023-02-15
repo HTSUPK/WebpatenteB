@@ -78,6 +78,60 @@ class _QuizScreenState extends BaseStatefulWidgetState<QuizScreen> {
     super.dispose();
   }
 
+  Future<bool> onWillPop() async {
+    bool value = false;
+    await showDialog<String>(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) => AlertDialog(
+        backgroundColor: colorPrimary,
+        title: TextWidget(
+          text: "Close Quiz",
+          fontSize: 18,
+          color: colorWhite,
+          textAlign: TextAlign.center,
+          fontWeight: FontWeight.w600,
+        ),
+        content: TextWidget(
+          text: "Do you want to quit this quiz?",
+          color: colorWhite,
+          textAlign: TextAlign.center,
+          fontWeight: FontWeight.w500,
+        ),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+              value = false;
+              setState(() {});
+            },
+            child: TextWidget(
+              text: "No",
+              color: colorWhite,
+              textAlign: TextAlign.center,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+          TextButton(
+            onPressed: () async {
+              Navigator.of(context).pop();
+              value = true;
+              setState(() {});
+              // Navigator.of(context).pop();
+            },
+            child: TextWidget(
+              text: "Yes",
+              color: colorWhite,
+              textAlign: TextAlign.center,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+        ],
+      ),
+    );
+    return Future.value(value);
+  }
+
   @override
   // TODO: implement scaffoldBgColor
   Color? get scaffoldBgColor => Provider.of<QuizProvider>(context).quizList.isNotEmpty ? colorPrimary : colorBackground;
@@ -107,303 +161,309 @@ class _QuizScreenState extends BaseStatefulWidgetState<QuizScreen> {
   @override
   Widget buildBody(BuildContext context) {
     return Consumer<QuizProvider>(builder: (_, quizProviderRef, __) {
-      return Column(
-        children: [
-          quizProviderRef.quizLoader
-              ? Shimmer.fromColors(
-                  baseColor: Colors.grey[200]!,
-                  highlightColor: Colors.grey[350]!,
-                  child: Container(
-                    color: colorBackground,
-                    height: 142.h,
-                    width: screenSize.width,
-                  ),
-                )
-              : quizProviderRef.quizList.isNotEmpty
-                  ? Container(
-                      height: 142.h,
-                      color: colorPrimary,
-                      child: Column(
-                        children: [
-                          heightBox(10.h),
-                          Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 14.w),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                SizedBox(
-                                  height: 34.h,
-                                  width: 282.w,
-                                  child: Stack(
-                                    fit: StackFit.expand,
-                                    children: [
-                                      ClipRRect(
-                                        borderRadius: const BorderRadius.all(Radius.circular(50)),
-                                        child: LinearProgressIndicator(
-                                          value: quizProviderRef.progress,
-                                          valueColor: const AlwaysStoppedAnimation(colorTimeBackground),
-                                          backgroundColor: colorDarkGreen,
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.all(6),
-                                        child: Row(
-                                          mainAxisSize: MainAxisSize.min,
-                                          children: [
-                                            const Icon(
-                                              Icons.watch_later_outlined,
-                                              size: 18,
-                                            ),
-                                            widthBox(5.w),
-                                            TextWidget(
-                                              text: quizProviderRef.timerText,
-                                              // text: "${quizProviderRef.minuteString}:${quizProviderRef.secondString}",
-                                              fontSize: 16,
-                                              fontWeight: FontWeight.w600,
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                GestureDetector(
-                                  onTap: () => showDialog<String>(
-                                    context: context,
-                                    builder: (BuildContext context) => AlertDialog(
-                                      backgroundColor: colorPrimary,
-                                      title: TextWidget(
-                                        text: "Close Quiz",
-                                        fontSize: 18,
-                                        color: colorWhite,
-                                        textAlign: TextAlign.center,
-                                        fontWeight: FontWeight.w600,
-                                      ),
-                                      content: TextWidget(
-                                        text: "Do you want to quit this quiz?",
-                                        color: colorWhite,
-                                        textAlign: TextAlign.center,
-                                        fontWeight: FontWeight.w500,
-                                      ),
-                                      actions: <Widget>[
-                                        TextButton(
-                                          onPressed: () {
-                                            Navigator.of(context).pop();
-                                          },
-                                          child: TextWidget(
-                                            text: "No",
-                                            color: colorWhite,
-                                            textAlign: TextAlign.center,
-                                            fontWeight: FontWeight.w600,
-                                          ),
-                                        ),
-                                        TextButton(
-                                          onPressed: () async {
-                                            Navigator.of(context).pop();
-                                            Navigator.of(context).pop();
-                                          },
-                                          child: TextWidget(
-                                            text: "Yes",
-                                            color: colorWhite,
-                                            textAlign: TextAlign.center,
-                                            fontWeight: FontWeight.w600,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-
-                                  // Navigator.pop(context),
-                                  child: Image.asset(
-                                    icClose,
-                                    fit: BoxFit.fitWidth,
-                                    height: 35.h,
-                                    width: 35.w,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          heightBox(40.h),
-                          SizedBox(
-                            height: 44,
-                            width: screenSize.width,
-                            child: ListView.builder(
-                                // itemCount: 30,
-                                itemCount: quizProviderRef.quizList.length,
-                                shrinkWrap: true,
-                                scrollDirection: Axis.horizontal,
-                                itemBuilder: (context, index) {
-                                  return GestureDetector(
-                                    onTap: () {
-                                      setState(() {
-                                        isSelect = index;
-                                        setState(() {});
-                                      });
-                                    },
-                                    child: Padding(
-                                      padding: EdgeInsets.only(left: 8.w),
-                                      child: Container(
-                                        height: 44,
-                                        width: 44,
-                                        decoration: BoxDecoration(
-                                          color: isSelect == index
-                                              ? colorTimeBackground
-                                              : quizProviderRef.isSelectAnswerList[index].isAnswered == 1
-                                                  ? colorDarkBlue
-                                                  : colorDarkGreen,
-                                          borderRadius: BorderRadius.circular(44),
-                                        ),
-                                        child: Center(
-                                          child: TextWidget(
-                                            text: "${index + 1}",
-                                            fontSize: 22,
-                                            fontWeight: FontWeight.w700,
-                                            color: isSelect == index ? colorBlack : colorWhite,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  );
-                                }),
-                          )
-                        ],
-                      ),
-                    )
-                  : const SizedBox(),
-          Expanded(
-            child: quizProviderRef.quizLoader
+      return WillPopScope(
+        onWillPop: onWillPop,
+        child: Column(
+          children: [
+            quizProviderRef.quizLoader
                 ? Shimmer.fromColors(
                     baseColor: Colors.grey[200]!,
                     highlightColor: Colors.grey[350]!,
                     child: Container(
                       color: colorBackground,
+                      height: 142.h,
                       width: screenSize.width,
                     ),
                   )
                 : quizProviderRef.quizList.isNotEmpty
                     ? Container(
-                        width: screenSize.width,
-                        color: colorBackground,
-                        child: Container(
-                          width: screenSize.width,
-                          margin: EdgeInsets.symmetric(horizontal: 15.w, vertical: 18.h),
-                          decoration: BoxDecoration(
-                            color: colorWhite,
-                            borderRadius: BorderRadius.circular(13),
-                          ),
-                          child: Stack(
-                            children: [
-                              SingleChildScrollView(
-                                child: Padding(
-                                  padding: const EdgeInsets.all(18),
-                                  child: Column(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      quizProviderRef.quizList[isSelect].image != "" && quizProviderRef.quizList[isSelect].image != null
-                                          ? GestureDetector(
-                                              onTap: () {
-                                                Navigator.push(
-                                                  context,
-                                                  MaterialPageRoute(
-                                                    builder: (context) => PictureFullViewScreen(
-                                                      image: quizProviderRef.quizList[isSelect].image!,
-                                                    ),
-                                                  ),
-                                                );
-                                              },
-                                              child: ClipRRect(
-                                                borderRadius: BorderRadius.circular(8),
-                                                child: Image.network(
-                                                  // icQuizImage,
-                                                  quizProviderRef.quizList[isSelect].image!,
-                                                  height: 145.h,
-                                                  width: 200.w,
-                                                  fit: BoxFit.cover,
-                                                ),
+                        height: 142.h,
+                        color: colorPrimary,
+                        child: Column(
+                          children: [
+                            heightBox(10.h),
+                            Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 14.w),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  SizedBox(
+                                    height: 34.h,
+                                    width: 282.w,
+                                    child: Stack(
+                                      fit: StackFit.expand,
+                                      children: [
+                                        ClipRRect(
+                                          borderRadius: const BorderRadius.all(Radius.circular(50)),
+                                          child: LinearProgressIndicator(
+                                            value: quizProviderRef.progress,
+                                            valueColor: const AlwaysStoppedAnimation(colorTimeBackground),
+                                            backgroundColor: colorDarkGreen,
+                                          ),
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsets.all(6),
+                                          child: Row(
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: [
+                                              const Icon(
+                                                Icons.watch_later_outlined,
+                                                size: 18,
                                               ),
-                                            )
-                                          : ClipRRect(
-                                              borderRadius: BorderRadius.circular(8),
-                                              child: Image.asset(
-                                                icDummyNoImage,
-                                                height: 145.h,
-                                                width: 200.w,
-                                                fit: BoxFit.cover,
+                                              widthBox(5.w),
+                                              TextWidget(
+                                                text: quizProviderRef.timerText,
+                                                // text: "${quizProviderRef.minuteString}:${quizProviderRef.secondString}",
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.w600,
                                               ),
-                                            ),
-                                      heightBox(10.h),
-                                      Padding(
-                                        padding: EdgeInsets.symmetric(horizontal: 12.w),
-                                        child: TextWidget(
-                                          text: quizProviderRef.quizList[isSelect].question,
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  GestureDetector(
+                                    onTap: () => showDialog<String>(
+                                      context: context,
+                                      builder: (BuildContext context) => AlertDialog(
+                                        backgroundColor: colorPrimary,
+                                        title: TextWidget(
+                                          text: "Close Quiz",
                                           fontSize: 18,
-                                          fontWeight: FontWeight.w700,
+                                          color: colorWhite,
                                           textAlign: TextAlign.center,
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                        content: TextWidget(
+                                          text: "Do you want to quit this quiz?",
+                                          color: colorWhite,
+                                          textAlign: TextAlign.center,
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                        actions: <Widget>[
+                                          TextButton(
+                                            onPressed: () {
+                                              Navigator.of(context).pop();
+                                            },
+                                            child: TextWidget(
+                                              text: "No",
+                                              color: colorWhite,
+                                              textAlign: TextAlign.center,
+                                              fontWeight: FontWeight.w600,
+                                            ),
+                                          ),
+                                          TextButton(
+                                            onPressed: () async {
+                                              Navigator.of(context).pop();
+                                              Navigator.of(context).pop();
+                                            },
+                                            child: TextWidget(
+                                              text: "Yes",
+                                              color: colorWhite,
+                                              textAlign: TextAlign.center,
+                                              fontWeight: FontWeight.w600,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+
+                                    // Navigator.pop(context),
+                                    child: Image.asset(
+                                      icClose,
+                                      fit: BoxFit.fitWidth,
+                                      height: 35.h,
+                                      width: 35.w,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            heightBox(40.h),
+                            SizedBox(
+                              height: 44,
+                              width: screenSize.width,
+                              child: ListView.builder(
+                                  // itemCount: 30,
+                                  itemCount: quizProviderRef.quizList.length,
+                                  shrinkWrap: true,
+                                  scrollDirection: Axis.horizontal,
+                                  itemBuilder: (context, index) {
+                                    return GestureDetector(
+                                      onTap: () {
+                                        setState(() {
+                                          isSelect = index;
+                                          setState(() {});
+                                        });
+                                      },
+                                      child: Padding(
+                                        padding: EdgeInsets.only(left: 8.w),
+                                        child: Container(
+                                          height: 44,
+                                          width: 44,
+                                          decoration: BoxDecoration(
+                                            color: isSelect == index
+                                                ? colorTimeBackground
+                                                : quizProviderRef.isSelectAnswerList[index].isAnswered == 1
+                                                    ? colorDarkBlue
+                                                    : colorDarkGreen,
+                                            borderRadius: BorderRadius.circular(44),
+                                          ),
+                                          child: Center(
+                                            child: TextWidget(
+                                              text: "${index + 1}",
+                                              fontSize: 22,
+                                              fontWeight: FontWeight.w700,
+                                              color: isSelect == index ? colorBlack : colorWhite,
+                                            ),
+                                          ),
                                         ),
                                       ),
-                                      heightBox(20.h),
-                                      // const Spacer(),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                              Positioned(
-                                bottom: 0,
-                                left: 0,
-                                right: 0,
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    color: colorWhite,
-                                    borderRadius: BorderRadius.circular(13),
-                                  ),
-                                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      quizProviderRef.quizList[isSelect].audio != "" && quizProviderRef.quizList[isSelect].audio != null
-                                          ? GestureDetector(
-                                              onTap: () async {
-                                                /// AUDIO ///
-                                                await audioPlayer.play(UrlSource(quizProviderRef.quizList[isSelect].audio!));
-                                                // await audioPlayer.play(UrlSource('https://www.kozco.com/tech/piano2-CoolEdit.mp3'));
-                                                // setState(() {
-                                                //   Provider.of<QuestionProvider>(context, listen: false).text = quizProviderRef.quizList[isSelect].question!;
-                                                //   Provider.of<QuestionProvider>(context, listen: false).speak();
-                                                //   setState(() {});
-                                                // });
-                                              },
-                                              child: SvgPicture.asset(
-                                                icSound,
-                                              ),
-                                            )
-                                          : const SizedBox(),
-                                      TextWidget(
-                                        text: "${isSelect + 1} of ${quizProviderRef.quizList.length}",
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.w500,
-                                        textAlign: TextAlign.center,
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              )
-                            ],
-                          ),
+                                    );
+                                  }),
+                            )
+                          ],
                         ),
                       )
-                    : Container(
+                    : const SizedBox(),
+            Expanded(
+              child: quizProviderRef.quizLoader
+                  ? Shimmer.fromColors(
+                      baseColor: Colors.grey[200]!,
+                      highlightColor: Colors.grey[350]!,
+                      child: Container(
                         color: colorBackground,
-                        child: Center(
-                          child: TextWidget(
-                            text: "No Quiz Found",
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600,
+                        width: screenSize.width,
+                      ),
+                    )
+                  : quizProviderRef.quizList.isNotEmpty
+                      ? Container(
+                          width: screenSize.width,
+                          color: colorBackground,
+                          child: Container(
+                            width: screenSize.width,
+                            margin: EdgeInsets.symmetric(horizontal: 15.w, vertical: 18.h),
+                            decoration: BoxDecoration(
+                              color: colorWhite,
+                              borderRadius: BorderRadius.circular(13),
+                            ),
+                            child: Stack(
+                              children: [
+                                SingleChildScrollView(
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(18),
+                                    child: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        quizProviderRef.quizList[isSelect].image != "" && quizProviderRef.quizList[isSelect].image != null
+                                            ? GestureDetector(
+                                                onTap: () {
+                                                  Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                      builder: (context) => PictureFullViewScreen(
+                                                        image: quizProviderRef.quizList[isSelect].image!,
+                                                      ),
+                                                    ),
+                                                  );
+                                                },
+                                                child: Center(
+                                                  child: ClipRRect(
+                                                    borderRadius: BorderRadius.circular(8),
+                                                    child: Image.network(
+                                                      // icQuizImage,
+                                                      quizProviderRef.quizList[isSelect].image!,
+                                                      height: 145.h,
+                                                      width: 200.w,
+                                                      fit: BoxFit.cover,
+                                                    ),
+                                                  ),
+                                                ),
+                                              )
+                                            : const SizedBox(),
+                                        // ClipRRect(
+                                        //         borderRadius: BorderRadius.circular(8),
+                                        //         child: Image.asset(
+                                        //           icDummyNoImage,
+                                        //           height: 145.h,
+                                        //           width: 200.w,
+                                        //           fit: BoxFit.cover,
+                                        //         ),
+                                        //       ),
+                                        heightBox(10.h),
+                                        Padding(
+                                          padding: EdgeInsets.symmetric(horizontal: 12.w),
+                                          child: TextWidget(
+                                            text: quizProviderRef.quizList[isSelect].question,
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.w700,
+                                            textAlign: TextAlign.center,
+                                          ),
+                                        ),
+                                        heightBox(20.h),
+                                        // const Spacer(),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                                Positioned(
+                                  bottom: 0,
+                                  left: 0,
+                                  right: 0,
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      color: colorWhite,
+                                      borderRadius: BorderRadius.circular(13),
+                                    ),
+                                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        quizProviderRef.quizList[isSelect].audio != "" && quizProviderRef.quizList[isSelect].audio != null
+                                            ? GestureDetector(
+                                                onTap: () async {
+                                                  /// AUDIO ///
+                                                  await audioPlayer.play(UrlSource(quizProviderRef.quizList[isSelect].audio!));
+                                                  // await audioPlayer.play(UrlSource('https://www.kozco.com/tech/piano2-CoolEdit.mp3'));
+                                                  // setState(() {
+                                                  //   Provider.of<QuestionProvider>(context, listen: false).text = quizProviderRef.quizList[isSelect].question!;
+                                                  //   Provider.of<QuestionProvider>(context, listen: false).speak();
+                                                  //   setState(() {});
+                                                  // });
+                                                },
+                                                child: SvgPicture.asset(
+                                                  icSound,
+                                                ),
+                                              )
+                                            : const SizedBox(),
+                                        TextWidget(
+                                          text: "${isSelect + 1} of ${quizProviderRef.quizList.length}",
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.w500,
+                                          textAlign: TextAlign.center,
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
+                        )
+                      : Container(
+                          color: colorBackground,
+                          child: Center(
+                            child: TextWidget(
+                              text: "No Quiz Found",
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600,
+                            ),
                           ),
                         ),
-                      ),
-          ),
-        ],
+            ),
+          ],
+        ),
       );
     });
   }
@@ -433,7 +493,8 @@ class _QuizScreenState extends BaseStatefulWidgetState<QuizScreen> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           AnswerButton(
-                              text: "True",
+                              // text: "True",
+                              text: "Vero",
                               backgroundColor: quizProviderRef.isSelectAnswerList[isSelect].isAnswered == 1 &&
                                       quizProviderRef.isSelectAnswerList[isSelect].yourAnswer == "true"
                                   ? colorDarkGreen
@@ -448,7 +509,8 @@ class _QuizScreenState extends BaseStatefulWidgetState<QuizScreen> {
                                 });
                               }),
                           AnswerButton(
-                            text: "False",
+                            // text: "False",
+                            text: "Falso",
                             backgroundColor: quizProviderRef.isSelectAnswerList[isSelect].isAnswered == 1 &&
                                     quizProviderRef.isSelectAnswerList[isSelect].yourAnswer == "false"
                                 ? colorRed

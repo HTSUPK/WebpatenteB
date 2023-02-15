@@ -179,13 +179,16 @@ class QuestionProvider extends ChangeNotifier {
         pageList.clear();
         chapterList.addAll(response.data!.chapter!);
         pageList.addAll(response.data!.page!);
+        print("Page ${pageList.length}");
         selectChapter = chapterList[0].chapter!;
         currentChapterId = response.data!.chapter![0].id!;
         currentSequence = response.data!.page![0].sequence!;
-        currentPageNo = response.data!.page![0].id!;
+        currentPageNo = response.data!.page![0].sequence!;
+        print("CId $currentChapterId");
         Map<String, dynamic> body = {
           "chapter_id": currentChapterId,
-          "page": currentPageNo,
+          // "page": currentPageNo,
+          "page": currentSequence,
         };
         callApiQuestion(body);
         notifyListeners();
