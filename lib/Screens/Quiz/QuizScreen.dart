@@ -42,6 +42,7 @@ class _QuizScreenState extends BaseStatefulWidgetState<QuizScreen> {
     // TODO: implement initState
     isSelect = 0;
     quizProviderRef = Provider.of<QuizProvider>(context, listen: false);
+    quizProviderRef.quizList.clear();
     quizProviderRef.quizType = widget.where;
     if (widget.where == "full") {
       Future.delayed(const Duration(seconds: 0), () {

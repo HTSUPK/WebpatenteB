@@ -203,15 +203,17 @@ class QuizProvider extends ChangeNotifier {
         quizList.clear();
         quizList.addAll(response.data!);
         isSelectAnswerList.clear();
-        for (int i = 0; i < response.data!.length; i++) {
-          isSelectAnswerList.add(Result(
-            id: i,
-            image: response.data![i].image,
-            question: response.data![i].question,
-            correct: response.data![i].answer,
-            yourAnswer: "",
-            isAnswered: 0,
-          ));
+        if(response.data!.isNotEmpty){
+          for (int i = 0; i < response.data!.length; i++) {
+            isSelectAnswerList.add(Result(
+              id: i,
+              image: response.data![i].image,
+              question: response.data![i].question,
+              correct: response.data![i].answer,
+              yourAnswer: "",
+              isAnswered: 0,
+            ));
+          }
         }
         notifyListeners();
       }

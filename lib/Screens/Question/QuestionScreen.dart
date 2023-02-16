@@ -169,9 +169,9 @@ class _QuestionScreenState extends BaseStatefulWidgetState<QuestionScreen> {
                         ),
                         trimMode: TrimMode.Line,
                         trimCollapsedText: 'Show more',
-                        trimExpandedText: 'Show less',
-                        moreStyle: const TextStyle(color: colorWhite, fontSize: 14, fontWeight: FontWeight.w600),
-                        lessStyle: const TextStyle(color: colorWhite, fontSize: 14, fontWeight: FontWeight.w600),
+                        trimExpandedText: ' Show less',
+                        moreStyle: const TextStyle(color: colorGoButton, fontSize: 14, fontWeight: FontWeight.w600),
+                        lessStyle: const TextStyle(color: colorGoButton, fontSize: 14, fontWeight: FontWeight.w600),
                       ),
                       /* TextWidget(
                         text: questionProviderRef.pageList[questionProviderRef.currentPageNo - 1].title,
