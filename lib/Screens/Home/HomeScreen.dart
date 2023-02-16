@@ -11,6 +11,7 @@ import '../../resources/strings.dart';
 import '../../utils/app_constants.dart';
 import '../../utils/app_utils.dart';
 import '../../utils/shared_preference_util.dart';
+import '../Profile/EditProfileScreen.dart';
 import '../Profile/ProfileScreen.dart';
 import '../Question/QuestionScreen.dart';
 import '../Quiz/QuizScreen.dart';
@@ -51,36 +52,47 @@ class _HomeScreenState extends BaseStatefulWidgetState<HomeScreen> {
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        CircleAvatar(
-                          radius: 30,
-                          backgroundColor: colorWhite,
-                          child: CircleAvatar(
-                            radius: 25,
-                            backgroundImage: NetworkImage(
-                              // "https://hexeros.com/dev/superapp/uploads/user/user.png",
-                              SharedPreferenceUtil.getString(userProfileImage),
+                        GestureDetector(
+                          onTap: () => Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const EditProfileScreen(),
                             ),
                           ),
-                        ),
-                        widthBox(15.w),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            TextWidget(
-                              text: SharedPreferenceUtil.getString(userName),
-                              fontSize: 26,
-                              color: colorWhite,
-                              fontFamily: strFontName,
-                              fontWeight: FontWeight.w700,
-                            ),
-                            TextWidget(
-                              text: "Profile",
-                              fontSize: 16,
-                              color: colorWhite,
-                              fontFamily: strFontName,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ],
+                          child: Row(
+                            children: [
+                              CircleAvatar(
+                                radius: 30,
+                                backgroundColor: colorWhite,
+                                child: CircleAvatar(
+                                  radius: 25,
+                                  backgroundImage: NetworkImage(
+                                    SharedPreferenceUtil.getString(userProfileImage),
+                                  ),
+                                ),
+                              ),
+                              widthBox(15.w),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  TextWidget(
+                                    text: SharedPreferenceUtil.getString(userName),
+                                    fontSize: 26,
+                                    color: colorWhite,
+                                    fontFamily: strFontName,
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                                  TextWidget(
+                                    text: "Profile",
+                                    fontSize: 16,
+                                    color: colorWhite,
+                                    fontFamily: strFontName,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
                         ),
                         const Spacer(),
                         GestureDetector(

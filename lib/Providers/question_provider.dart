@@ -13,8 +13,8 @@ class QuestionProvider extends ChangeNotifier {
   /// Question Call Function ///
 
   questionFunction(chapterId, pageNo) {
-    currentChapterId = chapterId;
-    currentPageNo = pageNo;
+    // currentChapterId = chapterId;
+    // currentPageNo = pageNo;
     Map<String, dynamic> body = {
       "chapter_id": chapterId,
       "page": pageNo,
@@ -45,6 +45,8 @@ class QuestionProvider extends ChangeNotifier {
         questionList.clear();
         selectLanguageCode.clear();
         questionList.addAll(response.data!);
+        currentChapterId = body['chapter_id'];
+        currentPageNo = body['page'];
         for (int i = 0; i < questionList.length; i++) {
           dropDownValue.add('English');
           selectLanguageCode.add(questionList[i].languageTexts!.en!);

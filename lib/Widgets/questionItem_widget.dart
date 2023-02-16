@@ -33,7 +33,7 @@ class _QuestionItemState extends State<QuestionItem> {
             widget.iconName!,
             height: 16.h,
             width: 18.w,
-            fit: BoxFit.cover,
+            fit: BoxFit.fill,
           ),
           widthBox(5.w),
           TextWidget(
