@@ -19,7 +19,7 @@ import 'ResultScreen.dart';
 
 class QuizScreen extends StatefulWidget {
   final String? where;
-  final List? selectChapterId;
+  final List<int>? selectChapterId;
 
   const QuizScreen({
     super.key,
@@ -50,7 +50,7 @@ class _QuizScreenState extends BaseStatefulWidgetState<QuizScreen> {
           "limit": "",
           "offset": "",
         };
-        quizProviderRef.callApiFullQuiz(body);
+        quizProviderRef.callApiFullQuiz(body, context);
       });
     } else if (widget.where == "selected") {
       Future.delayed(const Duration(seconds: 0), () {
@@ -63,10 +63,9 @@ class _QuizScreenState extends BaseStatefulWidgetState<QuizScreen> {
           "offset": "",
           "chapter_id": selectId,
         };
-        quizProviderRef.callApiSelectedQuiz(body);
+        quizProviderRef.callApiSelectedQuiz(body, context);
       });
     }
-
     super.initState();
   }
 
@@ -80,57 +79,61 @@ class _QuizScreenState extends BaseStatefulWidgetState<QuizScreen> {
   }
 
   Future<bool> onWillPop() async {
-    bool value = false;
-    await showDialog<String>(
-      context: context,
-      barrierDismissible: false,
-      builder: (BuildContext context) => AlertDialog(
-        backgroundColor: colorPrimary,
-        title: TextWidget(
-          text: "Close Quiz",
-          fontSize: 18,
-          color: colorWhite,
-          textAlign: TextAlign.center,
-          fontWeight: FontWeight.w600,
-        ),
-        content: TextWidget(
-          text: "Do you want to quit this quiz?",
-          color: colorWhite,
-          textAlign: TextAlign.center,
-          fontWeight: FontWeight.w500,
-        ),
-        actions: <Widget>[
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-              value = false;
-              setState(() {});
-            },
-            child: TextWidget(
-              text: "No",
-              color: colorWhite,
-              textAlign: TextAlign.center,
-              fontWeight: FontWeight.w600,
-            ),
+    if (quizProviderRef.quizList.isNotEmpty) {
+      bool value = false;
+      await showDialog<String>(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) => AlertDialog(
+          backgroundColor: colorPrimary,
+          title: TextWidget(
+            text: "Close Quiz",
+            fontSize: 18,
+            color: colorWhite,
+            textAlign: TextAlign.center,
+            fontWeight: FontWeight.w600,
           ),
-          TextButton(
-            onPressed: () async {
-              Navigator.of(context).pop();
-              value = true;
-              setState(() {});
-              // Navigator.of(context).pop();
-            },
-            child: TextWidget(
-              text: "Yes",
-              color: colorWhite,
-              textAlign: TextAlign.center,
-              fontWeight: FontWeight.w600,
-            ),
+          content: TextWidget(
+            text: "Do you want to quit this quiz?",
+            color: colorWhite,
+            textAlign: TextAlign.center,
+            fontWeight: FontWeight.w500,
           ),
-        ],
-      ),
-    );
-    return Future.value(value);
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+                value = false;
+                setState(() {});
+              },
+              child: TextWidget(
+                text: "No",
+                color: colorWhite,
+                textAlign: TextAlign.center,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+            TextButton(
+              onPressed: () async {
+                Navigator.of(context).pop();
+                value = true;
+                setState(() {});
+                // Navigator.of(context).pop();
+              },
+              child: TextWidget(
+                text: "Yes",
+                color: colorWhite,
+                textAlign: TextAlign.center,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ],
+        ),
+      );
+      return Future.value(value);
+    } else {
+      return Future.value(true);
+    }
   }
 
   @override

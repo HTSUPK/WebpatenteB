@@ -260,7 +260,7 @@ class _StatisticsScreenState extends BaseStatefulWidgetState<StatisticsScreen> {
                             ColumnSeries<Graph, String>(
                               dataSource: statisticsProviderRef.graphList,
                               width: statisticsProviderRef.graphList.length < 3 ? 0.1 : 0.4,
-                              xValueMapper: (Graph data, index) => "Q${index +1}",
+                              xValueMapper: (Graph data, index) => "Q${(statisticsProviderRef.graphList.length) - index}",
                               yValueMapper: (Graph data, _) => double.parse(data.percentage!).round(),
                               borderRadius: BorderRadius.circular(12),
                               isVisibleInLegend: false,

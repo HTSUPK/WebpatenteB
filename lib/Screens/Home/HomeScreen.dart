@@ -71,25 +71,31 @@ class _HomeScreenState extends BaseStatefulWidgetState<HomeScreen> {
                                   ),
                                 ),
                               ),
-                              widthBox(15.w),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  TextWidget(
-                                    text: SharedPreferenceUtil.getString(userName),
-                                    fontSize: 26,
-                                    color: colorWhite,
-                                    fontFamily: strFontName,
-                                    fontWeight: FontWeight.w700,
-                                  ),
-                                  TextWidget(
-                                    text: "Profile",
-                                    fontSize: 16,
-                                    color: colorWhite,
-                                    fontFamily: strFontName,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                ],
+                              widthBox(10.w),
+                              SizedBox(
+                                width: 180.w,
+                                // color: colorRed,
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    TextWidget(
+                                      text: SharedPreferenceUtil.getString(userName),
+                                      fontSize: 22,
+                                      color: colorWhite,
+                                      textOverflow: TextOverflow.ellipsis,
+                                      maxLines: 1,
+                                      fontFamily: strFontName,
+                                      fontWeight: FontWeight.w700,
+                                    ),
+                                    TextWidget(
+                                      text: "Profile",
+                                      fontSize: 16,
+                                      color: colorWhite,
+                                      fontFamily: strFontName,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ],
+                                ),
                               ),
                             ],
                           ),

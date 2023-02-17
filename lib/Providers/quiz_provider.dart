@@ -18,12 +18,13 @@ class QuizProvider extends ChangeNotifier {
 
   List<ChapterList> chapterList = []; // show chapter
   List<bool> selectChapter = []; // user select
-  List selectChapterId = []; // Add to Select chapter ID
+  List<int> selectChapterId = []; // Add to Select chapter ID
 
   Future<BaseModel<ChapterListModel>> callApiChapterList() async {
     ChapterListModel response;
     quizLoader = true;
     notifyListeners();
+
     try {
       response = await RestClient(RetroApi().dioData()).chapterListRequest();
       if (response.status == 200) {
@@ -97,19 +98,27 @@ class QuizProvider extends ChangeNotifier {
   //   }
   // }
 
-  totalProgressTime() {
+  formatTime({required int time}) {
+    int sec = time % 60;
+    int min = (time / 60).floor();
+    String minute = min.toString().length <= 1 ? "0$min" : "$min";
+    String second = sec.toString().length <= 1 ? "0$sec" : "$sec";
+    return "$minute : $second";
+  }
+
+  totalProgressTime(context) {
     // totalProgressTime(context) {
     progress = 1.0 - (currentSeconds / timerMaxSeconds);
     if (progress == 0.0) {
-      // Navigator.pushReplacement(
-      //   context,
-      //   MaterialPageRoute(
-      //     builder: (context) => ResultScreen(
-      //       result: isSelectAnswerList,
-      //       time: "$minuteString:$secondString",
-      //     ),
-      //   ),
-      // );
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => ResultScreen(
+            result: isSelectAnswerList,
+            time: formatTime(time: currentSeconds),
+          ),
+        ),
+      );
     }
     notifyListeners();
   }
@@ -125,12 +134,12 @@ class QuizProvider extends ChangeNotifier {
 
   final interval = const Duration(seconds: 1);
 
-  startTimeout([int? milliseconds]) {
+  startTimeout(context, [int? milliseconds]) {
     var duration = interval;
     quizTimer = Timer.periodic(duration, (timer) {
       print(timer.tick);
       currentSeconds = timer.tick;
-      totalProgressTime();
+      totalProgressTime(context);
       if (timer.tick >= timerMaxSeconds) timer.cancel();
       notifyListeners();
     });
@@ -146,7 +155,7 @@ class QuizProvider extends ChangeNotifier {
     _quizList = value;
   }
 
-  Future<BaseModel<QuizModel>> callApiFullQuiz(body) async {
+  Future<BaseModel<QuizModel>> callApiFullQuiz(body, context) async {
     QuizModel response;
     quizLoader = true;
     notifyListeners();
@@ -156,21 +165,24 @@ class QuizProvider extends ChangeNotifier {
         quizLoader = false;
         // quizTimer.cancel();  // Timer clear
         currentSeconds = 0; // Timer clear
-        timerMinute = response.timer!;
+        // timerMinute = response.timer!;
         timerMaxSeconds = timerMinute * 60;
-        startTimeout();
+        startTimeout(context);
         quizList.clear();
         quizList.addAll(response.data!);
         isSelectAnswerList.clear();
-        for (int i = 0; i < response.data!.length; i++) {
-          isSelectAnswerList.add(Result(
-            id: i,
-            image: response.data![i].image,
-            question: response.data![i].question,
-            correct: response.data![i].answer == "1" ? "true" : "false",
-            yourAnswer: "",
-            isAnswered: 0,
-          ));
+        if (response.data!.isNotEmpty) {
+          for (int i = 0; i < response.data!.length; i++) {
+            isSelectAnswerList.add(Result(
+              id: i,
+              image: response.data![i].image,
+              question: response.data![i].question,
+              // correct: response.data![i].answer == "1" ? "true" : "false",
+              correct: response.data![i].ans == "1" ? "true" : "false",
+              yourAnswer: "",
+              isAnswered: 0,
+            ));
+          }
         }
         notifyListeners();
       }
@@ -187,7 +199,7 @@ class QuizProvider extends ChangeNotifier {
 
   /// Selected Quiz Api ///
 
-  Future<BaseModel<QuizModel>> callApiSelectedQuiz(body) async {
+  Future<BaseModel<QuizModel>> callApiSelectedQuiz(body, context) async {
     QuizModel response;
     quizLoader = true;
     notifyListeners();
@@ -195,21 +207,21 @@ class QuizProvider extends ChangeNotifier {
       response = await RestClient(RetroApi().dioData()).selectQuizRequest(body);
       if (response.status == 200) {
         quizLoader = false;
-        quizTimer.cancel(); // Timer clear
+        // quizTimer.cancel(); // Timer clear
         currentSeconds = 0; // Timer clear
         timerMinute = response.timer!;
         timerMaxSeconds = timerMinute * 60;
-        startTimeout();
+        startTimeout(context);
         quizList.clear();
         quizList.addAll(response.data!);
         isSelectAnswerList.clear();
-        if(response.data!.isNotEmpty){
+        if (response.data!.isNotEmpty) {
           for (int i = 0; i < response.data!.length; i++) {
             isSelectAnswerList.add(Result(
               id: i,
               image: response.data![i].image,
               question: response.data![i].question,
-              correct: response.data![i].answer,
+              correct: response.data![i].ans == "1" ? "true" : "false",
               yourAnswer: "",
               isAnswered: 0,
             ));
