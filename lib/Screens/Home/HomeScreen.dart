@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:provider/provider.dart';
+import '../../Providers/profile_provider.dart';
 import '../../Widgets/card_widget.dart';
 import '../../Widgets/common_button.dart';
 import '../../Widgets/quizType_widget.dart';
@@ -26,6 +28,19 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends BaseStatefulWidgetState<HomeScreen> {
+
+  late ProfileProvider profileProviderRef;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    profileProviderRef = Provider.of<ProfileProvider>(context, listen: false);
+    Future.delayed(const Duration(seconds: 0), () {
+      profileProviderRef.callApiGetUserProfile();
+    });
+    super.initState();
+  }
+
   @override
   // TODO: implement scaffoldBgColor
   Color? get scaffoldBgColor => colorPrimary;

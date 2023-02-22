@@ -30,7 +30,7 @@ class QuizProvider extends ChangeNotifier {
       if (response.status == 200) {
         quizLoader = false;
         chapterList.clear();
-        chapterList.addAll(response.data!.chapter!);
+        chapterList.addAll(response.data!.chapterList!);
         notifyListeners();
       }
     } catch (error, stacktrace) {

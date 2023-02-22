@@ -26,7 +26,8 @@ class QuestionProvider extends ChangeNotifier {
   /// Question ///
 
   List<QuestionData> questionList = [];
-  List<String> dropDownValue = [];
+  // List<String> dropDownValue = [];
+  String dropDownValue = "English";
   var items = [
     'English',
     'Hindi',
@@ -48,9 +49,23 @@ class QuestionProvider extends ChangeNotifier {
         currentChapterId = body['chapter_id'];
         currentPageNo = body['page'];
         for (int i = 0; i < questionList.length; i++) {
-          dropDownValue.add('English');
-          selectLanguageCode.add(questionList[i].languageTexts!.en!);
+          if (dropDownValue == "English") {
+            selectLanguageCode
+                .add(questionList[i].languageTexts!.en!);
+          }
+          if (dropDownValue == "Hindi") {
+            selectLanguageCode
+                .add(questionList[i].languageTexts!.hi!);
+          }
+          if (dropDownValue == "Urdu") {
+            selectLanguageCode
+                .add(questionList[i].languageTexts!.ur!);
+          }
         }
+        // for (int i = 0; i < questionList.length; i++) {
+        //   // dropDownValue.add('English');
+        //   selectLanguageCode.add(questionList[i].languageTexts!.en!);
+        // }
         notifyListeners();
       }
     } catch (error, stacktrace) {
@@ -145,7 +160,7 @@ class QuestionProvider extends ChangeNotifier {
   /// Chapter List ///
 
   List<ChapterList> chapterList = [];
-  List<Page> pageList = [];
+  List<PageList> pageList = [];
   String selectChapter = "";
   int _currentChapterId = 0;
   int _currentPageNo = 1;
@@ -179,13 +194,15 @@ class QuestionProvider extends ChangeNotifier {
         questionLoader = false;
         chapterList.clear();
         pageList.clear();
-        chapterList.addAll(response.data!.chapter!);
-        pageList.addAll(response.data!.page!);
+        chapterList.addAll(response.data!.chapterList!);
+        pageList.addAll(response.data!.pageList!);
         print("Page ${pageList.length}");
         selectChapter = chapterList[0].chapter!;
-        currentChapterId = response.data!.chapter![0].id!;
-        currentSequence = response.data!.page![0].sequence!;
-        currentPageNo = response.data!.page![0].sequence!;
+        currentChapterId = response.data!.chapterList![0].id!;
+        // currentSequence = response.data!.page![0].sequence!;
+        currentSequence = response.data!.chapterList![0].page![0].sequence!;
+        // currentPageNo = response.data!.page![0].sequence!;
+        currentPageNo = response.data!.chapterList![0].page![0].sequence!;
         print("CId $currentChapterId");
         Map<String, dynamic> body = {
           "chapter_id": currentChapterId,

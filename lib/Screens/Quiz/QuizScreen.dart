@@ -398,11 +398,13 @@ class _QuizScreenState extends BaseStatefulWidgetState<QuizScreen> {
                                         heightBox(10.h),
                                         Padding(
                                           padding: EdgeInsets.symmetric(horizontal: 12.w),
-                                          child: TextWidget(
-                                            text: quizProviderRef.quizList[isSelect].question,
-                                            fontSize: 18,
-                                            fontWeight: FontWeight.w700,
-                                            textAlign: TextAlign.center,
+                                          child: Center(
+                                            child: TextWidget(
+                                              text: quizProviderRef.quizList[isSelect].question,
+                                              fontSize: 18,
+                                              fontWeight: FontWeight.w700,
+                                              textAlign: TextAlign.center,
+                                            ),
                                           ),
                                         ),
                                         heightBox(20.h),

@@ -38,9 +38,9 @@ class _QuestionScreenState extends BaseStatefulWidgetState<QuestionScreen> {
     Future.delayed(const Duration(seconds: 0), () {
       questionProviderRef.callApiChapterList();
     });
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      questionProviderRef.initLanguages();
-    });
+    // WidgetsBinding.instance.addPostFrameCallback((_) {
+    //   questionProviderRef.initLanguages();
+    // });
 
     // audioPlayer.onPlayerStateChanged.listen((state) {
     //   setState(() {
@@ -139,8 +139,8 @@ class _QuestionScreenState extends BaseStatefulWidgetState<QuestionScreen> {
                                     setState(() {
                                       questionProviderRef.selectChapter = v.chapter!;
                                       pageNoController.clear();
-                                      questionProviderRef.questionFunction(v.id, questionProviderRef.pageList[0].sequence ?? 1);
-                                      print('ChapterId ${v.id}');
+                                      questionProviderRef.questionFunction(v.id, v.page![0].sequence! ?? 1);
+                                      print('ChapterId ${v.id} ${v.page![0].sequence!}');
                                     });
                                   },
                                 ),
@@ -196,9 +196,11 @@ class _QuestionScreenState extends BaseStatefulWidgetState<QuestionScreen> {
                           GestureDetector(
                             onTap: () {
                               if (questionProviderRef.currentPageNo != 1) {
-                                // if (questionProviderRef.currentSequence != 1) {
                                 questionProviderRef.currentPageNo = --questionProviderRef.currentPageNo;
-                                // questionProviderRef.currentSequence = --questionProviderRef.currentSequence;
+                                var value =
+                                    questionProviderRef.pageList.indexWhere((element) => element.sequence == questionProviderRef.currentPageNo);
+                                questionProviderRef.currentChapterId = questionProviderRef.pageList[value].chapterId!;
+                                questionProviderRef.selectChapter = questionProviderRef.pageList[value].chapter!.chapter!;
                                 pageNoController.clear();
                                 questionProviderRef.questionFunction(questionProviderRef.currentChapterId, questionProviderRef.currentPageNo);
                               }
@@ -213,9 +215,11 @@ class _QuestionScreenState extends BaseStatefulWidgetState<QuestionScreen> {
                           GestureDetector(
                             onTap: () {
                               if (questionProviderRef.pageList.length != questionProviderRef.currentPageNo) {
-                                // if (questionProviderRef.pageList.length != questionProviderRef.currentSequence) {
                                 questionProviderRef.currentPageNo = ++questionProviderRef.currentPageNo;
-                                // questionProviderRef.currentSequence = ++questionProviderRef.currentSequence;
+                                var value =
+                                    questionProviderRef.pageList.indexWhere((element) => element.sequence == questionProviderRef.currentPageNo);
+                                questionProviderRef.currentChapterId = questionProviderRef.pageList[value].chapterId!;
+                                questionProviderRef.selectChapter = questionProviderRef.pageList[value].chapter!.chapter!;
                                 pageNoController.clear();
                                 questionProviderRef.questionFunction(questionProviderRef.currentChapterId, questionProviderRef.currentPageNo);
                               } else {
@@ -252,9 +256,12 @@ class _QuestionScreenState extends BaseStatefulWidgetState<QuestionScreen> {
                               if (pageNoController.text.isEmpty) {
                                 AppUtils.toast("Please enter page number", colorRed, colorWhite);
                               } else {
+                                var value =
+                                    questionProviderRef.pageList.indexWhere((element) => element.sequence == int.parse(pageNoController.text));
+                                questionProviderRef.currentChapterId = questionProviderRef.pageList[value].chapterId!;
+                                questionProviderRef.selectChapter = questionProviderRef.pageList[value].chapter!.chapter!;
                                 questionProviderRef.questionFunction(questionProviderRef.currentChapterId, int.parse(pageNoController.text));
-                                // var value =
-                                //     questionProviderRef.pageList.indexWhere((element) => element.sequence == int.parse(pageNoController.text));
+                                // var value = questionProviderRef.pageList.indexWhere((element) => element.sequence == int.parse(pageNoController.text));
                                 // if (value != -1) {
                                 //   questionProviderRef.questionFunction(questionProviderRef.currentChapterId, questionProviderRef.pageList[value].id);
                                 //   questionProviderRef.currentSequence =  questionProviderRef.pageList[value].sequence!;
@@ -384,7 +391,7 @@ class _QuestionScreenState extends BaseStatefulWidgetState<QuestionScreen> {
                                                     questionProviderRef.questionList[index].image!,
                                                     height: 55.h,
                                                     width: 70.w,
-                                                    fit: BoxFit.cover,
+                                                    fit: BoxFit.fill,
                                                   ),
                                                 ),
                                               )
@@ -396,7 +403,7 @@ class _QuestionScreenState extends BaseStatefulWidgetState<QuestionScreen> {
                                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                             children: [
                                               SizedBox(
-                                                width: 180.w,
+                                                width: questionProviderRef.questionList[index].image != "" ? 180.w : 250.w,
                                                 child: Column(
                                                   crossAxisAlignment: CrossAxisAlignment.start,
                                                   children: [
@@ -405,6 +412,7 @@ class _QuestionScreenState extends BaseStatefulWidgetState<QuestionScreen> {
                                                       fontSize: 15,
                                                       fontWeight: FontWeight.w500,
                                                       maxLines: 3,
+                                                      textAlign: TextAlign.left,
                                                     ),
                                                     heightBox(5.h),
                                                     Row(
@@ -475,7 +483,7 @@ class _QuestionScreenState extends BaseStatefulWidgetState<QuestionScreen> {
                                                 ),
                                                 child: DropdownButtonHideUnderline(
                                                   child: DropdownButton(
-                                                    value: questionProviderRef.dropDownValue[index],
+                                                    value: questionProviderRef.dropDownValue,
                                                     isDense: true,
                                                     icon: const Icon(Icons.keyboard_arrow_down),
                                                     items: questionProviderRef.items.map((String items) {
@@ -490,16 +498,32 @@ class _QuestionScreenState extends BaseStatefulWidgetState<QuestionScreen> {
                                                     }).toList(),
                                                     onChanged: (String? newValue) {
                                                       setState(() {
-                                                        questionProviderRef.dropDownValue[index] = newValue!;
-                                                        if (questionProviderRef.dropDownValue[index] == "English") {
-                                                          questionProviderRef.selectLanguageCode[index] =
-                                                              questionProviderRef.questionList[index].languageTexts!.en!;
-                                                        } else if (questionProviderRef.dropDownValue[index] == "Hindi") {
-                                                          questionProviderRef.selectLanguageCode[index] =
-                                                              questionProviderRef.questionList[index].languageTexts!.hi!;
-                                                        } else if (questionProviderRef.dropDownValue[index] == "Urdu") {
-                                                          questionProviderRef.selectLanguageCode[index] =
-                                                              questionProviderRef.questionList[index].languageTexts!.ur!;
+                                                        // questionProviderRef.dropDownValue[index] = newValue!;
+                                                        // if (questionProviderRef.dropDownValue[index] == "English") {
+                                                        //   questionProviderRef.selectLanguageCode[index] =
+                                                        //       questionProviderRef.questionList[index].languageTexts!.en!;
+                                                        // } else if (questionProviderRef.dropDownValue[index] == "Hindi") {
+                                                        //   questionProviderRef.selectLanguageCode[index] =
+                                                        //       questionProviderRef.questionList[index].languageTexts!.hi!;
+                                                        // } else if (questionProviderRef.dropDownValue[index] == "Urdu") {
+                                                        //   questionProviderRef.selectLanguageCode[index] =
+                                                        //       questionProviderRef.questionList[index].languageTexts!.ur!;
+                                                        // }
+                                                        questionProviderRef.dropDownValue = newValue!;
+                                                        questionProviderRef.selectLanguageCode.clear();
+                                                        for (int i = 0; i < questionProviderRef.questionList.length; i++) {
+                                                          if (questionProviderRef.dropDownValue == "English") {
+                                                            questionProviderRef.selectLanguageCode
+                                                                .add(questionProviderRef.questionList[i].languageTexts!.en!);
+                                                          }
+                                                          if (questionProviderRef.dropDownValue == "Hindi") {
+                                                            questionProviderRef.selectLanguageCode
+                                                                .add(questionProviderRef.questionList[i].languageTexts!.hi!);
+                                                          }
+                                                          if (questionProviderRef.dropDownValue == "Urdu") {
+                                                            questionProviderRef.selectLanguageCode
+                                                                .add(questionProviderRef.questionList[i].languageTexts!.ur!);
+                                                          }
                                                         }
                                                         setState(() {});
                                                       });
@@ -512,7 +536,7 @@ class _QuestionScreenState extends BaseStatefulWidgetState<QuestionScreen> {
                                                 width: 360.w,
                                                 child: TextWidget(
                                                   text: questionProviderRef.selectLanguageCode[index],
-                                                  textAlign: questionProviderRef.dropDownValue[index] == "Urdu" ? TextAlign.end : TextAlign.start,
+                                                  textAlign: questionProviderRef.dropDownValue == "Urdu" ? TextAlign.end : TextAlign.start,
                                                   fontWeight: FontWeight.w400,
                                                   fontSize: 12.sp,
                                                 ),
